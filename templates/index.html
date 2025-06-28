@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Artisan Workspace</title>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f0f0f0; /* Light neutral background */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #323232;
+}
+
+/* Header with dark blue gradient, diagonal shape, and white text */
+.header {
+  background: linear-gradient(135deg, #29102a, #994ac3, #582c64); /* Deep attractive dark blue gradient */
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: #fff; /* White text for neatness */
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+}
+.header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.3rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header p {
+  font-size: 0.9rem;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.4;
+  border-top: 2px solid #fff; /* White line below the title for clean division */
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+/* Container as CSS Grid: 4 in a row, centered, neat with spacing */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 2rem;
+  background-color: #f0f0f0; /* Same as body for seamless look */
+  margin-top: -1rem;
+}
+@media(max-width: 768px){
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+/* Style for each box: clean, uniform, and attractive */
+.card {
+  padding: 1.2rem;
+  border-radius: 1rem;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  background: #fff; /* White for neatness */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 150px; /* uniform height for consistency */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+}
+.card i {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  transition: transform 0.3s, color 0.3s;
+}
+.card:hover i {
+  color: #0f2027; /* Dark blue matching header for hover effect */
+  transform: scale(1.2);
+}
+h5 {
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+  color: #444;
+}
+h6 {
+  font-size: 0.90rem;
+  color: #fefefe;
+  line-height: 1.2;
+  margin: 0;
+}
+p {
+  font-size: 0.75rem;
+  color: #555;
+  line-height: 1.2;
+  margin: 0;
+}
+
+/* Border colors for variety */
+.card:nth-child(1) { border-top: 3px solid #ff6f61; }
+.card:nth-child(2) { border-top: 3px solid #ffb347; }
+.card:nth-child(3) { border-top: 3px solid #006064; } /* Dark blue accent */
+.card:nth-child(4) { border-top: 3px solid #00b894; }
+.card:nth-child(5) { border-top: 3px solid #fd79a8; }
+.card:nth-child(6) { border-top: 3px solid #fdba74; }
+.card:nth-child(7) { border-top: 3px solid #0984e3; }
+.card:nth-child(8) { border-top: 3px solid #00cec9; }
+
+/* Footer with white background, black text, matching style */
+.footer {
+  background-color: #ffffff;
+  color: #000;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: auto;
+  border-radius: 0 0 1rem 1rem;
+  box-shadow: inset 0 -2px 10px rgba(0,0,0,0.02);
+}
+</style>
+</head>
+<body>
+
+<!-- Header: Dark Blue Gradient, Diagonal, White Text, with Icon -->
+<div class="header">
+  <h1>Stationer Success Tracker</h1>
+  <h6>Track leads, projects, and profits - all in one place.</h6>
+</div>
+
+<!-- Grid of 4 in a row, responsive to smaller screens -->
+<div class="cards-container">
+  <div class="card" onclick="location.href='/projects'">
+    <i class="fas fa-pen-nib"></i>
+    <h5>Design Projects</h5>
+    <p>Manage your creative card & stationery projects.</p>
+  </div>
+  <div class="card" onclick="location.href='/clients'">
+    <i class="fas fa-user-friends"></i>
+    <h5>Clients & Feedback</h5>
+    <p>Track customer feedback and testimonials.</p>
+  </div>
+  <div class="card" onclick="location.href='/costs'">
+    <i class="fas fa-hand-holding-usd"></i>
+    <h5>Expenses & Profit</h5>
+    <p>Monitor finances clearly and simply.</p>
+  </div>
+  <div class="card" onclick="location.href='/tasks'">
+    <i class="fas fa-sync-alt"></i>
+    <h5>Tasks & Routine</h5>
+    <p>Stay on top of your daily work.</p>
+  </div>
+  <div class="card" onclick="location.href='/posts'">
+    <i class="fas fa-lightbulb"></i>
+    <h5>Content & Ideas</h5>
+    <p>Plan your creative content easily.</p>
+  </div>
+  <div class="card" onclick="location.href='/issues'">
+    <i class="fas fa-exclamation-circle"></i>
+    <h5>Workflow & Challenges</h5>
+    <p>Identify delays and bottlenecks.</p>
+  </div>
+  <div class="card" onclick="location.href='/inquiry'">
+    <i class="fas fa-comments"></i>
+    <h5>Leads & Sales</h5>
+    <p>Track inquiries and convert leads.</p>
+  </div>
+  <div class="card" onclick="location.href='/time'">
+    <i class="fas fa-hourglass-half"></i>
+    <h5>Time & Hours</h5>
+    <p>Log your work hours efficiently.</p>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  &copy; <strong>Stationer Success Tracker</strong>. Built with ❤️ to help creative businesses thrive.
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

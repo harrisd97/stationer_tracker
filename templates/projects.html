@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Stationer Projects</title>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #323232;
+  font-size: 0.9rem; /* smaller base font size */
+}
+
+/* Header with diagonal gradient shape, smaller font size */
+.header {
+  background: linear-gradient(135deg, #29102a, #994ac3, #582c64);
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: #fff;
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+}
+.header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.3rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+h6 {
+  font-size: 0.90rem;
+  color: #fefefe;
+  line-height: 1.2;
+  margin: 0;
+}
+.header p {
+  font-size: 0.8rem;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.3;
+  border-top: 2px solid #fff;
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+}
+
+/* Main container with scroll */
+.main-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem 1rem;
+  max-height: calc(100vh - 160px); /* adjust as needed for header/footer size */
+}
+
+/* Form styling */
+#projectFormSection {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  margin-bottom: 1.5rem;
+}
+#projectForm {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+}
+#projectForm .row {
+  margin-bottom: 0.75rem;
+}
+#projectForm label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  display: block;
+  font-size: 0.9rem;
+}
+#projectForm input,
+#projectForm select {
+  width: 100%;
+  padding: 0.4rem;
+  border-radius: 0.4rem;
+  border: 1px solid #ccc;
+  font-size: 0.85rem;
+}
+#projectForm .d-flex {
+  gap: 0.5rem;
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  background: #fff;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  font-size: 0.85rem;
+}
+thead {
+  background-color: #f8f9fa;
+}
+tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Loading overlay styles */
+.loading-overlay {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(255,255,255,0.7);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 999;
+}
+.spinner-border {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Pagination controls */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Footer style */
+.footer {
+  background-color: #ffffff;
+  color: #000;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: auto;
+  border-radius: 0 0 1rem 1rem;
+  box-shadow: inset 0 -2px 10px rgba(0,0,0,0.02);
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header text-center">
+  <h1>
+    <a href="/" class="text-white text-decoration-none">Stationer Success Tracker</a>
+  </h1>
+  <h6 class="text-light">Track leads, projects, and profits - all in one place.</h6>
+</div>
+
+<!-- Main Content with scroll -->
+<div class="main-container" id="scrollContainer">
+
+  <!-- Header with back button -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 style="font-size:1.5rem;">Projects</h2>
+    <a class="btn btn-outline-secondary btn-sm" href="/">Back to Home</a>
+  </div>
+
+  <!-- Add button and entries limit -->
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <button class="btn btn-primary btn-sm" id="addProjectBtn">+ Add Project</button>
+    <div class="d-flex align-items-center">
+      <label class="me-2 mb-0">Show</label>
+      <select id="limitSelect" class="form-select d-inline-block w-auto" style="width:auto;">
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+      </select>
+      <span class="ms-2">entries</span>
+    </div>
+  </div>
+
+  <!-- Project Form (hidden initially) -->
+  <div id="projectFormSection" style="display:none;">
+    <form id="projectForm" class="p-3 border rounded bg-white mb-4">
+      <input type="hidden" id="project_id" />
+      <input type="hidden" id="client_id" />
+
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <label>Client Name</label>
+          <input type="text" class="form-control" id="client_name" required />
+        </div>
+        <div class="col-md-6">
+          <label>Client Email</label>
+          <input class="form-control" id="client_email" type="email" />
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <label>Client Phone</label>
+          <input class="form-control" id="client_phone" />
+        </div>
+        <div class="col-md-6">
+          <label>Project Reference</label>
+          <input class="form-control" id="project_reference" />
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <label>Inquiry Date</label>
+          <input class="form-control" id="inquiry_date" type="date" />
+        </div>
+        <div class="col-md-6">
+          <label>Source</label>
+          <select class="form-select" id="source"></select>
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <label>Project Type</label>
+          <select class="form-select" id="project_type"></select>
+        </div>
+        <div class="col-md-6">
+          <label>Conversion Status</label>
+          <select class="form-select" id="conversion_status"></select>
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <label>Quoted Amount</label>
+          <input type="number" class="form-control" id="quoted_amount" />
+        </div>
+        <div class="col-md-6">
+          <label>Final Amount</label>
+          <input type="number" class="form-control" id="final_amount" />
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <label>Contract Signed Date</label>
+          <input type="date" class="form-control" id="contract_signed_date" />
+        </div>
+        <div class="col-md-6">
+          <label>Project Deadline</label>
+          <input type="date" class="form-control" id="project_deadline" />
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button class="btn btn-success btn-sm" type="submit">Save</button>
+        <button class="btn btn-outline-danger btn-sm" type="button" onclick="closeForm()">Close</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Projects Table -->
+  <div class="table-responsive position-relative mb-4">
+    <div id="loading" class="loading-overlay" style="display:none;">
+      <div class="spinner-border text-danger"></div>
+    </div>
+    <table class="table table-bordered table-striped mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Client</th>
+          <th>Reference</th>
+          <th>Inquiry Date</th>
+          <th>Source</th>
+          <th>Conversion</th>
+          <th>Quoted</th>
+          <th>Final</th>
+          <th>Edit</th>
+        </tr>
+      </thead>
+      <tbody id="projectTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination-controls mb-4 justify-content-center d-flex gap-2">
+    <button class="btn btn-sm btn-outline-secondary" id="prevBtn" onclick="changePage(-1)">Prev</button>
+    <span id="pageIndicator">Page 1</span>
+    <button class="btn btn-sm btn-outline-secondary" id="nextBtn" onclick="changePage(1)">Next</button>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  © <strong>Stationer Success Tracker</strong>. Built with ❤️ to help creative businesses thrive.
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Variables
+  let currentPage = 1;
+  let limit = 10;
+
+  // Initialize
+  window.onload = () => {
+    document.getElementById("inquiry_date").value = getTodayDate();
+    loadLOV("CONVERSION_STATUS", "conversion_status").then(() => {
+      document.getElementById("conversion_status").value = "PENDING";
+    });
+    loadLOV("LEAD_SOURCE", "source");
+    loadLOV("PROJECT_TYPE", "project_type");
+    loadProjects();
+  };
+
+  document.getElementById("limitSelect").addEventListener("change", () => {
+    limit = parseInt(document.getElementById("limitSelect").value);
+    currentPage = 1;
+    loadProjects();
+  });
+
+  document.getElementById("addProjectBtn").addEventListener("click", () => {
+    resetForm();
+  });
+
+  async function loadProjects() {
+    document.getElementById("loading").style.display = "flex";
+    const res = await fetch(`/api/projects?page=${currentPage}&limit=${limit}`);
+    const data = await res.json();
+    const tbody = document.getElementById("projectTableBody");
+    tbody.innerHTML = "";
+    if (!data.length) {
+      document.getElementById("pageIndicator").innerText = "No records";
+      document.getElementById("prevBtn").style.display = "none";
+      document.getElementById("nextBtn").style.display = "none";
+      document.getElementById("loading").style.display = "none";
+      return;
+    }
+    document.getElementById("pageIndicator").innerText = `Page ${currentPage}`;
+    document.getElementById("prevBtn").style.display = currentPage === 1 ? "none" : "inline-block";
+    document.getElementById("nextBtn").style.display = data.length < limit ? "none" : "inline-block";
+
+    data.forEach((row, idx) => {
+      const sno = (currentPage - 1) * limit + idx + 1;
+      tbody.innerHTML += `
+        <tr>
+          <td>${sno}</td>
+          <td>${row.client_name}</td>
+          <td>${row.project_reference}</td>
+          <td>${row.inquiry_date || ""}</td>
+          <td>${row.source_desc || ""}</td>
+          <td>${row.conversion_status_desc || ""}</td>
+          <td>${row.quoted_amount}</td>
+          <td>${row.final_amount}</td>
+          <td><button class="btn btn-sm btn-link p-0" onclick="editProject(${row.project_id})">✏️</button></td>
+        </tr>`;
+    });
+    document.getElementById("loading").style.display = "none";
+  }
+
+  function changePage(dir) {
+    currentPage += dir;
+    loadProjects();
+  }
+
+  async function editProject(projectId) {
+    const res = await fetch(`/api/project/${projectId}`);
+    const data = await res.json();
+    document.getElementById("projectFormSection").style.display = "block";
+
+    for (const key in data) {
+      if (document.getElementById(key)) {
+        document.getElementById(key).value = data[key] || "";
+      }
+    }
+    document.getElementById("project_reference").disabled = false;
+    document.getElementById("inquiry_date").value = data.inquiry_date || getTodayDate();
+
+    await loadLOV("CONVERSION_STATUS", "conversion_status");
+    if (data.conversion_status) {
+      document.getElementById("conversion_status").value = data.conversion_status;
+    } else {
+      document.getElementById("conversion_status").value = "PENDING";
+    }
+    window.scrollTo(0, 0);
+  }
+
+  function getTodayDate() {
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = String(today.getMonth() + 1).padStart(2, '0');
+    const d = String(today.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  async function loadLOV(refName, selectId) {
+    const res = await fetch(`/api/lov/${refName}`);
+    const data = await res.json();
+    const select = document.getElementById(selectId);
+    select.innerHTML = `<option value="">-- Select --</option>`;
+    data.forEach(item => {
+      select.innerHTML += `<option value="${item.code_value}">${item.code_description}</option>`;
+    });
+  }
+
+  async function resetForm() {
+    document.getElementById("projectForm").reset();
+    document.getElementById("project_id").value = "";
+    document.getElementById("client_id").value = "";
+    document.getElementById("inquiry_date").value = getTodayDate();
+    await loadLOV("CONVERSION_STATUS", "conversion_status");
+    document.getElementById("conversion_status").value = "PND";
+    document.getElementById("project_reference").disabled = true;
+    document.getElementById("projectFormSection").style.display = "block";
+    window.scrollTo(0, 0);
+  }
+
+  document.getElementById("client_phone").addEventListener("input", () => {
+    const input = document.getElementById("client_phone");
+    input.value = input.value.replace(/\D/g, '');
+    if (input.value.length > 10) input.value = input.value.slice(0, 10);
+  });
+
+  document.getElementById("projectForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const payload = {};
+    [...document.querySelectorAll("#projectForm input")].forEach(el => {
+      if (el.id) payload[el.id] = el.value;
+    });
+    if (payload.client_phone && payload.client_phone.length !== 10) {
+      alert("Client Phone must be exactly 10 digits");
+      return;
+    }
+    const res = await fetch("/api/project", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const msg = await res.text();
+    alert(msg);
+    if (res.ok) {
+      document.getElementById("projectForm").reset();
+      document.getElementById("projectFormSection").style.display = "none";
+      loadProjects();
+    }
+  });
+
+  function closeForm() {
+    document.getElementById("projectForm").reset();
+    document.getElementById("projectFormSection").style.display = "none";
+  }
+</script>
+</body>
+</html>
