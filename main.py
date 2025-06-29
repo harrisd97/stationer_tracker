@@ -3,7 +3,7 @@ from db_config import get_connection
 from psycopg2.extras import RealDictCursor
 import json
 import logging
-import 'os'
+import os
 
 # Configure logging
 logging.basicConfig(
