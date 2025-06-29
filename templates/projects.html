@@ -3,11 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!--Title-->
 <title>Stationer Projects</title>
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+
 <style>
 body {
   margin: 0;
@@ -52,6 +56,10 @@ h6 {
   margin-top: 0.4rem;
   padding-top: 0.4rem;
 }
+
+h2 {
+      font-size: 2rem;
+    }
 
 /* Main container with scroll */
 .main-container {
@@ -110,13 +118,20 @@ tbody tr:hover {
   background-color: #f1f1f1;
 }
 
-/* Loading overlay styles */
-.loading-overlay {
-  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(255,255,255,0.7);
-  display: flex; justify-content: center; align-items: center;
-  z-index: 999;
-}
+    /* Loading overlay styles */
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
 .spinner-border {
   width: 2rem;
   height: 2rem;
@@ -142,6 +157,14 @@ tbody tr:hover {
   border-radius: 0 0 1rem 1rem;
   box-shadow: inset 0 -2px 10px rgba(0,0,0,0.02);
 }
+
+.action-icon {
+      cursor: pointer;
+    }
+
+    .action-icon:hover {
+      color: #0d6efd;
+    }
 </style>
 </head>
 <body>
@@ -159,7 +182,7 @@ tbody tr:hover {
 
   <!-- Header with back button -->
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 style="font-size:1.5rem;">Projects</h2>
+    <h2>Projects</h2>
     <a class="btn btn-outline-secondary btn-sm" href="/">Back to Home</a>
   </div>
 
@@ -295,12 +318,12 @@ tbody tr:hover {
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!--Script-->
 <script>
-  // Variables
   let currentPage = 1;
   let limit = 10;
 
-  // Initialize
   window.onload = () => {
     document.getElementById("inquiry_date").value = getTodayDate();
     loadLOV("CONVERSION_STATUS", "conversion_status").then(() => {
@@ -323,37 +346,43 @@ tbody tr:hover {
 
   async function loadProjects() {
     document.getElementById("loading").style.display = "flex";
-    const res = await fetch(`/api/projects?page=${currentPage}&limit=${limit}`);
-    const data = await res.json();
-    const tbody = document.getElementById("projectTableBody");
-    tbody.innerHTML = "";
-    if (!data.length) {
-      document.getElementById("pageIndicator").innerText = "No records";
-      document.getElementById("prevBtn").style.display = "none";
-      document.getElementById("nextBtn").style.display = "none";
-      document.getElementById("loading").style.display = "none";
-      return;
-    }
-    document.getElementById("pageIndicator").innerText = `Page ${currentPage}`;
-    document.getElementById("prevBtn").style.display = currentPage === 1 ? "none" : "inline-block";
-    document.getElementById("nextBtn").style.display = data.length < limit ? "none" : "inline-block";
+    try {
+      const res = await fetch(`/api/projects?page=${currentPage}&limit=${limit}`);
+      const data = await res.json();
+      const tbody = document.getElementById("projectTableBody");
+      tbody.innerHTML = "";
 
-    data.forEach((row, idx) => {
-      const sno = (currentPage - 1) * limit + idx + 1;
-      tbody.innerHTML += `
-        <tr>
-          <td>${sno}</td>
-          <td>${row.client_name}</td>
-          <td>${row.project_reference}</td>
-          <td>${row.inquiry_date || ""}</td>
-          <td>${row.source_desc || ""}</td>
-          <td>${row.conversion_status_desc || ""}</td>
-          <td>${row.quoted_amount}</td>
-          <td>${row.final_amount}</td>
-          <td><button class="btn btn-sm btn-link p-0" onclick="editProject(${row.project_id})">✏️</button></td>
-        </tr>`;
-    });
-    document.getElementById("loading").style.display = "none";
+      if (!data.length) {
+        document.getElementById("pageIndicator").innerText = "No records";
+        document.getElementById("prevBtn").style.display = "none";
+        document.getElementById("nextBtn").style.display = "none";
+        return;
+      }
+
+      document.getElementById("pageIndicator").innerText = `Page ${currentPage}`;
+      document.getElementById("prevBtn").style.display = currentPage === 1 ? "none" : "inline-block";
+      document.getElementById("nextBtn").style.display = data.length < limit ? "none" : "inline-block";
+
+      data.forEach((row, idx) => {
+        const sno = (currentPage - 1) * limit + idx + 1;
+        tbody.innerHTML += `
+          <tr>
+            <td>${sno}</td>
+            <td>${row.client_name}</td>
+            <td>${row.project_reference}</td>
+            <td>${row.inquiry_date || ""}</td>
+            <td>${row.source_desc || ""}</td>
+            <td>${row.conversion_status_desc || ""}</td>
+            <td>${row.quoted_amount}</td>
+            <td>${row.final_amount}</td>
+            <td><button class="btn btn-sm btn-link p-0" onclick="editProject(${row.project_id})">✏️</button></td>
+          </tr>`;
+      });
+    } catch (error) {
+      showToast("Unable to load data. Please try again.", "danger");
+    } finally {
+      document.getElementById("loading").style.display = "none";
+    }
   }
 
   function changePage(dir) {
@@ -362,43 +391,48 @@ tbody tr:hover {
   }
 
   async function editProject(projectId) {
-    const res = await fetch(`/api/project/${projectId}`);
-    const data = await res.json();
-    document.getElementById("projectFormSection").style.display = "block";
+    try {
+      const res = await fetch(`/api/project/${projectId}`);
+      const data = await res.json();
+      if (!data || Object.keys(data).length === 0) return;
 
-    for (const key in data) {
-      if (document.getElementById(key)) {
-        document.getElementById(key).value = data[key] || "";
+      document.getElementById("projectFormSection").style.display = "block";
+
+      for (const key in data) {
+        if (document.getElementById(key)) {
+          document.getElementById(key).value = data[key] || "";
+        }
       }
-    }
-    document.getElementById("project_reference").disabled = false;
-    document.getElementById("inquiry_date").value = data.inquiry_date || getTodayDate();
 
-    await loadLOV("CONVERSION_STATUS", "conversion_status");
-    if (data.conversion_status) {
-      document.getElementById("conversion_status").value = data.conversion_status;
-    } else {
-      document.getElementById("conversion_status").value = "PENDING";
+      document.getElementById("project_reference").disabled = false;
+      document.getElementById("inquiry_date").value = data.inquiry_date || getTodayDate();
+
+      await loadLOV("CONVERSION_STATUS", "conversion_status");
+      document.getElementById("conversion_status").value = data.conversion_status || "PENDING";
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      showToast("Could not fetch project details.", "danger");
     }
-    window.scrollTo(0, 0);
   }
 
   function getTodayDate() {
     const today = new Date();
-    const y = today.getFullYear();
-    const m = String(today.getMonth() + 1).padStart(2, '0');
-    const d = String(today.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
+    return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
   }
 
   async function loadLOV(refName, selectId) {
-    const res = await fetch(`/api/lov/${refName}`);
-    const data = await res.json();
-    const select = document.getElementById(selectId);
-    select.innerHTML = `<option value="">-- Select --</option>`;
-    data.forEach(item => {
-      select.innerHTML += `<option value="${item.code_value}">${item.code_description}</option>`;
-    });
+    try {
+      const res = await fetch(`/api/lov/${refName}`);
+      const data = await res.json();
+      const select = document.getElementById(selectId);
+      select.innerHTML = `<option value="">-- Select --</option>`;
+      data.forEach(item => {
+        select.innerHTML += `<option value="${item.code_value}">${item.code_description}</option>`;
+      });
+    } catch (err) {
+      showToast(`Failed to load options for ${refName}`, "warning");
+    }
   }
 
   async function resetForm() {
@@ -410,7 +444,7 @@ tbody tr:hover {
     document.getElementById("conversion_status").value = "PND";
     document.getElementById("project_reference").disabled = true;
     document.getElementById("projectFormSection").style.display = "block";
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   document.getElementById("client_phone").addEventListener("input", () => {
@@ -421,25 +455,41 @@ tbody tr:hover {
 
   document.getElementById("projectForm").addEventListener("submit", async (e) => {
     e.preventDefault();
+
     const payload = {};
-    [...document.querySelectorAll("#projectForm input")].forEach(el => {
-      if (el.id) payload[el.id] = el.value;
+    [...document.querySelectorAll("#projectForm input, #projectForm select")].forEach(el => {
+      if (el.id) payload[el.id] = el.value.trim();
     });
-    if (payload.client_phone && payload.client_phone.length !== 10) {
-      alert("Client Phone must be exactly 10 digits");
+
+    if (!payload.client_name) {
+      showToast("Client Name is required", "danger");
       return;
     }
-    const res = await fetch("/api/project", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    const msg = await res.text();
-    alert(msg);
-    if (res.ok) {
-      document.getElementById("projectForm").reset();
-      document.getElementById("projectFormSection").style.display = "none";
-      loadProjects();
+
+    if (payload.client_phone && payload.client_phone.length !== 10) {
+      showToast("Client Phone must be exactly 10 digits", "danger");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/project", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+
+      if (res.ok && (result.success || result.status === "success")) {
+        showToast(result.message || "Saved", "success");
+        closeForm();
+        loadProjects();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        showToast(result.message || "Something went wrong.", "danger");
+      }
+    } catch (err) {
+      showToast("Server error. Please try again later.", "danger");
     }
   });
 
@@ -447,6 +497,20 @@ tbody tr:hover {
     document.getElementById("projectForm").reset();
     document.getElementById("projectFormSection").style.display = "none";
   }
+
+  function showToast(message, type = "info") {
+    const toast = document.createElement("div");
+    toast.className = `alert alert-${type}`;
+    toast.innerText = message;
+    toast.style.marginBottom = "10px";
+    toast.style.minWidth = "250px";
+    toast.style.boxShadow = "0 0 10px rgba(0,0,0,0.2)";
+    document.getElementById("toastBox").appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
 </script>
+
+<!-- Place this somewhere in the HTML body -->
+<div id="toastBox" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;"></div>
 </body>
 </html>
