@@ -3,16 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  
-  <!--Title-->
+
   <title>Client Experience Tracker</title>
-  <!-- Bootstrap CSS -->
+
+  <!-- External CSS Libraries -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  
-  
+
+  <!-- Internal CSS for styling -->
   <style>
+    /* ===================== */
+    /* General Body Styles  */
+    /* ===================== */
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
@@ -21,20 +23,26 @@
       flex-direction: column;
       min-height: 100vh;
       color: #323232;
-      font-size: 0.9rem; /* smaller base font size */
+      font-size: 0.9rem; /* Smaller base font size */
     }
 
-    /* Header with diagonal gradient shape, smaller font size */
+    /* ===================== */
+    /* Header Styles        */
+    /* ===================== */
     .header {
       background: linear-gradient(135deg, #29102a, #994ac3, #582c64);
-      padding: 2.5rem 1rem;
+      padding: 2rem 1rem;
       text-align: center;
       color: #fff;
-      clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+      clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+      position: relative;
+      overflow: hidden; /* Ensures no overflow outside header */
+      max-width: 100%;   /* Responsive on small screens */
+      box-sizing: border-box;
     }
 
     .header h1 {
-      font-size: 2.2rem;
+      font-size: 2rem;
       margin-bottom: 0.3rem;
       letter-spacing: 1px;
       font-weight: 700;
@@ -43,13 +51,22 @@
       justify-content: center;
     }
 
+    /* Responsive width for header headings */
+    .header h1, .header h6 {
+      margin: 0 auto;
+      max-width: 90vw; /* Responsive for mobile devices */
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* Subheading in header */
     h6 {
       font-size: 0.90rem;
-      /*color: #fefefe;*/
       line-height: 1.2;
       margin: 0;
     }
 
+    /* Paragraph under header */
     .header p {
       font-size: 0.8rem;
       max-width: 700px;
@@ -60,18 +77,28 @@
       padding-top: 0.4rem;
     }
 
-    h2 {
-      font-size: 2rem;
-    }
-
-    /* Main container with scroll */
+    /* ===================== */
+    /* Main Container Styles */
+    /* ===================== */
     .main-container {
       flex: 1;
       overflow-y: auto;
       padding: 1.5rem 1rem;
-      max-height: calc(100vh - 160px); /* adjust as needed for header/footer size */
+      /* Adjust for header/footer height if needed */
+      max-height: calc(100vh - 160px);
     }
 
+    /* ===================== */
+    /* Button Styles        */
+    /* ===================== */
+    .btn-outline-secondary {
+      font-size: 0.65rem;
+      padding: 0.3rem 0.6rem;
+    }
+
+    /* ===================== */
+    /* Dashboard Cards Styles */
+    /* ===================== */
     .summary-cards {
       display: flex;
       flex-wrap: wrap;
@@ -81,60 +108,100 @@
 
     .summary-card {
       flex: 1;
-      min-width: 150px;
-      background: white;
-      padding: 1rem;
+      min-width: 100px;
+      background: linear-gradient(135deg, #f5f0ff, #e9d4f5);
+      padding: 1.2rem 1rem;
       text-align: center;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(153, 74, 195, 0.2);
+      transition: transform 0.2s ease;
     }
-    
-    /* Form styling */
-#feedbackForm {
-  display: flex;
-  flex-direction: column;
-  font-size: 0.85rem;
-}
 
-#feedbackForm .row {
-  margin-bottom: 0.75rem;
-}
+    /* Card hover effect */
+    .summary-card:hover {
+      transform: scale(1.02);
+    }
 
-#feedbackForm label {
-  font-weight: 600;
-  margin-bottom: 0.3rem;
-  display: block;
-  font-size: 0.9rem;
-}
+    /* Card title styling */
+    .summary-card h6 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #5c1a84;
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
 
-#feedbackForm input,
-#feedbackForm select {
-  width: 100%;
-  padding: 0.4rem;
-  border-radius: 0.4rem;
-  border: 1px solid #ccc;
-  font-size: 0.85rem;
-}
+    /* Card value styling */
+    .summary-card p {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #2e0438;
+      margin: 0;
+    }
 
-#feedbackForm .d-flex {
-  gap: 0.5rem;
-}
+    /* Responsive adjustments for cards on small screens */
+    @media (max-width: 768px) {
+      .summary-card {
+        flex: 0 0 calc(50% - 0.5rem); /* 2 per row */
+      }
+    }
 
-/* Table styles */
-table {
-  width: 100%;
-  background: #fff;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  font-size: 0.85rem;
-}
-thead {
-  background-color: #f8f9fa;
-}
-tbody tr:hover {
-  background-color: #f1f1f1;
-}
+    /* ===================== */
+    /* Feedback Form Styles  */
+    /* ===================== */
+    #feedbackForm {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.85rem;
+    }
 
+    #feedbackForm .row {
+      margin-bottom: 0.75rem;
+    }
+
+    #feedbackForm label {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    #feedbackForm input,
+    #feedbackForm select {
+      width: 100%;
+      padding: 0.4rem;
+      border-radius: 0.4rem;
+      border: 1px solid #ccc;
+      font-size: 0.85rem;
+    }
+
+    #feedbackForm .d-flex {
+      gap: 0.5rem;
+    }
+
+    /* ===================== */
+    /* Table Styles          */
+    /* ===================== */
+    table {
+      width: 100%;
+      background: #fff;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      font-size: 0.85rem;
+    }
+
+    thead {
+      background-color: #f8f9fa;
+    }
+
+    tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* ===================== */
+    /* Pagination Controls   */
+    /* ===================== */
     .pagination-controls {
       display: flex;
       justify-content: center;
@@ -143,14 +210,13 @@ tbody tr:hover {
       margin-top: 1rem;
     }
 
-    /* Loading overlay styles */
+    /* ===================== */
+    /* Loading Overlay Styles */
+    /* ===================== */
     .loading-overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(255, 255, 255, 0.7);
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(255,255,255,0.7);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -162,18 +228,11 @@ tbody tr:hover {
       height: 2rem;
     }
 
-    /* Pagination controls */
-    .pagination-controls {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    /* Footer style */
+    /* ===================== */
+    /* Footer Styles         */
+    /* ===================== */
     .footer {
-      background-color: #ffffff;
+      background-color: #fff;
       color: #000;
       padding: 1rem;
       text-align: center;
@@ -183,6 +242,9 @@ tbody tr:hover {
       box-shadow: inset 0 -2px 10px rgba(0, 0, 0, 0.02);
     }
 
+    /* ===================== */
+    /* Action Icon Styles    */
+    /* ===================== */
     .action-icon {
       cursor: pointer;
     }
@@ -194,9 +256,9 @@ tbody tr:hover {
 </head>
 <body>
 
-
-
-  <!-- Header -->
+  <!-- ===================== -->
+  <!-- Header Section        -->
+  <!-- ===================== -->
   <div class="header text-center">
     <h1>
       <a href="/" class="text-white text-decoration-none">Stationer Success Tracker</a>
@@ -204,7 +266,9 @@ tbody tr:hover {
     <h6 class="text-light">Track leads, projects, and profits - all in one place.</h6>
   </div>
 
-  <!-- Main Content with scroll -->
+  <!-- ===================== -->
+  <!-- Main Content Area     -->
+  <!-- ===================== -->
   <div class="main-container" id="scrollContainer">
 
     <!-- Header with back button -->
@@ -213,7 +277,7 @@ tbody tr:hover {
       <a class="btn btn-outline-secondary btn-sm" href="/">Back to Home</a>
     </div>
 
-    <!-- Dashboard -->
+    <!-- Dashboard Summary Cards -->
     <div class="summary-cards">
       <div class="summary-card">
         <h6>Avg. Score</h6>
@@ -233,7 +297,7 @@ tbody tr:hover {
       </div>
     </div>
 
-    <!-- Add button and entries limit -->
+    <!-- Add Feedback Button & Entries Limit -->
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
       <button class="btn btn-primary btn-sm" id="addFeedbackBtn">+ Add Feedback</button>
       <div class="d-flex align-items-center">
@@ -248,22 +312,30 @@ tbody tr:hover {
       </div>
     </div>
 
-    <!-- Feedback Form -->
+    <!-- Feedback Form (Hidden by default) -->
     <div id="feedbackFormSection" style="display:none;">
       <form id="clientExperienceForm" class="p-3 border rounded bg-white mb-4">
+        <!-- Hidden ID for editing -->
         <input type="hidden" id="experience_id" />
 
+        <!-- Project & Score Inputs -->
         <div class="row mb-2">
-          <div class="col-md-6">
+          <!-- Project Search Input -->
+          <div class="col-md-6 position-relative">
             <label>Project</label>
-            <select id="project_id" class="form-select" required></select>
+            <input type="text" id="projectSearch" class="form-control" placeholder="Type to search project..." autocomplete="off" required>
+            <input type="hidden" id="project_id" />
+            <div id="projectSearchList" class="list-group position-absolute w-100 z-3" style="max-height: 200px; overflow-y: auto; display: none;"></div>
           </div>
+          
+          <!-- Score Input -->
           <div class="col-md-6">
             <label>Score (1–10)</label>
             <input type="number" min="1" max="10" id="score" class="form-control" required />
           </div>
         </div>
 
+        <!-- Feedback Theme & Notes -->
         <div class="row mb-2">
           <div class="col-md-6">
             <label>Feedback Theme</label>
@@ -275,6 +347,7 @@ tbody tr:hover {
           </div>
         </div>
 
+        <!-- Testimonials & Referral Checkboxes -->
         <div class="row mb-2">
           <div class="col-md-6 form-check">
             <input type="checkbox" id="testimonial_collected" class="form-check-input" />
@@ -286,6 +359,7 @@ tbody tr:hover {
           </div>
         </div>
 
+        <!-- Form Buttons -->
         <div class="d-flex gap-2 mt-3">
           <button type="submit" class="btn btn-success btn-sm">Save</button>
           <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeForm()">Close</button>
@@ -293,12 +367,13 @@ tbody tr:hover {
       </form>
     </div>
 
-
-    <!-- Feedback Table -->
+    <!-- Feedback Entries Table -->
     <div class="table-responsive position-relative mb-4">
+      <!-- Loading Overlay -->
       <div id="loading" class="loading-overlay" style="display:none;">
         <div class="spinner-border text-danger"></div>
       </div>
+      <!-- Data Table -->
       <table class="table table-bordered table-striped mb-0">
         <thead class="table-light">
           <tr>
@@ -317,71 +392,85 @@ tbody tr:hover {
       </table>
     </div>
 
-    <!-- Pagination -->
+    <!-- Pagination Controls -->
     <div class="pagination-controls mb-4 justify-content-center d-flex gap-2">
       <button id="prevBtn" class="btn btn-sm btn-outline-secondary" onclick="changePage(-1)">Prev</button>
       <span id="pageIndicator">Page 1</span>
       <button id="nextBtn" class="btn btn-sm btn-outline-secondary" onclick="changePage(1)">Next</button>
     </div>
-
   </div>
 
-    <!-- Footer -->
-    <div class="footer">
-        © <strong>Stationer Success Tracker</strong>. Built with ❤️ to help creative businesses thrive.
-      </div>
+  <!-- Footer -->
+  <div class="footer">
+    © <strong>Stationer Success Tracker</strong>. Built with ❤️ to help creative businesses thrive.
+  </div>
 
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Your existing HTML structure, add this inside your HTML body where appropriate -->
+  <!-- Toast Message Container -->
+  <div id="toastBox" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;"></div>
 
-<div id="toastBox" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;"></div>
-<!-- Updated and error-handled script for Client Experience -->
-<script>
-    let currentPage = 1;
-    let limit = 10;
-  
+  <!-- ===================== -->
+  <!-- Scripts: Bootstrap & Custom -->
+  <!-- ===================== -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // ===================== //
+    // Global Variables     //
+    // ===================== //
+    let currentPage = 1;    // Current page for pagination
+    let limit = 10;         // Entries per page
+
+    // ===================== //
+    // Initialization       //
+    // ===================== //
     window.onload = () => {
-      loadProjectsDropdown();
-      loadLOV("FEEDBACK_THEME", "feedback_theme");
-      loadClientExperiences();
-      loadExperienceDashboard();
+      loadProjectsDropdown();     // Load project options
+      loadLOV("FEEDBACK_THEME", "feedback_theme"); // Load feedback themes
+      loadClientExperiences();      // Load initial data
+      loadExperienceDashboard();    // Load dashboard metrics
     };
-  
+
+    // Event listener for limit dropdown change
     document.getElementById("limitSelect").addEventListener("change", () => {
       limit = parseInt(document.getElementById("limitSelect").value);
-      currentPage = 1;
+      currentPage = 1; // Reset to first page on limit change
       loadClientExperiences();
     });
-  
+
+    // Event listener for "Add Feedback" button
     document.getElementById("addFeedbackBtn").addEventListener("click", () => {
       resetForm();
     });
-  
+
+    // ===================== //
+    // Load Client Experiences
+    // ===================== //
     async function loadClientExperiences() {
       const loadingOverlay = document.getElementById("loading");
       if (loadingOverlay) loadingOverlay.style.display = "flex";
-  
+
       try {
         const res = await fetch(`/api/client-experiences?page=${currentPage}&limit=${limit}`);
         const data = await res.json();
-  
+
         if (!Array.isArray(data)) throw new Error("Invalid data format");
-  
+
         const tbody = document.getElementById("clientGrid");
-        tbody.innerHTML = "";
-  
+        tbody.innerHTML = ""; // Clear existing rows
+
         if (data.length === 0) {
           document.getElementById("pageIndicator").innerText = "No records";
           document.getElementById("prevBtn").style.display = "none";
           document.getElementById("nextBtn").style.display = "none";
           return;
         }
-  
+
+        // Update pagination controls
         document.getElementById("pageIndicator").innerText = `Page ${currentPage}`;
         document.getElementById("prevBtn").style.display = currentPage === 1 ? "none" : "inline-block";
         document.getElementById("nextBtn").style.display = data.length < limit ? "none" : "inline-block";
-  
+
+        // Populate table rows
         data.forEach((row, idx) => {
           const sno = (currentPage - 1) * limit + idx + 1;
           tbody.innerHTML += `
@@ -404,24 +493,30 @@ tbody tr:hover {
         if (loadingOverlay) loadingOverlay.style.display = "none";
       }
     }
-  
+
+    // Pagination: Change page
     function changePage(dir) {
       currentPage += dir;
       loadClientExperiences();
     }
-  
+
+    // ===================== //
+    // Edit Experience
+    // ===================== //
     async function editExperience(id) {
       try {
         const res = await fetch(`/api/client-experience/${id}`);
         const data = await res.json();
-  
+
         if (!data || Object.keys(data).length === 0) {
           showToast("Experience not found.", "warning");
           return;
         }
-  
+
+        // Show form section
         document.getElementById("feedbackFormSection").style.display = "block";
-  
+
+        // Populate form fields
         for (const key in data) {
           const el = document.getElementById(key);
           if (el) {
@@ -432,13 +527,17 @@ tbody tr:hover {
             }
           }
         }
+        // Scroll to top
         window.scrollTo(0, 0);
       } catch (err) {
         showToast("Failed to load experience details.", "danger");
         console.error("editExperience error:", err);
       }
     }
-  
+
+    // ===================== //
+    // Load Projects Dropdown
+    // ===================== //
     async function loadProjectsDropdown() {
       try {
         const res = await fetch('/api/projects?page=1&limit=100');
@@ -454,7 +553,51 @@ tbody tr:hover {
         console.error("loadProjectsDropdown error:", err);
       }
     }
-  
+
+    // Project search input with dynamic search
+    document.getElementById("projectSearch").addEventListener("input", async function () {
+      const query = this.value.trim();
+      const resultBox = document.getElementById("projectSearchList");
+
+      // Clear previous results
+      resultBox.innerHTML = "";
+      resultBox.style.display = "none";
+
+      if (query.length < 2) return;
+
+      try {
+        const res = await fetch(`/api/projects/search?query=${encodeURIComponent(query)}`);
+        const projects = await res.json();
+
+        // Clear again as a safety measure
+        resultBox.innerHTML = "";
+
+        if (!Array.isArray(projects)) return;
+
+        // Populate search results
+        projects.forEach(p => {
+          const item = document.createElement("a");
+          item.className = "list-group-item list-group-item-action";
+          item.textContent = `${p.project_reference} - ${p.client_name}`;
+          item.dataset.id = p.project_id;
+          item.onclick = () => {
+            document.getElementById("projectSearch").value = item.textContent;
+            document.getElementById("project_id").value = item.dataset.id;
+            resultBox.style.display = "none";
+          };
+          resultBox.appendChild(item);
+        });
+
+        // Show results if any
+        resultBox.style.display = projects.length > 0 ? "block" : "none";
+      } catch (err) {
+        console.error("Search error:", err);
+      }
+    });
+
+    // ===================== //
+    // Load List of Values (LOV)
+    // ===================== //
     async function loadLOV(refName, selectId) {
       try {
         const res = await fetch(`/api/lov/${refName}`);
@@ -469,22 +612,29 @@ tbody tr:hover {
         console.error("loadLOV error:", err);
       }
     }
-  
+
+    // ===================== //
+    // Reset & Close Form
+    // ===================== //
     function resetForm() {
       document.getElementById("clientExperienceForm").reset();
       document.getElementById("experience_id").value = "";
       document.getElementById("feedbackFormSection").style.display = "block";
       window.scrollTo(0, 0);
     }
-  
+
     function closeForm() {
       document.getElementById("clientExperienceForm").reset();
       document.getElementById("feedbackFormSection").style.display = "none";
     }
-  
+
+    // ===================== //
+    // Submit Feedback Form
+    // ===================== //
     document.getElementById("clientExperienceForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-  
+
+      // Collect form data
       const payload = {};
       [...document.querySelectorAll("#clientExperienceForm input, #clientExperienceForm select")].forEach(el => {
         if (el.type === "checkbox") {
@@ -493,7 +643,7 @@ tbody tr:hover {
           payload[el.id] = el.value;
         }
       });
-  
+
       try {
         const res = await fetch("/api/client-experience", {
           method: "POST",
@@ -501,11 +651,14 @@ tbody tr:hover {
           body: JSON.stringify(payload)
         });
         const result = await res.json();
-  
+
         if (res.ok && result.status === "success") {
           showToast("Saved successfully!", "success");
+          // Reset and hide form
           document.getElementById("clientExperienceForm").reset();
           document.getElementById("feedbackFormSection").style.display = "none";
+
+          // Reload data & dashboard
           loadClientExperiences();
           loadExperienceDashboard();
         } else {
@@ -517,7 +670,10 @@ tbody tr:hover {
         console.error("Form submit error:", err);
       }
     });
-  
+
+    // ===================== //
+    // Load Dashboard Metrics
+    // ===================== //
     async function loadExperienceDashboard() {
       try {
         const res = await fetch('/api/client-experience/dashboard');
@@ -531,7 +687,10 @@ tbody tr:hover {
         console.error("loadExperienceDashboard error:", err);
       }
     }
-  
+
+    // ===================== //
+    // Toast Notification
+    // ===================== //
     function showToast(message, type = "info") {
       const toast = document.createElement("div");
       toast.className = `alert alert-${type}`;
@@ -541,7 +700,5 @@ tbody tr:hover {
       setTimeout(() => toast.remove(), 3000);
     }
   </script>
-  <!-- Error Message Toast Container -->
-  <div id="toastBox" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;"></div>
 </body>
 </html>
