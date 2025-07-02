@@ -1,149 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Meta tags for character encoding and responsiveness -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Page Title -->
   <title>Expenses & Profit Tracker</title>
 
-  <!-- Bootstrap CSS for responsive layout and components -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-  <!-- Font Awesome for icons -->
+  <!-- ============================
+       External CSS & Fonts
+       Why: To style the page with Bootstrap, custom fonts, and icons
+       How: Linking CDN resources
+       Where to edit: Swap or add CSS links as needed
+  ============================ -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
+  <!-- ============================
+       Custom CSS Styles
+       Why: To define the look & feel of your app, colors, layout, responsiveness
+       How: Using CSS variables, media queries, animations
+       Where to edit: Inside <style> block for quick changes or external stylesheet for more
+  ============================ -->
   <style>
-    /* Global box-sizing for consistent sizing */
+    :root {
+      /* Define color palette and gradients for consistent styling */
+      --primary-color: #f8f6fa;
+      --accent-color: #b399cc;
+      --text-color: #4a4158;
+      --border-color: #e2daea;
+      --shadow-color: rgba(179, 153, 204, 0.15);
+      --gradient-start: #ffffff;
+      --gradient-end: #f8f6fa;
+      --title-color: #7a4e82;
+      --title-shadow: rgba(122, 78, 130, 0.1);
+    }
+
+    /* Reset margins, paddings, and box-sizing for consistency */
     * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
 
-    /* Body styling */
+    /* Full height and width for html & body, prevent overflow */
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    /* Body styling: Flex layout, background, font, color */
     body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background-color: #f0f0f0;
       display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      color: #323232;
-      font-size: 0.9rem;
-      overflow-x: hidden; /* Prevent horizontal scrolling */
+      flex-direction: column; /* Stack header, main, footer vertically */
+      min-height: 100vh; /* Full viewport height */
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: url('https://www.transparenttextures.com/patterns/white-diamond.png'), 
+                  linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
+      color: var(--text-color);
+      position: relative;
     }
 
-    /* Navbar styling */
+    /* Decorative pseudo-elements to add visual flair (can be customized or removed) */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      z-index: -1;
+      width: 250px;
+      height: 250px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      opacity: 0.3;
+    }
+    /* === End of decorative elements === */
+
+    /* Navbar styling: semi-transparent background, border, shadow */
     .navbar {
-      background: linear-gradient(135deg, #29102a, #994ac3, #582c64);
-      color: #fff;
-      padding: 0.5rem 1rem;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 2px 10px var(--shadow-color);
     }
 
+    /* Brand styling: custom font, size, color, hover effect */
     .navbar-brand {
-      color: #fff;
-      font-size: 1.2rem;
-      font-weight: 600;
-    }
-
-    .navbar-toggler {
-      border-color: transparent;
-    }
-
-    .navbar-nav .nav-link {
-      color: #fff;
-      font-size: 0.95rem;
-      padding: 0.5rem 1rem;
-    }
-
-    .navbar-nav .nav-link:hover {
-      color: #f8f9fa;
-    }
-
-    @media (max-width: 768px) {
-      .navbar-brand span {
-        font-size: 1rem;
-      }
-
-      .navbar-nav .nav-link {
-        font-size: 0.9rem;
-        text-align: right;
-      }
-    }
-
-    /* Responsive adjustments for navbar */
-    @media (max-width: 768px) {
-      .navbar-brand {
-        font-size: 1.2rem;
-      }
-      .navbar-nav .nav-link {
-        font-size: 0.9rem;
-      }
-    }
-
-    /* Main container styles for scrollable content area */
-    .main-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1rem;
-      margin-top: 1rem;
-      max-height: calc(100vh - 160px);
-    }
-
-    /* Button styling */
-    .btn-outline-secondary {
-      font-size: 0.65rem;
-      padding: 0.3rem 0.6rem;
-    }
-
-    /* Layout for summary cards (metrics) */
-    .summary-cards {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2rem;
+      color: var(--title-color) !important;
+      transition: all 0.3s ease;
       display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      animation: fadeInUp 0.8s ease-out;
     }
 
-    /* Individual card styling for summaries */
+    .navbar-subtitle {
+      font-family: 'Great Vibes', cursive;
+      font-size: 1.5rem;
+      color: var(--title-color);
+      margin-left: 1.5rem;
+      opacity: 0.9;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .navbar-brand:hover {
+      transform: translateY(-2px);
+      text-shadow: 0 4px 8px var(--shadow-color);
+    }
+
+    .navbar-brand i {
+      font-size: 2rem;
+      color: var(--title-color);
+      transition: all 0.3s ease;
+    }
+
+    .navbar-brand:hover i {
+      transform: rotate(-15deg);
+    }
+
+    @media (max-width: 768px) {
+      .navbar-subtitle {
+        font-size: 1rem;
+        margin-left: 0.75rem;
+        display: block;
+      }
+      .navbar-brand {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+
+    /* Navigation links styling */
+    .nav-link {
+      color: var(--title-color) !important;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    /* Hover effect for nav links */
+    .nav-link:hover {
+      color: var(--accent-color) !important;
+    }
+
+    /* Spacing between nav items */
+    .nav-item {
+      margin: 0 0.5rem;
+    }
+
+    /* Main container styling: centered, padded, with background & shadow */
+    .main-container {
+      flex: 1 0 auto; /* Expand to fill available space */
+      width: calc(100% - 2rem);
+      max-width: 1200px;
+      margin: 1rem auto;
+      padding: 1.5rem;
+      background-color: rgba(255, 255, 255, 0.98);
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px var(--shadow-color);
+      animation: fadeInUp 0.8s ease-out; /* Animate on load */
+    }
+
+    /* KPI Summary Cards layout: grid for responsiveness */
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* 2 columns by default */
+      gap: 1rem;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeIn 0.8s ease-out forwards;
+      animation-delay: 0.3s;
+    }
+
+    /* Individual KPI card style */
     .summary-card {
-      flex: 1;
-      min-width: 100px;
-      max-width: 300px;
       background: linear-gradient(135deg, #f5f0ff, #e9d4f5);
-      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 1rem;
+      padding: 1.2rem;
       text-align: center;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(153, 74, 195, 0.2);
+      box-shadow: 0 4px 15px var(--shadow-color);
       transition: transform 0.2s ease;
     }
 
-    /* Hover effect for cards */
+    /* Hover effect for KPI cards */
     .summary-card:hover {
-      transform: scale(1.02);
+      transform: translateY(-2px);
     }
 
-    /* Card title styles */
+    /* Card titles style */
     .summary-card h6 {
       font-size: 0.9rem;
       font-weight: 600;
-      color: #5c1a84;
-      margin-bottom: 0.4rem;
+      color: var(--accent-color);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
     }
 
-    /* Metric value styles */
+    /* KPI values style */
     .summary-card p {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: bold;
-      color: #2e0438;
+      color: var(--text-color);
       margin: 0;
     }
 
-    /* Responsive adjustments for smaller screens */
-    @media (max-width: 768px) {
+    /* Table styling for expense list */
+    .table {
+      background-color: white;
+      border-radius: 0.75rem;
+      overflow: hidden;
+    }
+    thead {
+      background-color: var(--primary-color);
+    }
+    tbody tr:hover {
+      background-color: rgba(179, 153, 204, 0.05);
+    }
+
+    /* Form controls styling: border, focus effects */
+    .form-control, .form-select {
+      border-color: var(--border-color);
+      border-radius: 0.5rem;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 0.2rem rgba(179, 153, 204, 0.25);
+    }
+
+    /* Buttons styling: primary and outline secondary */
+    .btn-primary {
+      background-color: var(--accent-color);
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #9f84b8;
+    }
+    .btn-outline-secondary {
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+    }
+
+    /* Footer styling */
+    .footer {
+      flex-shrink: 0;
+      padding: 1rem;
+      background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+      color: var(--title-color);
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    /* Responsive adjustments for tablets and mobiles */
+    @media (min-width: 768px) {
+      .summary-cards {
+        grid-template-columns: repeat(4, 1fr); /* 4 columns on larger screens */
+      }
+      .main-container {
+        margin: 2rem auto;
+        padding: 2rem;
+      }
+    }
+    @media (max-width: 767px) {
+      .summary-cards {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
+      }
       .summary-card {
-        flex: 0 0 calc(50% - 0.5rem);
+        padding: 1rem;
       }
       .summary-card h6 {
         font-size: 0.8rem;
@@ -152,121 +275,255 @@
         font-size: 1.2rem;
       }
     }
-
-    /* Table styling */
-    table {
-      width: 100%;
-      background: #fff;
-      border-radius: 0.5rem;
-      overflow: hidden;
-      font-size: 0.85rem;
-    }
-
-    thead {
-      background-color: #f8f9fa;
-    }
-
-    tbody tr:hover {
-      background-color: #f1f1f1;
-    }
-
-    /* Responsive adjustments for table */
-    @media (max-width: 768px) {
-      table {
-        font-size: 0.75rem;
+    @media (max-width: 480px) {
+      .main-container {
+        margin: 0.5rem;
+        padding: 1rem;
+      }
+      .navbar-brand {
+        font-size: 1.5rem;
       }
     }
 
-    /* Footer styles */
-    .footer {
-      background-color: #ffffff;
-      color: #000;
-      padding: 1rem;
+    /* Loading overlay styles for async loading states */
+    .loading-overlay {
+      background: rgba(255, 255, 255, 0.9);
+    }
+    .spinner-border {
+      color: var(--accent-color);
+    }
+
+    /* Title section with hover & animation */
+    .page-title-section {
       text-align: center;
-      font-size: 0.9rem;
-      margin-top: auto;
-      border-radius: 0 0 1rem 1rem;
-      box-shadow: inset 0 -2px 10px rgba(0, 0, 0, 0.02);
+      margin-bottom: 2.5rem;
+      padding: 1rem 0;
+      position: relative;
+      opacity: 0;
+      animation: fadeIn 0.8s ease-out forwards;
+      animation-delay: 0.1s;
+    }
+    /* Animate title hover underline with gradient */
+    .page-title-section h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2rem;
+      color: var(--title-color);
+      font-weight: 600;
+      margin: 0;
+      padding: 0;
+      display: inline-block;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    .page-title-section h1:hover {
+      color: var(--accent-color);
+    }
+    /* Underline effect on hover (using pseudo-element) */
+    .page-title-section h1::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 3px;
+      background: linear-gradient(to right, transparent, var(--accent-color), transparent);
     }
 
-    /* Responsive adjustments for footer */
-    @media (max-width: 768px) {
-      .footer {
-        font-size: 0.8rem;
+    /* Loading overlay for smooth page transitions */
+    .page-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient-start);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeOut 0.5s ease-out forwards;
+      animation-delay: 0.2s;
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    /* Additional: Fix for Bootstrap Navbar collapse on small screens */
+    .navbar .container-fluid {
+      justify-content: space-between !important;
+    }
+    .navbar-collapse {
+      flex-grow: 0;
+    }
+
+    /* Animations for page load */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
       }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Additional navbar styles for mobile */
+    .navbar-toggler {
+      border: none;
+      padding: 0.25rem;
+    }
+
+    .navbar-toggler:focus {
+      box-shadow: none;
+      outline: none;
+    }
+
+    .navbar-toggler-icon {
+      width: 1.5em;
+      height: 1.5em;
+    }
+
+    .nav-link {
+      color: var(--title-color) !important;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+    }
+
+    .nav-link:hover {
+      color: var(--accent-color) !important;
+      transform: translateX(5px);
+    }
+
+    @media (max-width: 991px) {
+      .navbar-collapse {
+        background: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 12px var(--shadow-color);
+        position: absolute;
+        top: 100%;
+        right: 1rem;
+        left: 1rem;
+        z-index: 1000;
+      }
+      
+      .nav-item {
+        margin: 0.5rem 0;
+      }
+    }
+
+    .counter-animation {
+      transition: all 0.2s ease;
     }
   </style>
 </head>
 
+<!-- ============================
+     Body Content
+     Why: To structure the page with header, main content, footer
+     How: Using Bootstrap classes and custom styles
+     Where to edit: Modify or add sections as your app evolves
+============================ -->
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container-fluid justify-content-between align-items-center">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="/">
-        <i class="fas fa-hand-holding-usd fs-4"></i>
-        <span class="fw-semibold" style="font-size: 1.1rem;">Expenses & Profit</span>
-      </a>
 
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+  <!-- Loading overlay shown at page load for smooth transition -->
+  <div class="page-loader">
+    <div class="spinner-border" style="color: var(--accent-color); width: 3rem; height: 3rem;"></div>
+  </div>
+
+  <!-- ============================
+       Navbar
+       Why: Navigation menu for different sections
+       How: Bootstrap navbar with custom branding and links
+       Where to edit: Add/remove links or change branding
+  ============================ -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <i class="fas fa-gem"></i>
+        <strong>Stationer Tracker</strong>
+        <!-- <span class="navbar-subtitle">Track leads, projects, and profits - all in one place</span>-->
+      </a>
+      <!-- Hamburger menu button -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
-    </div>
-
-    <div class="collapse navbar-collapse px-3" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="/projects">Projects</a></li>
-        <li class="nav-item"><a class="nav-link" href="/costs">Expenses</a></li>
-        <li class="nav-item"><a class="nav-link" href="/reports">Reports</a></li>
-      </ul>
+      <!-- Navigation menu -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/projects">Design Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="/client-experiences">Clients & Feedback</a></li>
+          <li class="nav-item"><a class="nav-link" href="/costs">Expenses & Profit</a></li>
+          <li class="nav-item"><a class="nav-link" href="/tasks">Tasks & Routine</a></li>
+          <li class="nav-item"><a class="nav-link" href="/posts">Content & Ideas</a></li>
+          <li class="nav-item"><a class="nav-link" href="/issues">Workflow & Challenges</a></li>
+          <li class="nav-item"><a class="nav-link" href="/inquiry">Leads & Sales</a></li>
+          <li class="nav-item"><a class="nav-link" href="/time">Time & Hours</a></li>
+        </ul>
+      </div>
     </div>
   </nav>
 
-  <!-- MAIN CONTENT AREA -->
+  <!-- ============================
+       Main Content
+       Why: Core functional area for data display & input
+       How: Using Bootstrap containers, custom grids, and forms
+       Where to edit: Add new sections, modify existing layout
+  ============================ -->
   <main class="main-container" id="scrollContainer">
 
-    <!-- Top bar: Title and back button -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <!-- Removed <h2>Expenses & Profit</h2> -->
+    <!-- Page Title Section with Hover Effect -->
+    <div class="page-title-section">
+      <h1 onclick="window.location.href='/costs'">Expenses & Profit Tracker</h1>
     </div>
 
-    <!-- Summary Cards: Display key metrics -->
+    <!-- Summary KPI Cards -->
     <div class="summary-cards">
+      <!-- Total Revenue -->
       <div class="summary-card">
         <h6>Total Revenue</h6>
         <p id="totalRevenue">-</p>
       </div>
+      <!-- Total Cost -->
       <div class="summary-card">
         <h6>Total Cost</h6>
         <p id="totalCost">-</p>
       </div>
+      <!-- Total Profit -->
       <div class="summary-card">
         <h6>Total Profit</h6>
         <p id="totalProfit">-</p>
       </div>
+      <!-- Average Profit % -->
       <div class="summary-card">
         <h6>Avg. Profit %</h6>
         <p id="avgProfitPct">-</p>
       </div>
     </div>
 
-    <!-- Controls: Add Expense, Search, Show Entries -->
+    <!-- Controls: Add Expense, Search, Entries Limit -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
-      
       <!-- Add Expense Button -->
-      <div class="flex-grow-1">
-        <button class="btn btn-primary btn-sm" id="addExpenseBtn">+ Add Expense</button>
-      </div>
-
+      <button class="btn btn-primary btn-sm" id="addExpenseBtn">+ Add Expense</button>
+      
       <!-- Search Box -->
       <div class="input-group input-group-sm flex-grow-1" style="max-width: 300px;">
-        <input type="text" id="searchBox" class="form-control" placeholder="Search project or client...">
+        <input type="text" id="searchBox" class="form-control" placeholder="Search project or client..." 
+               onkeyup="if(event.key === 'Enter') searchExpenses()">
         <button class="btn btn-outline-secondary" onclick="searchExpenses()">
           <i class="fas fa-search"></i>
         </button>
       </div>
-
-      <!-- Show Entries Dropdown -->
+      
+      <!-- Show Entries Limit -->
       <div class="d-flex align-items-center">
         <label class="me-2 mb-0">Show</label>
         <select id="limitSelect" class="form-select form-select-sm w-auto">
@@ -279,31 +536,27 @@
       </div>
     </div>
 
-    <!-- Expense Form: Hidden by default, shown when adding/editing -->
+    <!-- Expense Form (Hidden by default) -->
     <section id="expenseFormSection" style="display:none;">
       <form id="expenseForm" class="p-3 border rounded bg-white mb-4">
-        <!-- Hidden field for expense ID to differentiate between insert and update -->
+        <!-- Hidden input for editing existing expense -->
         <input type="hidden" id="cost_id" />
-
-        <!-- Form inputs: Project, Cost Type -->
+        <!-- Project & Cost Type Inputs -->
         <div class="row mb-2">
           <div class="col-md-6 position-relative">
             <label>Project</label>
-            <!-- Autocomplete search for project -->
+            <!-- Autocomplete search input -->
             <input type="text" id="projectSearch" class="form-control" placeholder="Type to search project..." autocomplete="off" required />
-            <input type="hidden" id="project_id" />
-            <!-- Dynamic list for search results -->
+            <input type="hidden" id="project_id" /> <!-- Stores selected project ID -->
+            <!-- Search results list -->
             <div id="projectSearchList" class="list-group position-absolute w-100 z-3" style="max-height: 200px; overflow-y: auto; display: none;"></div>
           </div>
-
           <div class="col-md-6">
             <label>Cost Type</label>
-            <!-- Dropdown for cost type, loaded dynamically -->
             <select id="cost_type" class="form-select" required></select>
           </div>
         </div>
-
-        <!-- Amount and Notes -->
+        <!-- Amount & Notes Inputs -->
         <div class="row mb-2">
           <div class="col-md-6">
             <label>Amount (CAD)</label>
@@ -314,8 +567,7 @@
             <input type="text" id="notes" class="form-control" />
           </div>
         </div>
-
-        <!-- Buttons: Save and Close -->
+        <!-- Save & Close Buttons -->
         <div class="d-flex gap-2 mt-3">
           <button type="submit" class="btn btn-success btn-sm">Save</button>
           <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeForm()">Close</button>
@@ -325,7 +577,7 @@
 
     <!-- Expense List Table -->
     <section class="table-responsive position-relative mb-4">
-      <!-- Loading overlay for AJAX calls -->
+      <!-- Loading overlay during data fetch -->
       <div id="loading" class="loading-overlay" style="display:none;">
         <div class="spinner-border text-danger"></div>
       </div>
@@ -346,7 +598,7 @@
       </table>
     </section>
 
-    <!-- Pagination buttons to navigate pages -->
+    <!-- Pagination Controls -->
     <nav class="pagination-controls mb-4 justify-content-center d-flex gap-2">
       <button id="prevBtn" class="btn btn-sm btn-outline-secondary" onclick="changePage(-1)">Prev</button>
       <span id="pageIndicator">Page 1</span>
@@ -354,109 +606,104 @@
     </nav>
   </main>
 
-  <!-- Footer: Static info -->
+  <!-- ============================
+       Footer
+       Why: To provide closing message & attribution
+       How: Simple footer with styled text
+       Where to edit: Change message or styling as needed
+  ============================ -->
   <footer class="footer">
-    © <strong>Stationer Success Tracker</strong>. Built with ❤️ to help creative businesses thrive.
+    © <strong style="color: var(--title-color);">Stationer Success Tracker</strong>. Built with ❤️ to help creative businesses thrive.
   </footer>
 
-  <!-- Bootstrap JS bundle for components like modal -->
+  <!-- ============================
+       Scripts and JS Logic
+       Why: To add dynamic behavior, API integrations, interactivity
+       How: Using inline <script> and Bootstrap JS bundle
+       Where to edit: Modify functions for custom behavior
+  ============================ -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Toast container for dynamic alerts -->
-  <div id="toastBox" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;"></div>
-
-  <!-- Delete confirmation modal -->
-  <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="deleteConfirmationLabel">Confirm Deletion</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to delete this expense?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-danger btn-sm" id="confirmDeleteBtn">Delete</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- JavaScript Section: Core logic, API interactions, event handlers -->
   <script>
-    // ==========================
+    // ============================
     // API Endpoints Configuration
-    // ==========================
+    // Why: To centralize API URLs for easy maintenance
+    // How: Define as a constant object
+    // Where to edit: Change URLs if API routes change
+    // ============================
     const API_ENDPOINTS = {
       PROJECT_COSTS: '/api/project-costs', // List of expenses
       PROJECT_COST: '/api/project-cost',   // Single expense get/update/delete
       DASHBOARD: '/api/project-cost/dashboard', // Dashboard metrics
-      LOV: '/api/lov/',                     // List of values (dropdowns)
-      PROJECT_SEARCH: '/api/projects/search' // Search projects for autocomplete
+      LOV: '/api/lov/',                     // List of values (for dropdowns)
+      PROJECT_SEARCH: '/api/projects/search' // Autocomplete project search
     };
 
-    // ==========================
+    // ============================
     // State Variables
-    // ==========================
+    // Why: To manage current page, limit, search query
+    // How: Using simple JS variables
+    // Where to edit: Change default page/limit if needed
+    // ============================
     let currentPage = 1; // Current page for pagination
     let limit = 10; // Records per page
     let lastSearchQuery = ""; // Search term
 
-    // ==========================
-    // Initialization on page load
-    // ==========================
+    // ============================
+    // Initialization: Load dropdowns, dashboard, first expense page
+    // Why: To prepare UI with data
+    // How: Call functions on window.onload
+    // Where to edit: Add/remove initial load functions as needed
+    // ============================
     window.onload = () => {
-      loadLOV("COST_TYPE", "cost_type"); // Load dropdown options for cost types
+      loadLOV("COST_TYPE", "cost_type"); // Load cost types dropdown
       loadProjectSearchLOV();            // Setup project search autocomplete
       loadExpenseDashboard();            // Load summary metrics
       loadExpenses();                    // Load initial expense list
     };
 
-    // ==========================
-    // Event Listeners
-    // ==========================
-    // Limit change (records per page)
+    // ============================
+    // Event Listeners for UI controls
+    // ============================
     document.getElementById("limitSelect").addEventListener("change", () => {
       limit = parseInt(document.getElementById("limitSelect").value);
       currentPage = 1; // Reset to first page
       loadExpenses();
     });
 
-    // Add new expense (opens form)
     document.getElementById("addExpenseBtn").addEventListener("click", () => {
-      resetForm();
+      resetForm(); // Show form for new expense
     });
 
-    // Search box input event for search filtering
     document.getElementById("searchBox").addEventListener("input", function () {
-      lastSearchQuery = this.value.trim();
+      lastSearchQuery = this.value.trim(); // Store search term
     });
 
-    // Search button triggers loading with current search term
+    // Search button triggers expense reload with current search
     function searchExpenses() {
       currentPage = 1;
       loadExpenses();
     }
 
-    // ==========================
-    // Load Expenses List (Main Data Table)
-    // ==========================
+    // ============================
+    // Load Expenses List Function
+    // Why: To fetch and display expense data with pagination & search
+    // How: Fetch API, update table rows dynamically
+    // Where to edit: Adjust API URL, or data handling
+    // ============================
     async function loadExpenses() {
       // Show loading overlay
       const loadingOverlay = document.getElementById("loading");
       if (loadingOverlay) loadingOverlay.style.display = "flex";
 
       try {
-        // Fetch expense data from API with pagination and search
+        // Fetch data with page, limit, and search query
         const res = await fetch(`${API_ENDPOINTS.PROJECT_COSTS}?page=${currentPage}&limit=${limit}&search=${encodeURIComponent(lastSearchQuery)}`);
         const data = await res.json();
 
         // Validate data
         if (!Array.isArray(data)) throw new Error("Invalid data format");
 
-        // Clear existing table rows
+        // Clear existing rows
         const tbody = document.getElementById("expenseGrid");
         tbody.innerHTML = "";
 
@@ -468,12 +715,12 @@
           return;
         }
 
-        // Update pagination indicators
+        // Update pagination display
         document.getElementById("pageIndicator").innerText = `Page ${currentPage}`;
         document.getElementById("prevBtn").style.display = currentPage === 1 ? "none" : "inline-block";
         document.getElementById("nextBtn").style.display = data.length < limit ? "none" : "inline-block";
 
-        // Loop through data and build table rows
+        // Build table rows with data
         data.forEach((row, idx) => {
           const sno = (currentPage - 1) * limit + idx + 1;
           const projectId = row.project_id;
@@ -489,11 +736,11 @@
               <td>${isNaN(parseFloat(row.profit_pct)) ? "-" : `${parseFloat(row.profit_pct).toFixed(1)}%`}</td>
               <td>
                 <button class="btn btn-sm btn-link p-0" onclick="toggleDetails(this, ${projectId})">
-                  ⬇️
+                  <i class="fas fa-chevron-down"></i>
                 </button>
               </td>
             </tr>
-            <!-- Hidden detail row for project costs -->
+            <!-- Hidden row for project costs details -->
             <tr class="details-row" style="display: none;" data-project="${projectId}">
               <td colspan="7">
                 <div class="px-3 py-2">
@@ -516,36 +763,51 @@
           `;
         });
       } catch (err) {
-        // Show toast notification on failure
         showToast("Failed to load expenses.", "danger");
         console.error("loadExpenses error:", err);
       } finally {
-        // Hide loading overlay
         if (loadingOverlay) loadingOverlay.style.display = "none";
       }
     }
 
-    // ==========================
+    // ============================
     // Load Dashboard Metrics
-    // ==========================
+    // Why: To display total revenue, costs, profit, etc.
+    // How: Fetch API, update KPI cards
+    // Where to edit: Adjust API URL or formatting
+    // ============================
     async function loadExpenseDashboard() {
       try {
         const res = await fetch(API_ENDPOINTS.DASHBOARD);
         const data = await res.json();
-        // Populate metrics
-        document.getElementById("totalRevenue").innerText = data.totalRevenue || "-";
-        document.getElementById("totalCost").innerText = data.totalCost || "-";
-        document.getElementById("totalProfit").innerText = data.totalProfit || "-";
-        document.getElementById("avgProfitPct").innerText = data.avgProfitPct || "-";
+
+        // Animate each metric
+        const metrics = [
+          { id: "totalRevenue", value: parseFloat(data.totalRevenue) || 0, prefix: '$' },
+          { id: "totalCost", value: parseFloat(data.totalCost) || 0, prefix: '$' },
+          { id: "totalProfit", value: parseFloat(data.totalProfit) || 0, prefix: '$' },
+          { id: "avgProfitPct", value: parseFloat(data.avgProfitPct) || 0, suffix: '%' }
+        ];
+
+        metrics.forEach(metric => {
+          const element = document.getElementById(metric.id);
+          if (element) {
+            animateNumber(element, metric.value, 1500, metric.prefix, metric.suffix);
+          }
+        });
+
       } catch (err) {
         showToast("Dashboard metrics failed to load", "warning");
         console.error("loadExpenseDashboard error:", err);
       }
     }
 
-    // ==========================
+    // ============================
     // Load List of Values (LOV) for dropdowns
-    // ==========================
+    // Why: To populate options like "Cost Type"
+    // How: Fetch API, fill select options
+    // Where to edit: Change refName if adding new dropdowns
+    // ============================
     async function loadLOV(refName, selectId) {
       try {
         const res = await fetch(`${API_ENDPOINTS.LOV}${refName}`);
@@ -561,26 +823,25 @@
       }
     }
 
-    // ==========================
-    // Load Project Search LOV (for autocomplete)
-    // ==========================
-    let debounceTimeout; // For debouncing user input
-
+    // ============================
+    // Setup Project Search Autocomplete
+    // Why: To select projects with live search
+    // How: Debounce input, fetch search results, populate list
+    // Where to edit: Adjust debounce time or API route
+    // ============================
+    let debounceTimeout;
     async function loadProjectSearchLOV() {
       const input = document.getElementById("projectSearch");
       const list = document.getElementById("projectSearchList");
 
-      // Handle user input for search
       input.addEventListener("input", function () {
         const query = this.value.trim();
         list.innerHTML = "";
         list.style.display = "none";
 
-        // Debounce to limit API calls
         clearTimeout(debounceTimeout);
         debounceTimeout = setTimeout(async () => {
           if (query.length < 2) return; // Minimum characters to search
-
           try {
             const res = await fetch(`${API_ENDPOINTS.PROJECT_SEARCH}?query=${encodeURIComponent(query)}`);
             const projects = await res.json();
@@ -593,31 +854,36 @@
               item.textContent = `${p.project_reference} - ${p.client_name}`;
               item.dataset.id = p.project_id;
               item.onclick = () => {
-                input.dataset.selected = "true"; // Mark as selected before blur
+                input.dataset.selected = "true"; // Mark as selected
                 input.value = item.textContent;
                 document.getElementById("project_id").value = item.dataset.id;
                 list.style.display = "none";
               };
               list.appendChild(item);
             });
-            list.style.display = projects.length > 0 ? "block" : "none";
+            if (projects.length > 0) {
+              list.style.display = "block";
+            }
           } catch (err) {
             console.error("Project LOV search error:", err);
           }
-        }, 300); // Delay of 300ms
+        }, 300); // debounce delay
       });
 
-      // Clear selection on focus
-      input.addEventListener("focus", function () {
+      // Reset selection state on focus
+      input.addEventListener("focus", () => {
         if (input.dataset.selected === "true") {
-          input.dataset.selected = ""; // Reset selected flag
+          input.dataset.selected = "";
         }
       });
     }
 
-    // ==========================
+    // ============================
     // Edit Existing Expense (Pre-fill form)
-    // ==========================
+    // Why: To allow editing an expense entry
+    // How: Fetch expense data, populate form fields
+    // Where to edit: Adjust API URL or form fields
+    // ============================
     async function editExpense(id) {
       try {
         const res = await fetch(`${API_ENDPOINTS.PROJECT_COST}/${id}`);
@@ -626,7 +892,7 @@
           showToast("Expense not found.", "warning");
           return;
         }
-        // Show form section
+        // Show form
         document.getElementById("expenseFormSection").style.display = "block";
 
         // Fill form fields
@@ -640,7 +906,7 @@
         const selectedText = `${data.project_reference} - ${data.client_name}`;
         searchInput.value = selectedText;
 
-        // Scroll to top
+        // Scroll to top for better UX
         window.scrollTo(0, 0);
       } catch (err) {
         showToast("Failed to load expense details.", "danger");
@@ -648,9 +914,12 @@
       }
     }
 
-    // ==========================
+    // ============================
     // Toggle Details Row (expand/collapse)
-    // ==========================
+    // Why: To view/hide project costs
+    // How: Show/hide details row, fetch data if expanding
+    // Where to edit: Adjust API URL or expand logic
+    // ============================
     async function toggleDetails(button, projectId) {
       const detailRow = document.querySelector(`tr.details-row[data-project="${projectId}"]`);
       const detailsBody = document.getElementById(`details-${projectId}`);
@@ -658,7 +927,7 @@
       if (detailRow.style.display === "none") {
         // Expand row
         detailRow.style.display = "table-row";
-        button.innerText = "⬆️";
+        button.innerHTML = '<i class="fas fa-chevron-up"></i>';
 
         try {
           // Fetch project costs
@@ -670,8 +939,7 @@
             detailsBody.innerHTML = `<tr><td colspan="4">No cost details found.</td></tr>`;
             return;
           }
-
-          // Populate details table
+          // Populate sub-table with costs
           data.forEach(item => {
             detailsBody.innerHTML += `
               <tr data-cost-id="${item.cost_id}" data-project="${projectId}" data-cost-type="${item.cost_type}">
@@ -679,8 +947,12 @@
                 <td class="col-notes">${item.notes || "-"}</td>
                 <td class="col-amount">${isNaN(parseFloat(item.amount)) ? "-" : `$${parseFloat(item.amount).toFixed(2)}`}</td>
                 <td>
-                  <button class="btn btn-sm btn-link p-0 me-2" onclick="editExpenseInline(${item.cost_id}, ${projectId})">✏️</button>
-                  <button class="btn btn-sm btn-link text-danger p-0" onclick="showDeleteConfirmation(${item.cost_id}, ${projectId})">🗑️</button>
+                  <button class="btn btn-sm btn-link p-0 me-2" onclick="editExpenseInline(${item.cost_id}, ${projectId})">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-sm btn-link text-danger p-0" onclick="showDeleteConfirmation(${item.cost_id}, ${projectId})">
+                    <i class="fas fa-trash"></i>
+                  </button>
                 </td>
               </tr>
             `;
@@ -692,42 +964,51 @@
       } else {
         // Collapse row
         detailRow.style.display = "none";
-        button.innerText = "⬇️";
+        button.innerHTML = '<i class="fas fa-chevron-down"></i>';
       }
     }
 
-    // ==========================
-    // Inline Edit Expense
-    // ==========================
-    let editingCostId = null; // Track current inline edit
+    // ============================
+    // Inline Edit Cost Item
+    // Why: To quickly modify cost notes/amount
+    // How: Replace row with input fields, save via API
+    // Where to edit: Adjust inline editing logic
+    // ============================
+    let editingCostId = null; // Track editing row
 
     function editExpenseInline(costId, projectId) {
       const row = document.querySelector(`tr[data-cost-id="${costId}"]`);
       if (!row) return;
 
-      // Capture existing data
-      const costType = row.dataset.costType; // code
-      const costTypeDesc = row.querySelector(".col-cost-type").innerText.trim(); // description
+      // Extract current data
+      const costType = row.dataset.costType;
+      const costTypeDesc = row.querySelector(".col-cost-type").innerText.trim();
       const notes = row.querySelector(".col-notes").innerText.trim();
       const amount = row.querySelector(".col-amount").innerText.trim().replace('$', '');
 
-      // Replace row with editable inputs
+      // Replace row content with inputs
       row.innerHTML = `
         <td><input class="form-control form-control-sm" value="${costTypeDesc}" disabled></td>
         <td><input class="form-control form-control-sm" id="edit-notes-${costId}" value="${notes}"></td>
         <td><input class="form-control form-control-sm" id="edit-amount-${costId}" value="${amount}"></td>
         <td>
-          <button class="btn btn-sm btn-success me-1" onclick="saveExpenseInline(${costId}, ${projectId}, '${costType}')">💾</button>
-          <button class="btn btn-sm btn-secondary" onclick="cancelEditInline(${projectId})">❌</button>
+          <button class="btn btn-sm btn-success me-1" onclick="saveExpenseInline(${costId}, ${projectId}, '${costType}')">
+            <i class="fas fa-save"></i>
+          </button>
+          <button class="btn btn-sm btn-secondary" onclick="cancelEditInline(${projectId})">
+            <i class="fas fa-times"></i>
+          </button>
         </td>
       `;
-
-      editingCostId = costId; // Keep track
+      editingCostId = costId; // Store current editing row
     }
 
-    // ==========================
-    // Save Inline Edit
-    // ==========================
+    // ============================
+    // Save Inline Edited Cost
+    // Why: To persist quick edits without leaving the row
+    // How: Send POST API with updated notes & amount
+    // Where to edit: Adjust API endpoint or payload
+    // ============================
     async function saveExpenseInline(costId, projectId, costType) {
       const notes = document.getElementById(`edit-notes-${costId}`).value.trim();
       const amount = parseFloat(document.getElementById(`edit-amount-${costId}`).value.trim());
@@ -736,7 +1017,7 @@
       const payload = {
         cost_id: costId,
         project_id: projectId,
-        cost_type: costType, // Send code, not description
+        cost_type: costType,
         notes,
         amount
       };
@@ -749,31 +1030,37 @@
         });
         const result = await res.json();
 
-        if (result.success === false) throw new Error("Save failed");
-        toggleDetails({ innerText: "⬇️" }, projectId); // Collapse
-        toggleDetails({ innerText: "⬆️" }, projectId); // Expand
+        if (result.success !== false) {
+          window.location.reload(); // Reload to reflect changes
+        }
       } catch (err) {
         console.error("Error saving:", err);
         alert("Failed to save");
       }
     }
 
-    // ==========================
+    // ============================
     // Cancel Inline Edit
-    // ==========================
+    // Why: To discard changes and revert row
+    // How: Reload the original row by toggling details
+    // Where to edit: Adjust logic if needed
+    // ============================
     function cancelEditInline(projectId) {
-      // Collapse and re-expand to reload original row
+      // Re-toggle details to reload original data
       toggleDetails({ innerText: "⬇️" }, projectId);
       toggleDetails({ innerText: "⬆️" }, projectId);
     }
 
-    // ==========================
-    // Save Expense Form (Insert or Update)
-    // ==========================
+    // ============================
+    // Save Expense (Add or Update)
+    // Why: To submit form data for new or existing expense
+    // How: Send POST API, handle response
+    // Where to edit: API URL, form fields
+    // ============================
     document.getElementById("expenseForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // Gather form data
+      // Collect form data into payload object
       const payload = {};
       [...document.querySelectorAll("#expenseForm input, #expenseForm select")].forEach(el => {
         payload[el.id] = el.value;
@@ -790,11 +1077,9 @@
         if (res.ok && result.status === "success") {
           showToast("Expense saved successfully!", "success");
           closeForm();
-          loadExpenses(); // Refresh list
-          loadExpenseDashboard(); // Refresh metrics
+          window.location.reload(); // Refresh page for updated list
         } else {
           showToast(result.message || "Save failed.", "danger");
-          console.error("Save error:", result);
         }
       } catch (err) {
         showToast("Server error. Try again later.", "danger");
@@ -802,9 +1087,12 @@
       }
     });
 
-    // ==========================
-    // Reset and Close Form
-    // ==========================
+    // ============================
+    // Reset & Close Form
+    // Why: To clear form inputs and hide form section
+    // How: Reset form fields, toggle display
+    // Where to edit: Add custom initialization if needed
+    // ============================
     function resetForm() {
       document.getElementById("expenseForm").reset();
       document.getElementById("cost_id").value = "";
@@ -817,17 +1105,20 @@
       document.getElementById("expenseFormSection").style.display = "none";
     }
 
-    // ==========================
+    // ============================
     // Pagination Controls
-    // ==========================
+    // ============================
     function changePage(dir) {
       currentPage += dir;
-      loadExpenses();
+      loadExpenses(); // Reload data for new page
     }
 
-    // ==========================
-    // Toast Notifications Utility
-    // ==========================
+    // ============================
+    // Toast Notification Utility
+    // Why: To show user feedback messages
+    // How: Create alert divs, auto-remove after 3 sec
+    // Where to edit: Change style or add more types
+    // ============================
     function showToast(message, type = "info") {
       const toast = document.createElement("div");
       toast.className = `alert alert-${type}`;
@@ -837,59 +1128,103 @@
       setTimeout(() => toast.remove(), 3000);
     }
 
-    // ==========================
+    // ============================
     // Delete Expense with Confirmation
-    // ==========================
+    // Why: To confirm user intent before deleting
+    // How: Show modal, delete via API, reload
+    // Where to edit: Change modal text, API URL
+    // ============================
     let deleteCostId = null;
     let deleteProjectId = null;
 
     function showDeleteConfirmation(costId, projectId) {
       deleteCostId = costId;
       deleteProjectId = projectId;
-      // Show Bootstrap modal
-      const deleteModal = new bootstrap.Modal(document.getElementById("deleteConfirmationModal"));
-      deleteModal.show();
+      const modal = new bootstrap.Modal(document.getElementById("deleteConfirmationModal"));
+      modal.show();
+
+      // Set up delete button handler
+      document.getElementById("confirmDeleteBtn").onclick = async function() {
+        try {
+          const res = await fetch(`${API_ENDPOINTS.PROJECT_COST}/${deleteCostId}`, {
+            method: "DELETE"
+          });
+          const result = await res.json();
+
+          if (res.ok) {
+            modal.hide();
+            showToast("Expense deleted successfully!", "success");
+            window.location.reload();
+          } else {
+            throw new Error(result.message || "Delete failed");
+          }
+        } catch (err) {
+          showToast("Failed to delete expense", "danger");
+          console.error("Delete error:", err);
+        }
+      };
     }
 
-    document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
-      if (!deleteCostId || !deleteProjectId) return;
-
-      try {
-        const res = await fetch(`${API_ENDPOINTS.PROJECT_COST}/${deleteCostId}`, {
-          method: "DELETE",
-        });
-        const result = await res.json();
-
-        if (result.status === "success") {
-          showToast("Expense deleted successfully!", "success");
-          toggleDetails({ innerText: "⬇️" }, deleteProjectId);
-          toggleDetails({ innerText: "⬆️" }, deleteProjectId);
-        } else {
-          showToast(result.message || "Failed to delete expense.", "danger");
-          console.error("Delete error:", result.message);
+    // ============================
+    // Animated Counter Utility
+    // Why: To animate number changes like a flip counter
+    // How: Incrementally update number with easing
+    // Where to edit: Adjust duration and easing if needed
+    // ============================
+    function animateNumber(element, finalValue, duration = 1000, prefix = '', suffix = '') {
+      const startTime = performance.now();
+      const startValue = 0;
+      
+      function updateNumber(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function for smooth animation
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        
+        const currentValue = startValue + (finalValue - startValue) * easeOutQuart;
+        
+        if (typeof finalValue === 'number') {
+          element.innerHTML = `${prefix}${Math.abs(currentValue).toFixed(2)}${suffix}`;
+          
+          // Add color and arrow based on value
+          const color = finalValue < 0 ? '#dc3545' : '#198754';
+          const arrow = finalValue < 0 ? '↓' : (finalValue > 0 ? '↑' : '');
+          
+          element.innerHTML = `<span style="color: ${color}">${prefix}${Math.abs(currentValue).toFixed(2)}${suffix} ${arrow}</span>`;
         }
-      } catch (err) {
-        showToast("Server error. Try again later.", "danger");
-        console.error("Delete error:", err);
-      } finally {
-        deleteCostId = null;
-        deleteProjectId = null;
-        // Hide modal
-        const deleteModal = bootstrap.Modal.getInstance(document.getElementById("deleteConfirmationModal"));
-        deleteModal.hide();
+        
+        if (progress < 1) {
+          requestAnimationFrame(updateNumber);
+        }
       }
-    });
+      
+      requestAnimationFrame(updateNumber);
+    }
 
-    // ==========================
-    // Utility: DataTable Initialization (if needed)
-    // ==========================
-    $(document).ready(function () {
-      $('table').DataTable({
-        dom: 't',
-        paging: false,
-        info: false
-      });
-    });
   </script>
+
+  <!-- Toast container for user messages -->
+  <div id="toastBox" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;"></div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal fade" id="deleteConfirmationModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Deletion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this expense?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger btn-sm" id="confirmDeleteBtn">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

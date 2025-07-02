@@ -1,241 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Meta tags for character encoding and responsiveness -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Page Title -->
   <title>Stationer Success Tracker</title>
 
-  <!-- Bootstrap CSS for styling and responsiveness -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-  <!-- Font Awesome for icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <style>
-    /* Basic body styling for font, background, and layout */
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background-color: #f0f0f0; /* Light neutral background */
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      color: #323232;
+    :root {
+      --primary-color: #f8f6fa;
+      --accent-color: #b399cc;
+      --text-color: #4a4158;
+      --border-color: #e2daea;
+      --shadow-color: rgba(179, 153, 204, 0.15);
+      --gradient-start: #ffffff;
+      --gradient-end: #f8f6fa;
+      --title-color: #7a4e82;
+      --title-shadow: rgba(122, 78, 130, 0.1);
     }
 
-    /* Header styling: gradient background, diagonal shape, white text */
-    .header {
-      background: linear-gradient(135deg, #29102a, #994ac3, #582c64);
-      padding: 2rem 1rem;
-      text-align: center;
-      color: #fff;
-      /* Creates a diagonal cut at the bottom of the header */
-      clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
-      position: relative;
-      overflow: hidden; /* Ensures no overflow outside header shape */
-      max-width: 100%;   /* Prevents overflow on small screens */
+    * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
 
-    /* Style for main header title */
-    .header h1 {
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: url('https://www.transparenttextures.com/patterns/white-diamond.png'), 
+                linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
+      color: var(--text-color);
+      position: relative;
+    }
+
+    .navbar {
+      background-color: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 2px 10px var(--shadow-color);
+    }
+
+    .navbar-brand {
+      font-family: 'Great Vibes', cursive;
       font-size: 2rem;
-      margin-bottom: 0.3rem;
-      letter-spacing: 1px;
-      font-weight: 700;
+      color: var(--title-color) !important;
+      transition: all 0.3s ease;
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 0.5rem;
+      animation: fadeInUp 0.8s ease-out;
     }
 
-    /* Responsive width for h1 and h6 for smaller screens */
-    .header h1, .header h6 {
-      margin: 0 auto;
-      max-width: 90vw; /* Ensures text wraps properly on mobile */
-      word-wrap: break-word;
-      overflow-wrap: break-word;
+    .navbar-subtitle {
+      font-family: 'Great Vibes', cursive;
+      font-size: 1.5rem;
+      color: var(--title-color);
+      margin-left: 1.5rem;
+      opacity: 0.9;
+      animation: fadeIn 0.8s ease-out;
     }
 
-    /* Subheading styling */
-    .header p {
-      font-size: 0.9rem;
-      max-width: 700px;
-      margin: 0 auto;
-      line-height: 1.4;
-      border-top: 2px solid #fff; /* White top border for separation */
-      margin-top: 0.5rem;
-      padding-top: 0.5rem;
+    .navbar-brand:hover {
+      transform: translateY(-2px);
+      text-shadow: 0 4px 8px var(--shadow-color);
     }
 
-    /* Container for cards: grid layout with 4 columns, responsive on smaller screens */
+    .navbar-brand i {
+      font-size: 2rem;
+      color: var(--title-color);
+      transition: all 0.3s ease;
+    }
+
+    .navbar-brand:hover i {
+      transform: rotate(-15deg);
+    }
+
+    .main-container {
+      flex: 0 1 auto;
+      width: calc(100% - 2rem);
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: rgba(255, 255, 255, 0.98);
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px var(--shadow-color);
+      animation: fadeInUp 0.8s ease-out;
+    }
+
     .cards-container {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      padding: 2rem;
-      background-color: #f0f0f0; /* Same as body for seamless look */
-      margin-top: -1rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.75rem;
+      padding: 1rem;
+      margin: 0 auto;
+      opacity: 0;
+      animation: fadeIn 0.6s ease-out forwards;
     }
 
-    /* Responsive adjustment for tablets/small screens: 2 columns */
-    @media(max-width: 768px){
-      .cards-container {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    /* Individual card styling: clean, attractive, interactive */
     .card {
-      padding: 1.2rem;
+      background: white;
       border-radius: 1rem;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-      background: #fff; /* White background for clarity */
-      cursor: pointer; /* Pointer cursor on hover */
-      transition: all 0.3s ease; /* Smooth hover effect */
-      height: 150px; /* Consistent height for all cards */
+      padding: 2rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 8px 30px var(--shadow-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      border: none;
+      height: auto;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
+      min-height: 200px;
+      margin: 0;
+      animation: fadeInUp 0.6s ease-out;
     }
 
-    /* Hover effect for cards: lift and shadow enhancement */
     .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px var(--shadow-color);
     }
 
-    /* Icon styling within cards, with transition for hover effect */
     .card i {
-      font-size: 2rem;
-      margin-bottom: 0.75rem;
-      transition: transform 0.3s, color 0.3s;
+      font-size: 2.5rem;
+      color: var(--title-color);
+      margin-bottom: 1rem;
+      transition: transform 0.3s ease;
     }
 
-    /* Hover effect for icons: increase size and change color */
     .card:hover i {
-      color: #0f2027; /* Dark blue matching header for hover effect */
-      transform: scale(1.2);
+      transform: scale(1.1);
     }
 
-    /* Heading styles within cards */
-    h5 {
-      font-size: 1rem;
-      margin-bottom: 0.3rem;
+    .card h5 {
+      color: var(--text-color);
+      font-size: 1.1rem;
       font-weight: 600;
-      color: #444;
+      margin-bottom: 0.5rem;
     }
 
-    /* Subheading styles within cards */
-    h6 {
-      font-size: 0.90rem;
-      color: #fefefe;
-      line-height: 1.2;
-      margin: 0;
+    .card p {
+      color: #666;
+      font-size: 0.9rem;
+      line-height: 1.4;
     }
 
-    /* Paragraph text within cards */
-    p {
-      font-size: 0.75rem;
-      color: #555;
-      line-height: 1.2;
-      margin: 0;
-    }
-
-    /* Border colors for each card for variety, based on position */
-    .card:nth-child(1) { border-top: 3px solid #ff6f61; }
-    .card:nth-child(2) { border-top: 3px solid #ffb347; }
-    .card:nth-child(3) { border-top: 3px solid #006064; } /* Dark blue accent */
-    .card:nth-child(4) { border-top: 3px solid #00b894; }
-    .card:nth-child(5) { border-top: 3px solid #fd79a8; }
-    .card:nth-child(6) { border-top: 3px solid #fdba74; }
-    .card:nth-child(7) { border-top: 3px solid #0984e3; }
-    .card:nth-child(8) { border-top: 3px solid #00cec9; }
-
-    /* Footer styling: white background, centered text, subtle shadow and rounded corners */
     .footer {
-      background-color: #ffffff;
-      color: #000;
+      background-color: white;
+      color: var(--text-color);
       padding: 1rem;
       text-align: center;
-      font-size: 0.9rem;
-      margin-top: auto; /* Pushes footer to bottom if flex container expands */
-      border-radius: 0 0 1rem 1rem;
-      box-shadow: inset 0 -2px 10px rgba(0,0,0,0.02);
+      border-top: 1px solid var(--border-color);
+      margin-top: auto;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 1200px) {
+      .cards-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .cards-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .card {
+        min-height: 180px;
+      }
+      .navbar-subtitle {
+        font-size: 1.2rem;
+        margin-left: 1rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar-subtitle {
+        font-size: 1rem;
+        margin-left: 0.75rem;
+        display: block;
+      }
+      .navbar-brand {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .cards-container {
+        grid-template-columns: 1fr;
+        width: 100%;
+        padding: 0.75rem;
+      }
+      .card {
+        min-height: 160px;
+      }
+      .page-title-section h1 {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
-
 <body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <i class="fas fa-gem"></i>
+        <strong>Stationer Tracker</strong>
+        <span class="navbar-subtitle">Track leads, projects, and profits - all in one place</span>
+      </a>
+    </div>
+  </nav>
 
-<!-- Header: Diagonal gradient background, title, subtitle -->
-<div class="header">
-  <h1><a href="/" class="text-white text-decoration-none">Stationer Success Tracker</a></h1>
-  <h6>Track leads, projects, and profits - all in one place.</h6>
-</div>
+  <div class="main-container">
+    <div class="cards-container">
+      <!-- Card 1: Design Projects -->
+      <div class="card" onclick="location.href='/projects'">
+        <i class="fas fa-pen-nib"></i>
+        <h5>Design Projects</h5>
+        <p>Manage your creative card & stationery projects.</p>
+      </div>
+      <!-- Card 2: Clients & Feedback -->
+      <div class="card" onclick="location.href='/client-experiences'">
+        <i class="fas fa-user-friends"></i>
+        <h5>Clients & Feedback</h5>
+        <p>Track customer feedback and testimonials.</p>
+      </div>
+      <!-- Card 3: Expenses & Profit -->
+      <div class="card" onclick="location.href='/costs'">
+        <i class="fas fa-hand-holding-usd"></i>
+        <h5>Expenses & Profit</h5>
+        <p>Monitor finances clearly and simply.</p>
+      </div>
+      <!-- Card 4: Tasks & Routine -->
+      <div class="card" onclick="location.href='/tasks'">
+        <i class="fas fa-sync-alt"></i>
+        <h5>Tasks & Routine</h5>
+        <p>Stay on top of your daily work.</p>
+      </div>
+      <!-- Card 5: Content & Ideas -->
+      <div class="card" onclick="location.href='/posts'">
+        <i class="fas fa-lightbulb"></i>
+        <h5>Content & Ideas</h5>
+        <p>Plan your creative content easily.</p>
+      </div>
+      <!-- Card 6: Workflow & Challenges -->
+      <div class="card" onclick="location.href='/issues'">
+        <i class="fas fa-exclamation-circle"></i>
+        <h5>Workflow & Challenges</h5>
+        <p>Identify delays and bottlenecks.</p>
+      </div>
+      <!-- Card 7: Leads & Sales -->
+      <div class="card" onclick="location.href='/inquiry'">
+        <i class="fas fa-comments"></i>
+        <h5>Leads & Sales</h5>
+        <p>Track inquiries and convert leads.</p>
+      </div>
+      <!-- Card 8: Time & Hours -->
+      <div class="card" onclick="location.href='/time'">
+        <i class="fas fa-hourglass-half"></i>
+        <h5>Time & Hours</h5>
+        <p>Log your work hours efficiently.</p>
+      </div>
+    </div>
+  </div>
 
-<!-- Main grid of cards linking to different sections, responsive layout -->
-<div class="cards-container">
-  <!-- Card 1: Design Projects -->
-  <div class="card" onclick="location.href='/projects'">
-    <i class="fas fa-pen-nib"></i>
-    <h5>Design Projects</h5>
-    <p>Manage your creative card & stationery projects.</p>
-  </div>
-  <!-- Card 2: Clients & Feedback -->
-  <div class="card" onclick="location.href='/client-experiences'">
-    <i class="fas fa-user-friends"></i>
-    <h5>Clients & Feedback</h5>
-    <p>Track customer feedback and testimonials.</p>
-  </div>
-  <!-- Card 3: Expenses & Profit -->
-  <div class="card" onclick="location.href='/costs'">
-    <i class="fas fa-hand-holding-usd"></i>
-    <h5>Expenses & Profit</h5>
-    <p>Monitor finances clearly and simply.</p>
-  </div>
-  <!-- Card 4: Tasks & Routine -->
-  <div class="card" onclick="location.href='/tasks'">
-    <i class="fas fa-sync-alt"></i>
-    <h5>Tasks & Routine</h5>
-    <p>Stay on top of your daily work.</p>
-  </div>
-  <!-- Card 5: Content & Ideas -->
-  <div class="card" onclick="location.href='/posts'">
-    <i class="fas fa-lightbulb"></i>
-    <h5>Content & Ideas</h5>
-    <p>Plan your creative content easily.</p>
-  </div>
-  <!-- Card 6: Workflow & Challenges -->
-  <div class="card" onclick="location.href='/issues'">
-    <i class="fas fa-exclamation-circle"></i>
-    <h5>Workflow & Challenges</h5>
-    <p>Identify delays and bottlenecks.</p>
-  </div>
-  <!-- Card 7: Leads & Sales -->
-  <div class="card" onclick="location.href='/inquiry'">
-    <i class="fas fa-comments"></i>
-    <h5>Leads & Sales</h5>
-    <p>Track inquiries and convert leads.</p>
-  </div>
-  <!-- Card 8: Time & Hours -->
-  <div class="card" onclick="location.href='/time'">
-    <i class="fas fa-hourglass-half"></i>
-    <h5>Time & Hours</h5>
-    <p>Log your work hours efficiently.</p>
-  </div>
-</div>
+  <footer class="footer">
+    © <strong style="color: var(--title-color);">Stationer Success Tracker</strong>. Built with ❤️ to help creative businesses thrive.
+  </footer>
 
-<!-- Footer: Branding & message -->
-<div class="footer">
-  © <strong>Stationer Success Tracker</strong>. Built with ❤️ to help creative businesses thrive.
-</div>
-
-<!-- Bootstrap JS bundle for potential interactivity -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
