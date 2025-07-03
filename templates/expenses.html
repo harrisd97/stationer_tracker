@@ -1,30 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Meta tags for character encoding and responsiveness -->
+  <!-- H-1: Meta and Title -->
+  <!-- H-1.1: Meta tags for character encoding and responsiveness -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Expenses & Profit Tracker</title>
 
-  <!-- ============================
-       External CSS & Fonts
-       Why: To style the page with Bootstrap, custom fonts, and icons
-       How: Linking CDN resources
-       Where to edit: Swap or add CSS links as needed
-  ============================ -->
+  <!-- H-2: External CSS & Fonts -->
+  <!-- H-2.1: Bootstrap, Google Fonts, FontAwesome -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-  <!-- ============================
-       Custom CSS Styles
-       Why: To define the look & feel of your app, colors, layout, responsiveness
-       How: Using CSS variables, media queries, animations
-       Where to edit: Inside <style> block for quick changes or external stylesheet for more
-  ============================ -->
+  <!-- H-3: Custom CSS Styles -->
+  <!-- H-3.1: All style numbering uses S- prefix, see below -->
   <style>
+    /* S-1: Root Variables */
     :root {
-      /* Define color palette and gradients for consistent styling */
+      /* S-1.1: Color palette and gradients for consistent styling */
       --primary-color: #f8f6fa;
       --accent-color: #b399cc;
       --text-color: #4a4158;
@@ -36,22 +30,24 @@
       --title-shadow: rgba(122, 78, 130, 0.1);
     }
 
-    /* Reset margins, paddings, and box-sizing for consistency */
+    /* S-2: CSS Reset */
     * {
+      /* S-2.1: Reset margins, paddings, and box-sizing for consistency */
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    /* Full height and width for html & body, prevent overflow */
+    /* S-3: HTML & Body */
     html, body {
+      /* S-3.1: Full height and width, prevent overflow */
       height: 100%;
       width: 100%;
       overflow-x: hidden;
     }
 
-    /* Body styling: Flex layout, background, font, color */
     body {
+      /* S-3.2: Body styling: Flex layout, background, font, color */
       display: flex;
       flex-direction: column; /* Stack header, main, footer vertically */
       min-height: 100vh; /* Full viewport height */
@@ -62,8 +58,9 @@
       position: relative;
     }
 
-    /* Decorative pseudo-elements to add visual flair (can be customized or removed) */
+    /* S-4: Decorative Pseudo-elements */
     body::before, body::after {
+      /* S-4.1: Decorative pseudo-elements to add visual flair */
       content: "";
       position: fixed;
       z-index: -1;
@@ -73,10 +70,11 @@
       background-repeat: no-repeat;
       opacity: 0.3;
     }
-    /* === End of decorative elements === */
+    /* S-4.2: End of decorative elements */
 
-    /* Navbar styling: semi-transparent background, border, shadow */
+    /* S-5: Navbar */
     .navbar {
+      /* S-5.1: Navbar styling: semi-transparent background, border, shadow */
       background-color: rgba(255, 255, 255, 0.95);
       border-bottom: 1px solid var(--border-color);
       box-shadow: 0 2px 10px var(--shadow-color);
@@ -85,8 +83,8 @@
       z-index: 1050;
     }
 
-    /* Brand styling: custom font, size, color, hover effect */
     .navbar-brand {
+      /* S-5.2: Brand styling: custom font, size, color, hover effect */
       font-family: 'Great Vibes', cursive;
       font-size: 2rem;
       color: var(--title-color) !important;
@@ -100,6 +98,7 @@
     }
 
     .navbar-subtitle {
+      /* S-5.3: Navbar subtitle styling */
       font-family: 'Great Vibes', cursive;
       font-size: 1.5rem;
       color: var(--title-color);
@@ -109,21 +108,25 @@
     }
 
     .navbar-brand:hover {
+      /* S-5.4: Navbar brand hover effect */
       transform: translateY(-2px);
       text-shadow: 0 4px 8px var(--shadow-color);
     }
 
     .navbar-brand i {
+      /* S-5.5: Navbar brand icon styling */
       font-size: 2rem;
       color: var(--title-color);
       transition: all 0.3s ease;
     }
 
     .navbar-brand:hover i {
+      /* S-5.6: Navbar brand icon hover effect */
       transform: rotate(-15deg);
     }
 
     @media (max-width: 768px) {
+      /* S-5.7: Navbar responsive adjustments for subtitle and brand */
       .navbar-subtitle {
         font-size: 1rem;
         margin-left: 0.75rem;
@@ -136,25 +139,26 @@
       }
     }
 
-    /* Navigation links styling */
     .nav-link {
+      /* S-5.8: Navigation links styling */
       color: var(--title-color) !important;
       font-weight: 500;
       transition: color 0.2s ease;
     }
 
-    /* Hover effect for nav links */
     .nav-link:hover {
+      /* S-5.9: Hover effect for nav links */
       color: var(--accent-color) !important;
     }
 
-    /* Spacing between nav items */
     .nav-item {
+      /* S-5.10: Spacing between nav items */
       margin: 0 0.5rem;
     }
 
-    /* Main container styling: centered, padded, with background & shadow */
+    /* S-6: Main Container */
     .main-container {
+      /* S-6.1: Main container styling: centered, padded, with background & shadow */
       flex: 1 0 auto; /* Expand to fill available space */
       width: calc(100% - 2rem);
       max-width: 1200px;
@@ -166,8 +170,9 @@
       animation: fadeInUp 0.8s ease-out; /* Animate on load */
     }
 
-    /* KPI Summary Cards layout: grid for responsiveness */
+    /* S-7: KPI Summary Cards */
     .summary-cards {
+      /* S-7.1: KPI Summary Cards layout: grid for responsiveness */
       display: grid;
       grid-template-columns: repeat(2, 1fr); /* 2 columns by default */
       gap: 1rem;
@@ -177,8 +182,8 @@
       animation-delay: 0.3s;
     }
 
-    /* Individual KPI card style */
     .summary-card {
+      /* S-7.2: Individual KPI card style */
       background: linear-gradient(135deg, #f5f0ff, #e9d4f5);
       border: 1px solid var(--border-color);
       border-radius: 1rem;
@@ -188,13 +193,13 @@
       transition: transform 0.2s ease;
     }
 
-    /* Hover effect for KPI cards */
     .summary-card:hover {
+      /* S-7.3: Hover effect for KPI cards */
       transform: translateY(-2px);
     }
 
-    /* Card titles style */
     .summary-card h6 {
+      /* S-7.4: Card titles style */
       font-size: 0.9rem;
       font-weight: 600;
       color: var(--accent-color);
@@ -202,29 +207,33 @@
       margin-bottom: 0.5rem;
     }
 
-    /* KPI values style */
     .summary-card p {
+      /* S-7.5: KPI values style */
       font-size: 1.4rem;
       font-weight: bold;
       color: var(--text-color);
       margin: 0;
     }
 
-    /* Table styling for expense list */
+    /* S-8: Table Styling */
     .table {
+      /* S-8.1: Table styling for expense list */
       background-color: white;
       border-radius: 0.75rem;
       overflow: hidden;
     }
     thead {
+      /* S-8.2: Table header background */
       background-color: var(--primary-color);
     }
     tbody tr:hover {
+      /* S-8.3: Table row hover effect */
       background-color: rgba(179, 153, 204, 0.05);
     }
 
-    /* Form controls styling: border, focus effects */
+    /* S-9: Form Controls */
     .form-control, .form-select {
+      /* S-9.1: Form controls styling: border, focus effects */
       border-color: var(--border-color);
       border-radius: 0.5rem;
     }
@@ -233,21 +242,25 @@
       box-shadow: 0 0 0 0.2rem rgba(179, 153, 204, 0.25);
     }
 
-    /* Buttons styling: primary and outline secondary */
+    /* S-10: Buttons */
     .btn-primary {
+      /* S-10.1: Primary button styling */
       background-color: var(--accent-color);
       border: none;
     }
     .btn-primary:hover {
+      /* S-10.2: Primary button hover */
       background-color: #9f84b8;
     }
     .btn-outline-secondary {
+      /* S-10.3: Outline secondary button styling */
       border-color: var(--accent-color);
       color: var(--accent-color);
     }
 
-    /* Footer styling */
+    /* S-11: Footer */
     .footer {
+      /* S-11.1: Footer styling */
       flex-shrink: 0;
       padding: 1rem;
       background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
@@ -256,8 +269,9 @@
       text-align: center;
     }
 
-    /* Responsive adjustments for tablets and mobiles */
+    /* S-12: Responsive Adjustments */
     @media (min-width: 768px) {
+      /* S-12.1: Summary cards grid for larger screens */
       .summary-cards {
         grid-template-columns: repeat(4, 1fr); /* 4 columns on larger screens */
       }
@@ -267,6 +281,7 @@
       }
     }
     @media (max-width: 767px) {
+      /* S-12.2: Summary cards grid for smaller screens */
       .summary-cards {
         grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
       }
@@ -281,6 +296,7 @@
       }
     }
     @media (max-width: 480px) {
+      /* S-12.3: Main container and navbar brand for mobile */
       .main-container {
         margin: 0.5rem;
         padding: 1rem;
@@ -290,16 +306,19 @@
       }
     }
 
-    /* Loading overlay styles for async loading states */
+    /* S-13: Loading Overlay */
     .loading-overlay {
+      /* S-13.1: Loading overlay styles for async loading states */
       background: rgba(255, 255, 255, 0.9);
     }
     .spinner-border {
+      /* S-13.2: Spinner color */
       color: var(--accent-color);
     }
 
-    /* Title section with hover & animation */
+    /* S-14: Page Title Section */
     .page-title-section {
+      /* S-14.1: Title section with hover & animation */
       text-align: center;
       margin-bottom: 2.5rem;
       padding: 1rem 0;
@@ -308,8 +327,8 @@
       animation: fadeIn 0.8s ease-out forwards;
       animation-delay: 0.1s;
     }
-    /* Animate title hover underline with gradient */
     .page-title-section h1 {
+      /* S-14.2: Animate title hover underline with gradient */
       font-family: 'Poppins', sans-serif;
       font-size: 2rem;
       color: var(--title-color);
@@ -326,10 +345,11 @@
       padding: 10px;  /* Increase clickable area */
     }
     .page-title-section h1:hover {
+      /* S-14.3: Title hover color */
       color: var(--accent-color);
     }
-    /* Underline effect on hover (using pseudo-element) */
     .page-title-section h1::after {
+      /* S-14.4: Underline effect on hover (using pseudo-element) */
       content: '';
       position: absolute;
       bottom: -8px;
@@ -340,8 +360,9 @@
       background: linear-gradient(to right, transparent, var(--accent-color), transparent);
     }
 
-    /* Loading overlay for smooth page transitions */
+    /* S-15: Page Loader */
     .page-loader {
+      /* S-15.1: Loading overlay for smooth page transitions */
       position: fixed;
       top: 0;
       left: 0;
@@ -356,20 +377,24 @@
       animation-delay: 0.2s;
     }
     @keyframes fadeOut {
+      /* S-15.2: Fade out animation for loader */
       from { opacity: 1; }
       to { opacity: 0; visibility: hidden; }
     }
 
-    /* Additional: Fix for Bootstrap Navbar collapse on small screens */
+    /* S-16: Bootstrap Navbar Fixes */
     .navbar .container-fluid {
+      /* S-16.1: Additional: Fix for Bootstrap Navbar collapse on small screens */
       justify-content: space-between !important;
     }
     .navbar-collapse {
+      /* S-16.2: Prevent navbar collapse from growing */
       flex-grow: 0;
     }
 
-    /* Animations for page load */
+    /* S-17: Animations */
     @keyframes fadeInUp {
+      /* S-17.1: Fade in up animation */
       from {
         opacity: 0;
         transform: translateY(20px);
@@ -380,27 +405,32 @@
       }
     }
     @keyframes fadeIn {
+      /* S-17.2: Fade in animation */
       from { opacity: 0; }
       to { opacity: 1; }
     }
 
-    /* Additional navbar styles for mobile */
+    /* S-18: Mobile Navbar Styles */
     .navbar-toggler {
+      /* S-18.1: Additional navbar styles for mobile */
       border: none;
       padding: 0.25rem;
     }
 
     .navbar-toggler:focus {
+      /* S-18.2: Remove outline on focus */
       box-shadow: none;
       outline: none;
     }
 
     .navbar-toggler-icon {
+      /* S-18.3: Toggler icon size */
       width: 1.5em;
       height: 1.5em;
     }
 
     .nav-link {
+      /* S-18.4: Nav link styling for mobile */
       color: var(--title-color) !important;
       font-weight: 500;
       transition: all 0.3s ease;
@@ -408,11 +438,13 @@
     }
 
     .nav-link:hover {
+      /* S-18.5: Nav link hover effect for mobile */
       color: var(--accent-color) !important;
       transform: translateX(5px);
     }
 
     @media (max-width: 991px) {
+      /* S-18.6: Navbar collapse and nav item adjustments for mobile */
       .navbar-collapse {
         background: white;
         padding: 1rem;
@@ -433,16 +465,19 @@
     }
 
     .counter-animation {
+      /* S-19: Counter animation utility */
       transition: all 0.2s ease;
     }
 
     .clickable {
+      /* S-20: Clickable utility class */
       cursor: pointer;
       touch-action: manipulation; /* Optimize for touch */
       -webkit-tap-highlight-color: transparent;
     }
 
     .navbar-toggler {
+      /* S-21: Navbar toggler button styling */
       width: 44px;
       height: 44px;
       position: relative;
@@ -454,11 +489,13 @@
     }
 
     .navbar-toggler:focus {
+      /* S-21.1: Toggler focus effect */
       outline: none;
       box-shadow: 0 0 0 3px rgba(179, 153, 204, 0.25);
     }
 
     @media (max-width: 991px) {
+      /* S-22: Navbar collapse for mobile fixed position */
       .navbar-collapse {
         position: fixed;
         top: 70px;  /* Adjust based on your navbar height */
@@ -499,6 +536,7 @@
     }
 
     .page-title-section a {
+      /* S-23: Title link styling */
       text-decoration: none;
       display: inline-block;
       width: auto;
@@ -506,32 +544,25 @@
   </style>
 </head>
 
-<!-- ============================
-     Body Content
-     Why: To structure the page with header, main content, footer
-     How: Using Bootstrap classes and custom styles
-     Where to edit: Modify or add sections as your app evolves
-============================ -->
+<!-- H-4: Body Content -->
+<!-- H-4.1: Main body structure for loader, navbar, main content, footer -->
 <body>
 
-  <!-- Loading overlay shown at page load for smooth transition -->
+  <!-- H-5: Page Loader -->
+  <!-- H-5.1: Loading overlay shown at page load for smooth transition -->
   <div class="page-loader">
     <div class="spinner-border" style="color: var(--accent-color); width: 3rem; height: 3rem;"></div>
   </div>
 
-  <!-- ============================
-       Navbar
-       Why: Navigation menu for different sections
-       How: Bootstrap navbar with custom branding and links
-       Where to edit: Add/remove links or change branding
-  ============================ -->
+  <!-- H-6: Navbar -->
+  <!-- H-6.1: Main navigation bar with branding and links -->
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">
         <i class="fas fa-gem"></i>
         <strong>Stationer Tracker</strong>
       </a>
-      
+      <!-- H-6.2: Navbar toggler for mobile -->
       <button class="navbar-toggler" 
               type="button" 
               data-bs-toggle="collapse" 
@@ -541,9 +572,10 @@
               aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      
+      <!-- H-6.3: Navbar links -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
+          <!-- H-6.3.1: Navigation links for different sections -->
           <li class="nav-item">
             <a class="nav-link" href="/projects">Design Projects</a>
           </li>
@@ -561,51 +593,44 @@
     </div>
   </nav>
 
-  <!-- ============================
-       Main Content
-       Why: Core functional area for data display & input
-       How: Using Bootstrap containers, custom grids, and forms
-       Where to edit: Add new sections, modify existing layout
-  ============================ -->
+  <!-- H-7: Main Content Area -->
   <main class="main-container" id="scrollContainer">
-
-    <!-- Page Title Section with Hover Effect -->
+    <!-- H-7.1: Page Title Section -->
     <div class="page-title-section">
       <a href="/costs" class="title-link">
         <h1>Expenses & Profit Tracker</h1>
       </a>
     </div>
 
-    <!-- Summary KPI Cards -->
+    <!-- H-7.2: Summary KPI Cards -->
     <div class="summary-cards">
-      <!-- Total Revenue -->
+      <!-- H-7.2.1: Total Revenue Card -->
       <div class="summary-card">
         <h6>Total Revenue</h6>
         <p id="totalRevenue">-</p>
       </div>
-      <!-- Total Cost -->
+      <!-- H-7.2.2: Total Cost Card -->
       <div class="summary-card">
         <h6>Total Cost</h6>
         <p id="totalCost">-</p>
       </div>
-      <!-- Total Profit -->
+      <!-- H-7.2.3: Total Profit Card -->
       <div class="summary-card">
         <h6>Total Profit</h6>
         <p id="totalProfit">-</p>
       </div>
-      <!-- Average Profit % -->
+      <!-- H-7.2.4: Average Profit % Card -->
       <div class="summary-card">
         <h6>Avg. Profit %</h6>
         <p id="avgProfitPct">-</p>
       </div>
     </div>
 
-    <!-- Controls: Add Expense, Search, Entries Limit -->
+    <!-- H-7.3: Controls Row -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
-      <!-- Add Expense Button -->
+      <!-- H-7.3.1: Add Expense Button -->
       <button class="btn btn-primary btn-sm" id="addExpenseBtn">+ Add Expense</button>
-      
-      <!-- Search Box -->
+      <!-- H-7.3.2: Search Box -->
       <div class="input-group input-group-sm flex-grow-1" style="max-width: 300px;">
         <input type="text" id="searchBox" class="form-control" placeholder="Search project or client..." 
                onkeyup="if(event.key === 'Enter') searchExpenses()">
@@ -613,8 +638,7 @@
           <i class="fas fa-search"></i>
         </button>
       </div>
-      
-      <!-- Show Entries Limit -->
+      <!-- H-7.3.3: Show Entries Limit -->
       <div class="d-flex align-items-center">
         <label class="me-2 mb-0">Show</label>
         <select id="limitSelect" class="form-select form-select-sm w-auto">
@@ -627,19 +651,19 @@
       </div>
     </div>
 
-    <!-- Expense Form (Hidden by default) -->
+    <!-- H-7.4: Expense Form (Hidden by default) -->
     <section id="expenseFormSection" style="display:none;">
       <form id="expenseForm" class="p-3 border rounded bg-white mb-4">
-        <!-- Hidden input for editing existing expense -->
+        <!-- H-7.4.1: Hidden input for editing existing expense -->
         <input type="hidden" id="cost_id" />
-        <!-- Project & Cost Type Inputs -->
+        <!-- H-7.4.2: Project & Cost Type Inputs -->
         <div class="row mb-2">
           <div class="col-md-6 position-relative">
             <label>Project</label>
-            <!-- Autocomplete search input -->
+            <!-- H-7.4.2.1: Autocomplete search input -->
             <input type="text" id="projectSearch" class="form-control" placeholder="Type to search project..." autocomplete="off" required />
             <input type="hidden" id="project_id" /> <!-- Stores selected project ID -->
-            <!-- Search results list -->
+            <!-- H-7.4.2.2: Search results list -->
             <div id="projectSearchList" class="list-group position-absolute w-100 z-3" style="max-height: 200px; overflow-y: auto; display: none;"></div>
           </div>
           <div class="col-md-6">
@@ -647,7 +671,7 @@
             <select id="cost_type" class="form-select" required></select>
           </div>
         </div>
-        <!-- Amount & Notes Inputs -->
+        <!-- H-7.4.3: Amount & Notes Inputs -->
         <div class="row mb-2">
           <div class="col-md-6">
             <label>Amount (CAD)</label>
@@ -658,7 +682,7 @@
             <input type="text" id="notes" class="form-control" />
           </div>
         </div>
-        <!-- Save & Close Buttons -->
+        <!-- H-7.4.4: Save & Close Buttons -->
         <div class="d-flex gap-2 mt-3">
           <button type="submit" class="btn btn-success btn-sm">Save</button>
           <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeForm()">Close</button>
@@ -666,13 +690,13 @@
       </form>
     </section>
 
-    <!-- Expense List Table -->
+    <!-- H-7.5: Expense List Table -->
     <section class="table-responsive position-relative mb-4">
-      <!-- Loading overlay during data fetch -->
+      <!-- H-7.5.1: Loading overlay during data fetch -->
       <div id="loading" class="loading-overlay" style="display:none;">
         <div class="spinner-border text-danger"></div>
       </div>
-      <!-- Data table -->
+      <!-- H-7.5.2: Data table -->
       <table class="table table-bordered table-striped mb-0">
         <thead class="table-light">
           <tr>
@@ -689,7 +713,7 @@
       </table>
     </section>
 
-    <!-- Pagination Controls -->
+    <!-- H-7.6: Pagination Controls -->
     <nav class="pagination-controls mb-4 justify-content-center d-flex gap-2">
       <button id="prevBtn" class="btn btn-sm btn-outline-secondary" onclick="changePage(-1)">Prev</button>
       <span id="pageIndicator">Page 1</span>
@@ -697,30 +721,18 @@
     </nav>
   </main>
 
-  <!-- ============================
-       Footer
-       Why: To provide closing message & attribution
-       How: Simple footer with styled text
-       Where to edit: Change message or styling as needed
-  ============================ -->
+  <!-- H-8: Footer -->
   <footer class="footer">
     © <strong style="color: var(--title-color);">Stationer Success Tracker</strong>. Built with ❤️ to help creative businesses thrive.
   </footer>
 
-  <!-- ============================
-       Scripts and JS Logic
-       Why: To add dynamic behavior, API integrations, interactivity
-       How: Using inline <script> and Bootstrap JS bundle
-       Where to edit: Modify functions for custom behavior
-  ============================ -->
+  <!-- H-9: Scripts and JS Logic -->
+  <!-- H-9.1: Bootstrap JS bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- H-9.2: Main App Script -->
   <script>
-    // ============================
-    // API Endpoints Configuration
-    // Why: To centralize API URLs for easy maintenance
-    // How: Define as a constant object
-    // Where to edit: Change URLs if API routes change
-    // ============================
+    // ST-1: API Endpoints Configuration
+    // ST-1.1: Centralize API URLs for easy maintenance
     const API_ENDPOINTS = {
       PROJECT_COSTS: '/api/project-costs', // List of expenses
       PROJECT_COST: '/api/project-cost',   // Single expense get/update/delete
@@ -729,32 +741,22 @@
       PROJECT_SEARCH: '/api/projects/search' // Autocomplete project search
     };
 
-    // ============================
-    // State Variables
-    // Why: To manage current page, limit, search query
-    // How: Using simple JS variables
-    // Where to edit: Change default page/limit if needed
-    // ============================
+    // ST-2: State Variables
+    // ST-2.1: Manage current page, limit, search query
     let currentPage = 1; // Current page for pagination
     let limit = 10; // Records per page
     let lastSearchQuery = ""; // Search term
 
-    // ============================
-    // Initialization: Load dropdowns, dashboard, first expense page
-    // Why: To prepare UI with data
-    // How: Call functions on window.onload
-    // Where to edit: Add/remove initial load functions as needed
-    // ============================
+    // ST-3: Initialization
+    // ST-3.1: Load dropdowns, dashboard, first expense page
     window.onload = () => {
-      loadLOV("COST_TYPE", "cost_type"); // Load cost types dropdown
-      loadProjectSearchLOV();            // Setup project search autocomplete
-      loadExpenseDashboard();            // Load summary metrics
-      loadExpenses();                    // Load initial expense list
+      loadLOV("COST_TYPE", "cost_type"); // ST-3.2: Load cost types dropdown
+      loadProjectSearchLOV();            // ST-3.3: Setup project search autocomplete
+      loadExpenseDashboard();            // ST-3.4: Load summary metrics
+      loadExpenses();                    // ST-3.5: Load initial expense list
     };
 
-    // ============================
-    // Event Listeners for UI controls
-    // ============================
+    // ST-4: Event Listeners for UI controls
     document.getElementById("limitSelect").addEventListener("change", () => {
       limit = parseInt(document.getElementById("limitSelect").value);
       currentPage = 1; // Reset to first page
@@ -769,18 +771,14 @@
       lastSearchQuery = this.value.trim(); // Store search term
     });
 
-    // Search button triggers expense reload with current search
+    // ST-4.1: Search button triggers expense reload with current search
     function searchExpenses() {
       currentPage = 1;
       loadExpenses();
     }
 
-    // ============================
-    // Load Expenses List Function
-    // Why: To fetch and display expense data with pagination & search
-    // How: Fetch API, update table rows dynamically
-    // Where to edit: Adjust API URL, or data handling
-    // ============================
+    // ST-5: Load Expenses List Function
+    // ST-5.1: Fetch and display expense data with pagination & search
     async function loadExpenses() {
       // Show loading overlay
       const loadingOverlay = document.getElementById("loading");
@@ -861,12 +859,8 @@
       }
     }
 
-    // ============================
-    // Load Dashboard Metrics
-    // Why: To display total revenue, costs, profit, etc.
-    // How: Fetch API, update KPI cards
-    // Where to edit: Adjust API URL or formatting
-    // ============================
+    // ST-6: Load Dashboard Metrics
+    // ST-6.1: Display total revenue, costs, profit, etc.
     async function loadExpenseDashboard() {
       try {
         const res = await fetch(API_ENDPOINTS.DASHBOARD);
@@ -893,12 +887,8 @@
       }
     }
 
-    // ============================
-    // Load List of Values (LOV) for dropdowns
-    // Why: To populate options like "Cost Type"
-    // How: Fetch API, fill select options
-    // Where to edit: Change refName if adding new dropdowns
-    // ============================
+    // ST-7: Load List of Values (LOV) for dropdowns
+    // ST-7.1: Populate options like "Cost Type"
     async function loadLOV(refName, selectId) {
       try {
         const res = await fetch(`${API_ENDPOINTS.LOV}${refName}`);
@@ -914,12 +904,8 @@
       }
     }
 
-    // ============================
-    // Setup Project Search Autocomplete
-    // Why: To select projects with live search
-    // How: Debounce input, fetch search results, populate list
-    // Where to edit: Adjust debounce time or API route
-    // ============================
+    // ST-8: Setup Project Search Autocomplete
+    // ST-8.1: Select projects with live search
     let debounceTimeout;
     async function loadProjectSearchLOV() {
       const input = document.getElementById("projectSearch");
@@ -969,12 +955,8 @@
       });
     }
 
-    // ============================
-    // Edit Existing Expense (Pre-fill form)
-    // Why: To allow editing an expense entry
-    // How: Fetch expense data, populate form fields
-    // Where to edit: Adjust API URL or form fields
-    // ============================
+    // ST-9: Edit Existing Expense (Pre-fill form)
+    // ST-9.1: Allow editing an expense entry
     async function editExpense(id) {
       try {
         const res = await fetch(`${API_ENDPOINTS.PROJECT_COST}/${id}`);
@@ -1005,12 +987,8 @@
       }
     }
 
-    // ============================
-    // Toggle Details Row (expand/collapse)
-    // Why: To view/hide project costs
-    // How: Show/hide details row, fetch data if expanding
-    // Where to edit: Adjust API URL or expand logic
-    // ============================
+    // ST-10: Toggle Details Row (expand/collapse)
+    // ST-10.1: View/hide project costs
     async function toggleDetails(button, projectId) {
       const detailRow = document.querySelector(`tr.details-row[data-project="${projectId}"]`);
       const detailsBody = document.getElementById(`details-${projectId}`);
@@ -1059,12 +1037,8 @@
       }
     }
 
-    // ============================
-    // Inline Edit Cost Item
-    // Why: To quickly modify cost notes/amount
-    // How: Replace row with input fields, save via API
-    // Where to edit: Adjust inline editing logic
-    // ============================
+    // ST-11: Inline Edit Cost Item
+    // ST-11.1: Quickly modify cost notes/amount
     let editingCostId = null; // Track editing row
 
     function editExpenseInline(costId, projectId) {
@@ -1094,12 +1068,8 @@
       editingCostId = costId; // Store current editing row
     }
 
-    // ============================
-    // Save Inline Edited Cost
-    // Why: To persist quick edits without leaving the row
-    // How: Send POST API with updated notes & amount
-    // Where to edit: Adjust API endpoint or payload
-    // ============================
+    // ST-12: Save Inline Edited Cost
+    // ST-12.1: Persist quick edits without leaving the row
     async function saveExpenseInline(costId, projectId, costType) {
       const notes = document.getElementById(`edit-notes-${costId}`).value.trim();
       const amount = parseFloat(document.getElementById(`edit-amount-${costId}`).value.trim());
@@ -1130,24 +1100,16 @@
       }
     }
 
-    // ============================
-    // Cancel Inline Edit
-    // Why: To discard changes and revert row
-    // How: Reload the original row by toggling details
-    // Where to edit: Adjust logic if needed
-    // ============================
+    // ST-13: Cancel Inline Edit
+    // ST-13.1: Discard changes and revert row
     function cancelEditInline(projectId) {
       // Re-toggle details to reload original data
       toggleDetails({ innerText: "⬇️" }, projectId);
       toggleDetails({ innerText: "⬆️" }, projectId);
     }
 
-    // ============================
-    // Save Expense (Add or Update)
-    // Why: To submit form data for new or existing expense
-    // How: Send POST API, handle response
-    // Where to edit: API URL, form fields
-    // ============================
+    // ST-14: Save Expense (Add or Update)
+    // ST-14.1: Submit form data for new or existing expense
     document.getElementById("expenseForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -1178,12 +1140,8 @@
       }
     });
 
-    // ============================
-    // Reset & Close Form
-    // Why: To clear form inputs and hide form section
-    // How: Reset form fields, toggle display
-    // Where to edit: Add custom initialization if needed
-    // ============================
+    // ST-15: Reset & Close Form
+    // ST-15.1: Clear form inputs and hide form section
     function resetForm() {
       document.getElementById("expenseForm").reset();
       document.getElementById("cost_id").value = "";
@@ -1196,20 +1154,14 @@
       document.getElementById("expenseFormSection").style.display = "none";
     }
 
-    // ============================
-    // Pagination Controls
-    // ============================
+    // ST-16: Pagination Controls
     function changePage(dir) {
       currentPage += dir;
       loadExpenses(); // Reload data for new page
     }
 
-    // ============================
-    // Toast Notification Utility
-    // Why: To show user feedback messages
-    // How: Create alert divs, auto-remove after 3 sec
-    // Where to edit: Change style or add more types
-    // ============================
+    // ST-17: Toast Notification Utility
+    // ST-17.1: Show user feedback messages
     function showToast(message, type = "info") {
       const toast = document.createElement("div");
       toast.className = `alert alert-${type}`;
@@ -1219,12 +1171,8 @@
       setTimeout(() => toast.remove(), 3000);
     }
 
-    // ============================
-    // Delete Expense with Confirmation
-    // Why: To confirm user intent before deleting
-    // How: Show modal, delete via API, reload
-    // Where to edit: Change modal text, API URL
-    // ============================
+    // ST-18: Delete Expense with Confirmation
+    // ST-18.1: Confirm user intent before deleting
     let deleteCostId = null;
     let deleteProjectId = null;
 
@@ -1256,12 +1204,8 @@
       };
     }
 
-    // ============================
-    // Animated Counter Utility
-    // Why: To animate number changes like a flip counter
-    // How: Incrementally update number with easing
-    // Where to edit: Adjust duration and easing if needed
-    // ============================
+    // ST-19: Animated Counter Utility
+    // ST-19.1: Animate number changes like a flip counter
     function animateNumber(element, finalValue, duration = 1000, prefix = '', suffix = '') {
       const startTime = performance.now();
       const startValue = 0;
@@ -1293,8 +1237,9 @@
       requestAnimationFrame(updateNumber);
     }
 
+    // ST-20: DOMContentLoaded for Touch/Navigation
     document.addEventListener('DOMContentLoaded', function() {
-      // Enable touch events on clickable elements
+      // ST-20.1: Enable touch events on clickable elements
       document.querySelectorAll('.clickable').forEach(element => {
         element.addEventListener('touchend', function(e) {
           e.preventDefault();
@@ -1307,56 +1252,57 @@
       document.addEventListener('touchstart', function() {}, false);
     });
 
-    // Initialize mobile navigation
+    // ST-21: Initialize mobile navigation
     document.addEventListener('DOMContentLoaded', function() {
-        const navbarToggler = document.querySelector('.navbar-toggler');
-        const navbarCollapse = document.querySelector('.navbar-collapse');
-        
-        if (navbarToggler && navbarCollapse) {
-            // Prevent double-firing of click events
-            navbarToggler.addEventListener('click', function(e) {
-                e.stopPropagation();
-                navbarCollapse.classList.toggle('show');
-                this.setAttribute('aria-expanded', 
-                    navbarCollapse.classList.contains('show')
-                );
-            });
+      // ST-21.1: Mobile nav toggler and close logic
+      const navbarToggler = document.querySelector('.navbar-toggler');
+      const navbarCollapse = document.querySelector('.navbar-collapse');
+      
+      if (navbarToggler && navbarCollapse) {
+        // Prevent double-firing of click events
+        navbarToggler.addEventListener('click', function(e) {
+          e.stopPropagation();
+          navbarCollapse.classList.toggle('show');
+          this.setAttribute('aria-expanded', 
+            navbarCollapse.classList.contains('show')
+          );
+        });
 
-            // Close menu when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!navbarCollapse.contains(e.target) && 
-                    !navbarToggler.contains(e.target)) {
-                    navbarCollapse.classList.remove('show');
-                    navbarToggler.setAttribute('aria-expanded', 'false');
-                }
-            });
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+          if (!navbarCollapse.contains(e.target) && 
+              !navbarToggler.contains(e.target)) {
+            navbarCollapse.classList.remove('show');
+            navbarToggler.setAttribute('aria-expanded', 'false');
+          }
+        });
 
-            // Handle nav link clicks
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    navbarCollapse.classList.remove('show');
-                    navbarToggler.setAttribute('aria-expanded', 'false');
-                });
-            });
-        }
+        // Handle nav link clicks
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.addEventListener('click', function(e) {
+            navbarCollapse.classList.remove('show');
+            navbarToggler.setAttribute('aria-expanded', 'false');
+          });
+        });
+      }
 
-        // Make title link work on all devices
-        const titleLink = document.querySelector('.title-link');
-        if (titleLink) {
-            ['click', 'touchend'].forEach(eventType => {
-                titleLink.addEventListener(eventType, function(e) {
-                    e.preventDefault();
-                    window.location.href = this.getAttribute('href');
-                });
-            });
-        }
+      // Make title link work on all devices
+      const titleLink = document.querySelector('.title-link');
+      if (titleLink) {
+        ['click', 'touchend'].forEach(eventType => {
+          titleLink.addEventListener(eventType, function(e) {
+            e.preventDefault();
+            window.location.href = this.getAttribute('href');
+          });
+        });
+      }
     });
   </script>
 
-  <!-- Toast container for user messages -->
+  <!-- H-10: Toast container for user messages -->
   <div id="toastBox" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;"></div>
 
-  <!-- Delete Confirmation Modal -->
+  <!-- H-11: Delete Confirmation Modal -->
   <div class="modal fade" id="deleteConfirmationModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
