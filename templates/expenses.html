@@ -80,6 +80,9 @@
       background-color: rgba(255, 255, 255, 0.95);
       border-bottom: 1px solid var(--border-color);
       box-shadow: 0 2px 10px var(--shadow-color);
+      position: sticky;
+      top: 0;
+      z-index: 1050;
     }
 
     /* Brand styling: custom font, size, color, hover effect */
@@ -92,6 +95,8 @@
       align-items: center;
       gap: 0.5rem;
       animation: fadeInUp 0.8s ease-out;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
     }
 
     .navbar-subtitle {
@@ -314,6 +319,11 @@
       display: inline-block;
       cursor: pointer;
       transition: color 0.2s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      z-index: 1;
+      padding: 10px;  /* Increase clickable area */
     }
     .page-title-section h1:hover {
       color: var(--accent-color);
@@ -412,7 +422,9 @@
         top: 100%;
         right: 1rem;
         left: 1rem;
-        z-index: 1000;
+        z-index: 1040;  /* Higher than navbar */
+        max-height: calc(100vh - 70px); /* Prevent overflow */
+        overflow-y: auto;
       }
       
       .nav-item {
@@ -422,6 +434,74 @@
 
     .counter-animation {
       transition: all 0.2s ease;
+    }
+
+    .clickable {
+      cursor: pointer;
+      touch-action: manipulation; /* Optimize for touch */
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .navbar-toggler {
+      width: 44px;
+      height: 44px;
+      position: relative;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      background-color: transparent;
+      padding: 0;
+      margin-left: auto;
+    }
+
+    .navbar-toggler:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(179, 153, 204, 0.25);
+    }
+
+    @media (max-width: 991px) {
+      .navbar-collapse {
+        position: fixed;
+        top: 70px;  /* Adjust based on your navbar height */
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 1rem;
+        border-radius: 0 0 1rem 1rem;
+        box-shadow: 0 4px 12px var(--shadow-color);
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+        transition: all 0.3s ease;
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .navbar-collapse.show {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+      
+      .nav-item {
+        margin: 0.5rem 0;
+        width: 100%;
+      }
+
+      .nav-link {
+        display: block;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+      }
+
+      .nav-link:active {
+        background-color: var(--primary-color);
+      }
+    }
+
+    .page-title-section a {
+      text-decoration: none;
+      display: inline-block;
+      width: auto;
     }
   </style>
 </head>
@@ -450,17 +530,26 @@
       <a class="navbar-brand" href="/">
         <i class="fas fa-gem"></i>
         <strong>Stationer Tracker</strong>
-        <!-- <span class="navbar-subtitle">Track leads, projects, and profits - all in one place</span>-->
       </a>
-      <!-- Hamburger menu button -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      
+      <button class="navbar-toggler" 
+              type="button" 
+              data-bs-toggle="collapse" 
+              data-bs-target="#navbarNav" 
+              aria-controls="navbarNav" 
+              aria-expanded="false" 
+              aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <!-- Navigation menu -->
+      
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/projects">Design Projects</a></li>
-          <li class="nav-item"><a class="nav-link" href="/client-experiences">Clients & Feedback</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/projects">Design Projects</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/client-experiences">Clients & Feedback</a>
+          </li>
           <li class="nav-item"><a class="nav-link" href="/costs">Expenses & Profit</a></li>
           <li class="nav-item"><a class="nav-link" href="/tasks">Tasks & Routine</a></li>
           <li class="nav-item"><a class="nav-link" href="/posts">Content & Ideas</a></li>
@@ -482,7 +571,9 @@
 
     <!-- Page Title Section with Hover Effect -->
     <div class="page-title-section">
-      <h1 onclick="window.location.href='/costs'">Expenses & Profit Tracker</h1>
+      <a href="/costs" class="title-link">
+        <h1>Expenses & Profit Tracker</h1>
+      </a>
     </div>
 
     <!-- Summary KPI Cards -->
@@ -1202,6 +1293,64 @@
       requestAnimationFrame(updateNumber);
     }
 
+    document.addEventListener('DOMContentLoaded', function() {
+      // Enable touch events on clickable elements
+      document.querySelectorAll('.clickable').forEach(element => {
+        element.addEventListener('touchend', function(e) {
+          e.preventDefault();
+          const href = this.getAttribute('href');
+          if (href) window.location.href = href;
+        });
+      });
+      
+      // Fix for iOS hover states
+      document.addEventListener('touchstart', function() {}, false);
+    });
+
+    // Initialize mobile navigation
+    document.addEventListener('DOMContentLoaded', function() {
+        const navbarToggler = document.querySelector('.navbar-toggler');
+        const navbarCollapse = document.querySelector('.navbar-collapse');
+        
+        if (navbarToggler && navbarCollapse) {
+            // Prevent double-firing of click events
+            navbarToggler.addEventListener('click', function(e) {
+                e.stopPropagation();
+                navbarCollapse.classList.toggle('show');
+                this.setAttribute('aria-expanded', 
+                    navbarCollapse.classList.contains('show')
+                );
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!navbarCollapse.contains(e.target) && 
+                    !navbarToggler.contains(e.target)) {
+                    navbarCollapse.classList.remove('show');
+                    navbarToggler.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Handle nav link clicks
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    navbarCollapse.classList.remove('show');
+                    navbarToggler.setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
+
+        // Make title link work on all devices
+        const titleLink = document.querySelector('.title-link');
+        if (titleLink) {
+            ['click', 'touchend'].forEach(eventType => {
+                titleLink.addEventListener(eventType, function(e) {
+                    e.preventDefault();
+                    window.location.href = this.getAttribute('href');
+                });
+            });
+        }
+    });
   </script>
 
   <!-- Toast container for user messages -->
