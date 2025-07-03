@@ -1,283 +1,481 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- H-1: Meta and Title -->
+  <!-- H-1.1: Meta tags for character encoding and responsiveness -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <title>Client Experience Tracker</title>
 
-  <!-- External CSS Libraries -->
+  <!-- H-2: External CSS & Fonts -->
+  <!-- H-2.1: Bootstrap, Google Fonts, FontAwesome -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-  <!-- Internal CSS for styling -->
+  <!-- H-3: Custom CSS Styles -->
+  <!-- H-3.1: All style numbering uses S- prefix, see below -->
   <style>
-    /* ===================== */
-    /* General Body Styles  */
-    /* ===================== */
+    /* S-1: Root Variables */
+    :root {
+      /* S-1.1: Color palette and gradients for consistent styling */
+      --primary-color: #f8f6fa;
+      --accent-color: #b399cc;
+      --text-color: #4a4158;
+      --border-color: #e2daea;
+      --shadow-color: rgba(179, 153, 204, 0.15);
+      --gradient-start: #ffffff;
+      --gradient-end: #f8f6fa;
+      --title-color: #7a4e82;
+      --title-shadow: rgba(122, 78, 130, 0.1);
+    }
+
+    /* S-2: CSS Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* S-3: HTML & Body */
+    html, body { height: 100%; width: 100%; overflow-x: hidden; }
     body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background-color: #f0f0f0;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      color: #323232;
-      font-size: 0.9rem; /* Smaller base font size */
-    }
-
-    /* ===================== */
-    /* Header Styles        */
-    /* ===================== */
-    .header {
-      background: linear-gradient(135deg, #29102a, #994ac3, #582c64);
-      padding: 2rem 1rem;
-      text-align: center;
-      color: #fff;
-      clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: url('https://www.transparenttextures.com/patterns/white-diamond.png'), linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
+      color: var(--text-color);
       position: relative;
-      overflow: hidden; /* Ensures no overflow outside header */
-      max-width: 100%;   /* Responsive on small screens */
-      box-sizing: border-box;
     }
 
-    .header h1 {
+    /* S-4: Decorative Pseudo-elements */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      z-index: -1;
+      width: 250px;
+      height: 250px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      opacity: 0.3;
+    }
+
+    /* S-5: Navbar */
+    .navbar {
+      background-color: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 2px 10px var(--shadow-color);
+      position: sticky;
+      top: 0;
+      z-index: 1050;
+    }
+    .navbar-brand {
+      font-family: 'Great Vibes', cursive;
       font-size: 2rem;
-      margin-bottom: 0.3rem;
-      letter-spacing: 1px;
-      font-weight: 700;
+      color: var(--title-color) !important;
+      transition: all 0.3s ease;
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 0.5rem;
+      animation: fadeInUp 0.8s ease-out;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .navbar-brand:hover { transform: translateY(-2px); text-shadow: 0 4px 8px var(--shadow-color); }
+    .navbar-brand i { font-size: 2rem; color: var(--title-color); transition: all 0.3s ease; }
+    .navbar-brand:hover i { transform: rotate(-15deg); }
+    .nav-link {
+      color: var(--title-color) !important;
+      font-weight: 500;
+      transition: color 0.2s ease;
+      padding: 0.5rem 1rem;
+    }
+    .nav-link:hover { color: var(--accent-color) !important; transform: translateX(5px); }
+    .nav-item { margin: 0 0.5rem; }
+    .navbar .container-fluid { justify-content: space-between !important; }
+    .navbar-collapse { flex-grow: 0; }
+    .navbar-toggler {
+      border: none;
+      padding: 0.25rem;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      background-color: transparent;
+      margin-left: auto;
+    }
+    .navbar-toggler:focus { box-shadow: none; outline: none; }
+    .navbar-toggler-icon { width: 1.5em; height: 1.5em; }
+
+    @media (max-width: 991px) {
+      .navbar-collapse {
+        background: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 12px var(--shadow-color);
+        position: absolute;
+        top: 100%;
+        right: 1rem;
+        left: 1rem;
+        z-index: 1040;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+        transition: all 0.3s ease;
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+      }
+      .navbar-collapse.show {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+      .nav-item { margin: 0.5rem 0; width: 100%; }
+      .nav-link { display: block; padding: 0.75rem 1rem; border-radius: 0.5rem; }
+      .nav-link:active { background-color: var(--primary-color); }
+    }
+    @media (max-width: 768px) {
+      .navbar-brand { flex-wrap: wrap; justify-content: center; text-align: center; font-size: 1.5rem; }
+      .navbar-brand i { font-size: 1.5rem; }
+      .nav-link { font-size: 0.95rem !important; padding: 0.5rem 1rem !important; }
     }
 
-    /* Responsive width for header headings */
-    .header h1, .header h6 {
-      margin: 0 auto;
-      max-width: 90vw; /* Responsive for mobile devices */
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-    }
-
-    /* Subheading in header */
-    h6 {
-      font-size: 0.90rem;
-      line-height: 1.2;
-      margin: 0;
-    }
-
-    /* Paragraph under header */
-    .header p {
-      font-size: 0.8rem;
-      max-width: 700px;
-      margin: 0 auto;
-      line-height: 1.3;
-      border-top: 2px solid #fff;
-      margin-top: 0.4rem;
-      padding-top: 0.4rem;
-    }
-
-    /* ===================== */
-    /* Main Container Styles */
-    /* ===================== */
+    /* S-6: Main Container */
     .main-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.5rem 1rem;
-      /* Adjust for header/footer height if needed */
-      max-height: calc(100vh - 160px);
+      flex: 1 0 auto;
+      width: calc(100% - 2rem);
+      max-width: 1200px;
+      margin: 1rem auto;
+      padding: 1.5rem;
+      background-color: rgba(255, 255, 255, 0.98);
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px var(--shadow-color);
+      animation: fadeInUp 0.8s ease-out;
+    }
+    @media (min-width: 768px) {
+      .main-container { margin: 2rem auto; padding: 2rem; }
+    }
+    @media (max-width: 768px) {
+      .main-container { padding: 1rem; }
     }
 
-    /* ===================== */
-    /* Button Styles        */
-    /* ===================== */
-    .btn-outline-secondary {
-      font-size: 0.65rem;
-      padding: 0.3rem 0.6rem;
-    }
-
-    /* ===================== */
-    /* Dashboard Cards Styles */
-    /* ===================== */
+    /* S-7: KPI Summary Cards */
     .summary-cards {
-      display: flex;
-      flex-wrap: wrap;
+      /* S-7.1: KPI Summary Cards layout: grid for responsiveness */
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* 2 columns by default */
       gap: 1rem;
-      margin-bottom: 1rem;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeIn 0.8s ease-out forwards;
+      animation-delay: 0.3s;
     }
 
     .summary-card {
-      flex: 1;
-      min-width: 100px;
+      /* S-7.2: Individual KPI card style */
       background: linear-gradient(135deg, #f5f0ff, #e9d4f5);
-      padding: 1.2rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 1rem;
+      padding: 1.2rem;
       text-align: center;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(153, 74, 195, 0.2);
+      box-shadow: 0 4px 15px var(--shadow-color);
       transition: transform 0.2s ease;
     }
 
-    /* Card hover effect */
     .summary-card:hover {
-      transform: scale(1.02);
+      /* S-7.3: Hover effect for KPI cards */
+      transform: translateY(-2px);
     }
 
-    /* Card title styling */
     .summary-card h6 {
+      /* S-7.4: Card titles style */
       font-size: 0.9rem;
       font-weight: 600;
-      color: #5c1a84;
-      margin-bottom: 0.4rem;
+      color: var(--accent-color);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
     }
 
-    /* Card value styling */
     .summary-card p {
-      font-size: 1.5rem;
+      /* S-7.5: KPI values style */
+      font-size: 1.4rem;
       font-weight: bold;
-      color: #2e0438;
+      color: var(--text-color);
       margin: 0;
     }
 
-    /* Responsive adjustments for cards on small screens */
-    @media (max-width: 768px) {
+    @media (min-width: 768px) {
+      /* S-7.1: Summary cards grid for larger screens */
+      .summary-cards {
+        grid-template-columns: repeat(4, 1fr); /* 4 columns on larger screens */
+      }
+    }
+    @media (max-width: 767px) {
+      /* S-7.2: Summary cards grid for smaller screens */
+      .summary-cards {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
+      }
       .summary-card {
-        flex: 0 0 calc(50% - 0.5rem); /* 2 per row */
+        padding: 1rem;
+      }
+      .summary-card h6 {
+        font-size: 0.8rem;
+      }
+      .summary-card p {
+        font-size: 1.2rem;
       }
     }
 
-    /* ===================== */
-    /* Feedback Form Styles  */
-    /* ===================== */
-    #feedbackForm {
-      display: flex;
-      flex-direction: column;
-      font-size: 0.85rem;
-    }
-
-    #feedbackForm .row {
-      margin-bottom: 0.75rem;
-    }
-
-    #feedbackForm label {
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-      display: block;
-      font-size: 0.9rem;
-    }
-
-    #feedbackForm input,
-    #feedbackForm select {
-      width: 100%;
-      padding: 0.4rem;
-      border-radius: 0.4rem;
-      border: 1px solid #ccc;
-      font-size: 0.85rem;
-    }
-
-    #feedbackForm .d-flex {
-      gap: 0.5rem;
-    }
-
-    /* ===================== */
-    /* Table Styles          */
-    /* ===================== */
-    table {
-      width: 100%;
-      background: #fff;
-      border-radius: 0.5rem;
+    /* S-8: Table Styling */
+    .table {
+      background-color: white;
+      border-radius: 0.75rem;
       overflow: hidden;
+    }
+    thead {
+      background-color: var(--primary-color);
+    }
+    tbody tr:hover {
+      background-color: rgba(179, 153, 204, 0.05);
+    }
+
+    /* S-9: Form Controls */
+    .form-control, .form-select {
+      border-color: var(--border-color);
+      border-radius: 0.5rem;
       font-size: 0.85rem;
     }
-
-    thead {
-      background-color: #f8f9fa;
+    .form-control:focus, .form-select:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 0.2rem rgba(179, 153, 204, 0.25);
     }
 
-    tbody tr:hover {
-      background-color: #f1f1f1;
+    /* S-10: Buttons */
+    .btn-primary {
+      background-color: var(--accent-color);
+      border: none;
+      font-weight: 500;
+    }
+    .btn-primary:hover { background-color: #9f84b8; }
+    .btn-outline-secondary {
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+      font-size: 0.85rem;
+    }
+    .btn-outline-secondary:hover {
+      background-color: var(--accent-color);
+      border-color: var(--accent-color);
+      color: white;
     }
 
-    /* ===================== */
-    /* Pagination Controls   */
-    /* ===================== */
-    .pagination-controls {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    /* ===================== */
-    /* Loading Overlay Styles */
-    /* ===================== */
-    .loading-overlay {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: rgba(255,255,255,0.7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-
-    .spinner-border {
-      width: 2rem;
-      height: 2rem;
-    }
-
-    /* ===================== */
-    /* Footer Styles         */
-    /* ===================== */
+    /* S-11: Footer */
     .footer {
-      background-color: #fff;
-      color: #000;
+      flex-shrink: 0;
       padding: 1rem;
+      background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+      color: var(--title-color);
+      border-top: 1px solid var(--border-color);
       text-align: center;
-      font-size: 0.9rem;
-      margin-top: auto;
-      border-radius: 0 0 1rem 1rem;
-      box-shadow: inset 0 -2px 10px rgba(0, 0, 0, 0.02);
     }
 
-    /* ===================== */
-    /* Action Icon Styles    */
-    /* ===================== */
-    .action-icon {
+    /* S-12: Responsive Adjustments */
+    /* Match animation speed and delay to expenses.html */
+    .main-container,
+    .navbar-brand,
+    .summary-cards,
+    .page-title-section,
+    .controls-section,
+    .table-responsive,
+    .pagination-controls,
+    #feedbackFormSection {
+      animation-duration: 0.8s !important;
+      animation-timing-function: ease-out !important;
+      animation-delay: 0.1s !important;
+    }
+
+    /* Match table font size to expenses.html */
+    .table,
+    table {
+      font-size: 1rem !important;
+    }
+
+    /* S-13: Loading Overlay */
+    .loading-overlay { background: rgba(255, 255, 255, 0.9); }
+    .spinner-border { color: var(--accent-color); }
+
+    /* S-14: Page Title Section */
+    .page-title-section {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding: 1rem 0;
+      position: relative;
+      opacity: 0;
+      animation: fadeIn 0.8s ease-out forwards;
+      animation-delay: 0.1s;
+    }
+    .page-title-section h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2rem;
+      color: var(--title-color);
+      font-weight: 600;
+      margin: 0;
+      padding: 0;
+      display: inline-block;
       cursor: pointer;
+      transition: color 0.2s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      z-index: 1;
+      padding: 10px;
+    }
+    .page-title-section h1:hover { color: var(--accent-color); }
+    .page-title-section h1::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 3px;
+      background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+    }
+    .page-title-section a { text-decoration: none; display: inline-block; width: auto; }
+
+    /* S-15: Page Loader */
+    .page-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient-start);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeOut 0.5s ease-out forwards;
+      animation-delay: 0.2s;
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; visibility: hidden; }
     }
 
-    .action-icon:hover {
-      color: #0d6efd;
+    /* S-16: Bootstrap Navbar Fixes */
+    .navbar .container-fluid { justify-content: space-between !important; }
+    .navbar-collapse { flex-grow: 0; }
+
+    /* S-17: Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* S-18: Mobile Navbar Styles */
+    @media (max-width: 991px) {
+      .navbar-collapse {
+        background: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 12px var(--shadow-color);
+        position: absolute;
+        top: 100%;
+        right: 1rem;
+        left: 1rem;
+        z-index: 1040;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+        transition: all 0.3s ease;
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+      }
+      .navbar-collapse.show {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+      .nav-item { margin: 0.5rem 0; width: 100%; }
+      .nav-link { display: block; padding: 0.75rem 1rem; border-radius: 0.5rem; }
+      .nav-link:active { background-color: var(--primary-color); }
+    }
+    @media (max-width: 768px) {
+      .navbar-brand { flex-wrap: wrap; justify-content: center; text-align: center; font-size: 1.5rem; }
+      .navbar-brand i { font-size: 1.5rem; }
+      .nav-link { font-size: 0.95rem !important; padding: 0.5rem 1rem !important; }
+    }
+
+    /* S-19: Counter animation utility */
+    .counter-animation { transition: all 0.2s ease; }
+
+    /* S-20: Clickable utility class */
+    .clickable {
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
   </style>
 </head>
+<!-- H-4: Body Content -->
+<!-- H-4.1: Main body structure for loader, navbar, main content, footer -->
 <body>
-
-  <!-- ===================== -->
-  <!-- Header Section        -->
-  <!-- ===================== -->
-  <div class="header text-center">
-    <h1>
-      <a href="/" class="text-white text-decoration-none">Stationer Success Tracker</a>
-    </h1>
-    <h6 class="text-light">Track leads, projects, and profits - all in one place.</h6>
+  <!-- H-5: Page Loader -->
+  <!-- H-5.1: Loading overlay shown at page load for smooth transition -->
+  <div class="page-loader">
+    <div class="spinner-border" style="color: var(--accent-color); width: 3rem; height: 3rem;"></div>
   </div>
 
-  <!-- ===================== -->
-  <!-- Main Content Area     -->
-  <!-- ===================== -->
-  <div class="main-container" id="scrollContainer">
+  <!-- H-6: Navbar -->
+  <!-- H-6.1: Main navigation bar with branding and links -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <i class="fas fa-gem"></i>
+        <strong>Stationer Tracker</strong>
+      </a>
+      <!-- H-6.2: Navbar toggler for mobile -->
+      <button class="navbar-toggler" 
+              type="button" 
+              data-bs-toggle="collapse" 
+              data-bs-target="#navbarNav" 
+              aria-controls="navbarNav" 
+              aria-expanded="false" 
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- H-6.3: Navbar links -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <!-- H-6.3.1: Navigation links for different sections -->
+          <li class="nav-item">
+            <a class="nav-link" href="/projects">Design Projects</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/client-experiences">Clients & Feedback</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="/costs">Expenses & Profit</a></li>
+          <li class="nav-item"><a class="nav-link" href="/tasks">Tasks & Routine</a></li>
+          <li class="nav-item"><a class="nav-link" href="/posts">Content & Ideas</a></li>
+          <li class="nav-item"><a class="nav-link" href="/issues">Workflow & Challenges</a></li>
+          <li class="nav-item"><a class="nav-link" href="/inquiry">Leads & Sales</a></li>
+          <li class="nav-item"><a class="nav-link" href="/time">Time & Hours</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-    <!-- Header with back button -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2>Client Experiences</h2>
-      <a class="btn btn-outline-secondary btn-sm" href="/">Back to Home</a>
+  <!-- H-7: Main Content Area -->
+  <main class="main-container" id="scrollContainer">
+    <!-- H-7.1: Page Title Section -->
+    <div class="page-title-section">
+      <a href="/client-experiences" class="title-link">
+        <h1>Client Experiences</h1>
+      </a>
     </div>
 
-    <!-- Dashboard Summary Cards -->
+    <!-- H-7.2: Summary KPI Cards -->
     <div class="summary-cards">
       <div class="summary-card">
         <h6>Avg. Score</h6>
@@ -297,12 +495,22 @@
       </div>
     </div>
 
-    <!-- Add Feedback Button & Entries Limit -->
-    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <!-- H-7.3: Controls Row -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
+      <!-- H-7.3.1: Add Feedback Button -->
       <button class="btn btn-primary btn-sm" id="addFeedbackBtn">+ Add Feedback</button>
+      <!-- H-7.3.2: Search Box -->
+      <div class="input-group input-group-sm flex-grow-1" style="max-width: 300px;">
+        <input type="text" id="searchBox" class="form-control" placeholder="Search client or project..." 
+               onkeyup="if(event.key === 'Enter') searchExperiences()">
+        <button class="btn btn-outline-secondary" onclick="searchExperiences()">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+      <!-- H-7.3.3: Show Entries Limit -->
       <div class="d-flex align-items-center">
         <label class="me-2 mb-0">Show</label>
-        <select id="limitSelect" class="form-select d-inline-block w-auto" style="width:auto;">
+        <select id="limitSelect" class="form-select form-select-sm w-auto">
           <option value="5">5</option>
           <option value="10" selected>10</option>
           <option value="25">25</option>
@@ -312,30 +520,29 @@
       </div>
     </div>
 
-    <!-- Feedback Form (Hidden by default) -->
+    <!-- H-7.4: Feedback Form (Hidden by default) -->
     <div id="feedbackFormSection" style="display:none;">
       <form id="clientExperienceForm" class="p-3 border rounded bg-white mb-4">
-        <!-- Hidden ID for editing -->
+        <!-- H-7.4.1: Hidden ID for editing -->
         <input type="hidden" id="experience_id" />
 
-        <!-- Project & Score Inputs -->
+        <!-- H-7.4.2: Project & Score Inputs -->
         <div class="row mb-2">
-          <!-- Project Search Input -->
+          <!-- H-7.4.2.1: Project Search Input -->
           <div class="col-md-6 position-relative">
             <label>Project</label>
             <input type="text" id="projectSearch" class="form-control" placeholder="Type to search project..." autocomplete="off" required>
             <input type="hidden" id="project_id" />
             <div id="projectSearchList" class="list-group position-absolute w-100 z-3" style="max-height: 200px; overflow-y: auto; display: none;"></div>
           </div>
-          
-          <!-- Score Input -->
+          <!-- H-7.4.2.2: Score Input -->
           <div class="col-md-6">
             <label>Score (1–10)</label>
             <input type="number" min="1" max="10" id="score" class="form-control" required />
           </div>
         </div>
 
-        <!-- Feedback Theme & Notes -->
+        <!-- H-7.4.3: Feedback Theme & Notes -->
         <div class="row mb-2">
           <div class="col-md-6">
             <label>Feedback Theme</label>
@@ -347,7 +554,7 @@
           </div>
         </div>
 
-        <!-- Testimonials & Referral Checkboxes -->
+        <!-- H-7.4.4: Testimonials & Referral Checkboxes -->
         <div class="row mb-2">
           <div class="col-md-6 form-check">
             <input type="checkbox" id="testimonial_collected" class="form-check-input" />
@@ -359,7 +566,7 @@
           </div>
         </div>
 
-        <!-- Form Buttons -->
+        <!-- H-7.4.5: Form Buttons -->
         <div class="d-flex gap-2 mt-3">
           <button type="submit" class="btn btn-success btn-sm">Save</button>
           <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeForm()">Close</button>
@@ -367,13 +574,13 @@
       </form>
     </div>
 
-    <!-- Feedback Entries Table -->
+    <!-- H-7.5: Feedback Entries Table -->
     <div class="table-responsive position-relative mb-4">
-      <!-- Loading Overlay -->
+      <!-- H-7.5.1: Loading Overlay -->
       <div id="loading" class="loading-overlay" style="display:none;">
         <div class="spinner-border text-danger"></div>
       </div>
-      <!-- Data Table -->
+      <!-- H-7.5.2: Data Table -->
       <table class="table table-bordered table-striped mb-0">
         <thead class="table-light">
           <tr>
@@ -384,36 +591,35 @@
             <th>Feedback</th>
             <th>Testimonial</th>
             <th>Referral</th>
-            <th>Notes</th>
-            <th>Edit</th>
+            <th>Expand</th>
           </tr>
         </thead>
         <tbody id="clientGrid"></tbody>
       </table>
     </div>
 
-    <!-- Pagination Controls -->
+    <!-- H-7.6: Pagination Controls -->
     <div class="pagination-controls mb-4 justify-content-center d-flex gap-2">
       <button id="prevBtn" class="btn btn-sm btn-outline-secondary" onclick="changePage(-1)">Prev</button>
       <span id="pageIndicator">Page 1</span>
       <button id="nextBtn" class="btn btn-sm btn-outline-secondary" onclick="changePage(1)">Next</button>
     </div>
-  </div>
+  </main>
 
-  <!-- Footer -->
-  <div class="footer">
-    © <strong>Stationer Success Tracker</strong>. Built with ❤️ to help creative businesses thrive.
-  </div>
+  <!-- H-8: Footer -->
+  <footer class="footer">
+    © <strong style="color: var(--title-color);">Stationer Success Tracker</strong>. Built with ❤️ to help creative businesses thrive.
+  </footer>
 
-  <!-- Toast Message Container -->
+  <!-- H-9: Toast Message Container -->
   <div id="toastBox" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;"></div>
 
-  <!-- ===================== -->
-  <!-- Scripts: Bootstrap & Custom -->
-  <!-- ===================== -->
+  <!-- H-10: Scripts and JS Logic -->
+  <!-- H-10.1: Bootstrap JS bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+  <!-- H-10.2: Main App Script -->
   <script>
+    // ST-1: API Endpoints Configuration
     // ===================== //
     // Global Variables     //
     // ===================== //
@@ -424,6 +630,7 @@
     // Initialization       //
     // ===================== //
     window.onload = () => {
+      document.getElementById("feedbackFormSection").style.display = "none";
       loadProjectsDropdown();     // Load project options
       loadLOV("FEEDBACK_THEME", "feedback_theme"); // Load feedback themes
       loadClientExperiences();      // Load initial data
@@ -440,6 +647,7 @@
     // Event listener for "Add Feedback" button
     document.getElementById("addFeedbackBtn").addEventListener("click", () => {
       resetForm();
+      document.getElementById("feedbackFormSection").style.display = "block";
     });
 
     // ===================== //
@@ -450,7 +658,7 @@
       if (loadingOverlay) loadingOverlay.style.display = "flex";
 
       try {
-        const res = await fetch(`/api/client-experiences?page=${currentPage}&limit=${limit}`);
+        const res = await fetch(`/api/client-experiences?page=${currentPage}&limit=${limit}&search=${encodeURIComponent(lastSearchQuery)}`);
         const data = await res.json();
 
         if (!Array.isArray(data)) throw new Error("Invalid data format");
@@ -473,6 +681,8 @@
         // Populate table rows
         data.forEach((row, idx) => {
           const sno = (currentPage - 1) * limit + idx + 1;
+          const experienceId = row.experience_id;
+          
           tbody.innerHTML += `
             <tr>
               <td>${sno}</td>
@@ -482,9 +692,61 @@
               <td>${row.feedback_theme_desc || ""}</td>
               <td>${row.testimonial_collected ? 'Yes' : 'No'}</td>
               <td>${row.referral_collected ? 'Yes' : 'No'}</td>
-              <td>${row.notes || ""}</td>
-              <td><button class="btn btn-sm btn-link p-0" onclick="editExperience(${row.experience_id})">✏️</button></td>
-            </tr>`;
+              <td>
+                <button class="btn btn-sm btn-link p-0" onclick="toggleDetails(this, ${experienceId})">
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+              </td>
+            </tr>
+            <!-- Hidden row for experience details -->
+            <tr class="details-row" style="display: none;" data-experience="${experienceId}">
+              <td colspan="8">
+                <div class="px-3 py-2">
+                  <form id="editForm-${experienceId}" class="row g-3">
+                    <input type="hidden" name="experience_id" value="${experienceId}">
+                    <div class="col-md-6">
+                      <label>Score (1-10)</label>
+                      <input type="number" class="form-control form-control-sm" name="score" value="${row.score}" min="1" max="10">
+                    </div>
+                    <div class="col-md-6">
+                      <label>Feedback Theme</label>
+                      <select class="form-select form-select-sm" name="feedback_theme" id="feedback_theme_${experienceId}">
+                      </select>
+                    </div>
+                    <div class="col-12">
+                      <label>Notes</label>
+                      <input type="text" class="form-control form-control-sm" name="notes" value="${row.notes || ''}">
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="testimonial_collected" ${row.testimonial_collected ? 'checked' : ''}>
+                        <label class="form-check-label">Testimonial Collected</label>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="referral_collected" ${row.referral_collected ? 'checked' : ''}>
+                        <label class="form-check-label">Referral Given</label>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <button type="submit" class="btn btn-success btn-sm me-2">Save Changes</button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggleDetails(this, ${experienceId})">Cancel</button>
+                    </div>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          `;
+
+          // Load feedback themes for this row
+          loadLOV("FEEDBACK_THEME", `feedback_theme_${experienceId}`);
+          
+          // Add form submit handler
+          document.getElementById(`editForm-${experienceId}`).addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveExperience(this);
+          });
         });
       } catch (err) {
         showToast("Failed to load client experiences.", "danger");
@@ -513,22 +775,25 @@
           return;
         }
 
-        // Show form section
-        document.getElementById("feedbackFormSection").style.display = "block";
+        // Show form section with smooth scroll
+        const formSection = document.getElementById("feedbackFormSection");
+        formSection.style.display = "block";
+        formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        // Populate form fields
-        for (const key in data) {
-          const el = document.getElementById(key);
-          if (el) {
-            if (typeof data[key] === "boolean") {
-              el.checked = data[key];
-            } else {
-              el.value = data[key] || "";
+        // Populate form fields with animation
+        setTimeout(() => {
+          for (const key in data) {
+            const el = document.getElementById(key);
+            if (el) {
+              if (typeof data[key] === "boolean") {
+                el.checked = data[key];
+              } else {
+                el.value = data[key] || "";
+              }
             }
           }
-        }
-        // Scroll to top
-        window.scrollTo(0, 0);
+        }, 100);
+
       } catch (err) {
         showToast("Failed to load experience details.", "danger");
         console.error("editExperience error:", err);
@@ -619,7 +884,6 @@
     function resetForm() {
       document.getElementById("clientExperienceForm").reset();
       document.getElementById("experience_id").value = "";
-      document.getElementById("feedbackFormSection").style.display = "block";
       window.scrollTo(0, 0);
     }
 
@@ -678,14 +942,61 @@
       try {
         const res = await fetch('/api/client-experience/dashboard');
         const data = await res.json();
-        document.getElementById("avgScore").innerText = data.avgScore || "-";
-        document.getElementById("testimonialPct").innerText = data.testimonialPct || "-";
-        document.getElementById("referralPct").innerText = data.referralPct || "-";
-        document.getElementById("totalCount").innerText = data.totalEntries || "-";
+
+        // Animate each metric
+        const metrics = [
+          { id: "avgScore", value: parseFloat(data.avgScore) || 0, suffix: '' },
+          { id: "testimonialPct", value: parseFloat(data.testimonialPct) || 0, suffix: '%' },
+          { id: "referralPct", value: parseFloat(data.referralPct) || 0, suffix: '%' },
+          { id: "totalCount", value: parseFloat(data.totalEntries) || 0, suffix: '' }
+        ];
+
+        metrics.forEach(metric => {
+          const element = document.getElementById(metric.id);
+          if (element) {
+            animateNumber(element, metric.value, 1500, '', metric.suffix);
+          }
+        });
+
       } catch (err) {
         showToast("Dashboard metrics failed to load", "warning");
         console.error("loadExperienceDashboard error:", err);
       }
+    }
+
+    // ============================
+    // Animated Counter Utility
+    // Why: To animate number changes like a flip counter
+    // How: Incrementally update number with easing
+    // Where to edit: Adjust duration and easing if needed
+    // ============================
+    function animateNumber(element, finalValue, duration = 1000, prefix = '', suffix = '') {
+      const startTime = performance.now();
+      const startValue = 0;
+      
+      function updateNumber(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function for smooth animation
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        
+        const currentValue = startValue + (finalValue - startValue) * easeOutQuart;
+        
+        if (typeof finalValue === 'number') {
+          // Add color and arrow based on value
+          const color = finalValue < 0 ? '#dc3545' : '#198754';
+          const arrow = finalValue < 0 ? '↓' : (finalValue > 0 ? '↑' : '');
+          
+          element.innerHTML = `<span style="color: ${color}">${prefix}${Math.abs(currentValue).toFixed(1)}${suffix} ${arrow}</span>`;
+        }
+        
+        if (progress < 1) {
+          requestAnimationFrame(updateNumber);
+        }
+      }
+      
+      requestAnimationFrame(updateNumber);
     }
 
     // ===================== //
@@ -698,6 +1009,97 @@
       toast.style.marginBottom = "10px";
       document.getElementById("toastBox").appendChild(toast);
       setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Add search functionality
+    let lastSearchQuery = ""; // Store search term
+
+    document.getElementById("searchBox").addEventListener("input", function() {
+      lastSearchQuery = this.value.trim();
+    });
+
+    // Search function (dummy for now)
+    function searchExperiences() {
+      currentPage = 1;
+      loadClientExperiences();
+    }
+
+    // Initialize mobile navigation
+    document.addEventListener('DOMContentLoaded', function() {
+        const navbarToggler = document.querySelector('.navbar-toggler');
+        const navbarCollapse = document.querySelector('.navbar-collapse');
+        
+        if (navbarToggler && navbarCollapse) {
+            navbarToggler.addEventListener('click', function(e) {
+                e.stopPropagation();
+                navbarCollapse.classList.toggle('show');
+                this.setAttribute('aria-expanded', 
+                    navbarCollapse.classList.contains('show')
+                );
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!navbarCollapse.contains(e.target) && 
+                    !navbarToggler.contains(e.target)) {
+                    navbarCollapse.classList.remove('show');
+                    navbarToggler.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Handle nav link clicks
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    navbarCollapse.classList.remove('show');
+                    navbarToggler.setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
+    });
+
+    // Add toggle details function
+    async function toggleDetails(button, experienceId) {
+      const detailRow = document.querySelector(`tr.details-row[data-experience="${experienceId}"]`);
+      const isExpanding = detailRow.style.display === "none";
+      
+      // Close all other open rows first
+      document.querySelectorAll('.details-row').forEach(row => {
+        if (row !== detailRow) {
+          row.style.display = "none";
+          const btn = row.previousElementSibling.querySelector('button i');
+          if (btn) btn.className = "fas fa-chevron-down";
+        }
+      });
+
+      // Toggle current row
+      detailRow.style.display = isExpanding ? "table-row" : "none";
+      button.querySelector('i').className = isExpanding ? "fas fa-chevron-up" : "fas fa-chevron-down";
+    }
+
+    // Add save experience function
+    async function saveExperience(form) {
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData);
+      
+      try {
+        const res = await fetch("/api/client-experience", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        
+        const result = await res.json();
+        if (res.ok && result.status === "success") {
+          showToast("Changes saved successfully!", "success");
+          loadClientExperiences();
+          loadExperienceDashboard();
+        } else {
+          throw new Error(result.message || "Save failed");
+        }
+      } catch (err) {
+        showToast(err.message || "Failed to save changes", "danger");
+        console.error("Save error:", err);
+      }
     }
   </script>
 </body>
