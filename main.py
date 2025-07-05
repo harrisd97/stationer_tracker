@@ -50,6 +50,10 @@ def client_experience():
 def expenses():
     return render_template("expenses.html")
 
+@app.route('/tasks')
+def tasks():
+    return render_template("tasks.html")
+
 # --------------------------------------
 # LOV (List of Values)
 # --------------------------------------
@@ -248,6 +252,104 @@ def delete_project_cost(cost_id):
     except Exception:
         logging.exception("Error deleting cost")
         return jsonify({"status": "error", "message": "Failed to delete expense"}), 500
+
+# --------------------------------------
+# Monthly Task APIs
+# --------------------------------------
+@app.route('/api/monthly-tasks')
+def get_monthly_tasks():
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT * FROM sp_get_monthly_task_category_list();")
+                return jsonify(cur.fetchall())
+    except Exception:
+        logging.exception("Error fetching task categories")
+        return jsonify({"success": False, "error": "Failed to fetch task categories"}), 500
+
+@app.route('/api/monthly-task/by-category/<string:category_code>')
+def get_monthly_tasks_by_category(category_code):
+    page = int(request.args.get("page", 1))
+    limit = int(request.args.get("limit", 10))
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT * FROM sp_get_monthly_task_by_category(%s, %s, %s);", 
+                            (category_code, page, limit))
+                return jsonify(cur.fetchall())
+    except Exception:
+        logging.exception("Error fetching tasks by category")
+        return jsonify({"success": False, "error": "Failed to fetch tasks"}), 500
+
+@app.route('/api/monthly-task/<int:task_id>')
+def get_monthly_task_by_id(task_id):
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                # Since there's no dedicated function for getting a single task,
+                # we'll use a direct query
+                cur.execute("""
+                    SELECT task_id, category_code, task_name, scheduled_date, 
+                           is_done, completed_date, notes
+                    FROM monthly_task_log
+                    WHERE task_id = %s
+                """, (task_id,))
+                return jsonify(cur.fetchone())
+    except Exception:
+        logging.exception("Error fetching task by ID")
+        return jsonify({"success": False, "error": "Failed to fetch task"}), 500
+
+@app.route('/api/monthly-task', methods=["POST"])
+def save_monthly_task():
+    try:
+        payload = request.get_json()
+        if not payload.get('category_code'):
+            return jsonify({"status": "error", "message": "Missing required field: category_code"}), 400
+            
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT sp_save_monthly_task(%s)", [json.dumps(payload)])
+                result = cur.fetchone()
+                conn.commit()
+                message = result[0] if result else "No response"
+        return jsonify({"status": "success", "message": message})
+    except Exception as e:
+        logging.exception(f"Error saving task: {str(e)}")
+        return jsonify({"status": "error", "message": f"Failed to save task: {str(e)}"}), 500
+
+@app.route('/api/monthly-task/<int:task_id>', methods=["DELETE"])
+def delete_monthly_task(task_id):
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT sp_delete_monthly_task(%s)", (task_id,))
+                result = cur.fetchone()
+                conn.commit()
+                message = result[0] if result else "No response"
+                
+        return jsonify({"status": "success", "message": "Task deleted successfully"})
+    except Exception:
+        logging.exception("Error deleting task")
+        return jsonify({"status": "error", "message": "Failed to delete task"}), 500
+
+@app.route('/api/monthly-task/dashboard')
+def get_monthly_task_dashboard():
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT * FROM sp_get_monthly_task_dashboard()")
+                result = cur.fetchone()
+        if result:
+            return jsonify(result)
+        return jsonify({
+            "overall_completion": "0%",
+            "best_performing_category": "-",
+            "worst_performing_category": "-",
+            "upcoming_tasks": ""
+        })
+    except Exception:
+        logging.exception("Error loading task dashboard")
+        return jsonify({"error": "Failed to fetch dashboard"}), 500
 
 # --------------------------------------
 # App Entry Point
