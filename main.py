@@ -54,6 +54,10 @@ def expenses():
 def tasks():
     return render_template("tasks.html")
 
+@app.route('/posts')
+def posts():
+    return render_template("posts.html")
+
 # --------------------------------------
 # LOV (List of Values)
 # --------------------------------------
@@ -349,6 +353,98 @@ def get_monthly_task_dashboard():
         })
     except Exception:
         logging.exception("Error loading task dashboard")
+        return jsonify({"error": "Failed to fetch dashboard"}), 500
+
+# --------------------------------------
+# Content & Ideas APIs
+# --------------------------------------
+@app.route('/api/content-posts')
+def get_content_posts():
+    month = request.args.get("month")
+    post_type = request.args.get("post_type")
+    platform = request.args.get("platform")
+    page = int(request.args.get("page", 1))
+    limit = int(request.args.get("limit", 10))
+    
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(
+                    "SELECT * FROM sp_get_content_post_list(%s, %s, %s, %s, %s);", 
+                    (month, post_type, platform, page, limit)
+                )
+                return jsonify(cur.fetchall())
+    except Exception:
+        logging.exception("Error fetching content posts")
+        return jsonify({"success": False, "error": "Failed to fetch content posts"}), 500
+
+@app.route('/api/content-post/<int:post_id>')
+def get_content_post_by_id(post_id):
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT * FROM sp_get_content_post_by_id(%s);", (post_id,))
+                return jsonify(cur.fetchone())
+    except Exception:
+        logging.exception("Error fetching content post by ID")
+        return jsonify({"success": False, "error": "Failed to fetch content post"}), 500
+
+@app.route('/api/content-post', methods=["POST"])
+def save_content_post():
+    try:
+        payload = request.get_json()
+        
+        # Fix for empty post_id - convert empty string to 0 or remove it
+        if 'post_id' in payload and (payload['post_id'] == '' or payload['post_id'] is None):
+            payload['post_id'] = 0  # Set to 0 which the stored procedure treats as a new record
+        
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT sp_save_content_post(%s)", [json.dumps(payload)])
+                result = cur.fetchone()
+                conn.commit()
+                message = result['sp_save_content_post'] if result and 'sp_save_content_post' in result else "No response"
+        return jsonify({"status": "success", "message": message})
+    except Exception:
+        logging.exception("Error saving content post")
+        return jsonify({"status": "error", "message": "Failed to save content post"}), 500
+
+@app.route('/api/content-post/<int:post_id>', methods=["DELETE"])
+def delete_content_post(post_id):
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT sp_delete_content_post(%s)", (post_id,))
+                result = cur.fetchone()
+                conn.commit()
+                message = result['sp_delete_content_post'] if result and 'sp_delete_content_post' in result else "No response"
+        return jsonify({"status": "success", "message": "Content post deleted successfully"})
+    except Exception:
+        logging.exception("Error deleting content post")
+        return jsonify({"status": "error", "message": "Failed to delete content post"}), 500
+
+@app.route('/api/content-post/dashboard')
+def get_content_post_dashboard():
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT * FROM sp_get_content_post_dashboard()")
+                result = cur.fetchone()
+        if result:
+            return jsonify({
+                "bestPerformingPost": result["best_post"],
+                "topTopic": result["top_topic"],
+                "mostUsedPlatform": result["most_used_platform"],
+                "avgEngagementPerPost": result["avg_engagement_per_post"]
+            })
+        return jsonify({
+            "bestPerformingPost": "-",
+            "topTopic": "-",
+            "mostUsedPlatform": "-",
+            "avgEngagementPerPost": "0.00"
+        })
+    except Exception:
+        logging.exception("Error loading content post dashboard")
         return jsonify({"error": "Failed to fetch dashboard"}), 500
 
 # --------------------------------------
