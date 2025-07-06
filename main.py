@@ -58,6 +58,10 @@ def tasks():
 def posts():
     return render_template("posts.html")
 
+@app.route('/issues')
+def issues():
+    return render_template("issues.html")
+
 # --------------------------------------
 # LOV (List of Values)
 # --------------------------------------
@@ -79,10 +83,12 @@ def get_lov(ref_name):
 def get_projects():
     page = int(request.args.get("page", 1))
     limit = int(request.args.get("limit", 10))
+    search = request.args.get("search", "")
+
     try:
         with get_connection() as conn:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
-                cur.execute("SELECT * FROM sp_get_project_list(%s, %s);", (page, limit))
+                cur.execute("SELECT * FROM sp_get_project_list(%s, %s, %s);", (page, limit, search))
                 return jsonify(cur.fetchall())
     except Exception:
         logging.exception("Error fetching projects")
@@ -445,6 +451,75 @@ def get_content_post_dashboard():
         })
     except Exception:
         logging.exception("Error loading content post dashboard")
+        return jsonify({"error": "Failed to fetch dashboard"}), 500
+
+# --------------------------------------
+# Project Issues APIs
+# --------------------------------------
+@app.route('/api/project-issues')
+def get_project_issues():
+    page = int(request.args.get("page", 1))
+    limit = int(request.args.get("limit", 10))
+    search = request.args.get("search", "")
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT * FROM sp_get_project_issues_list(%s, %s, %s);", (page, limit, search))
+                return jsonify(cur.fetchall())
+    except Exception:
+        logging.exception("Error fetching project issues")
+        return jsonify({"success": False, "error": "Failed to fetch project issues"}), 500
+
+@app.route('/api/project-issue/<int:project_id>')
+def get_project_issue_by_id(project_id):
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT * FROM sp_get_project_issues_by_id(%s);", (project_id,))
+                return jsonify(cur.fetchall())
+    except Exception:
+        logging.exception("Error fetching issues by ID")
+        return jsonify({"success": False, "error": "Failed to fetch issues"}), 500
+
+@app.route('/api/project-issue', methods=["POST"])
+def save_project_issue():
+    try:
+        payload = request.get_json()
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:  # Add RealDictCursor
+                cur.execute("SELECT sp_save_project_issue(%s)", [json.dumps(payload)])
+                result = cur.fetchone()
+                conn.commit()
+                message = result['sp_save_project_issue'] if result and 'sp_save_project_issue' in result else "No response"
+        return jsonify({"status": "success", "message": message})
+    except Exception as e:
+        logging.exception(f"Error saving issue: {str(e)}")
+        return jsonify({"status": "error", "message": "Failed to save issue"}), 500
+
+@app.route('/api/project-issue/<int:issue_id>', methods=["DELETE"])
+def delete_project_issue(issue_id):
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:  # Add RealDictCursor
+                cur.execute("SELECT sp_delete_project_issue(%s)", (issue_id,))
+                result = cur.fetchone()
+                conn.commit()
+                message = result['sp_delete_project_issue'] if result and 'sp_delete_project_issue' in result else "No response"
+        return jsonify({"status": "success", "message": "Issue deleted successfully"})
+    except Exception:
+        logging.exception("Error deleting issue")
+        return jsonify({"status": "error", "message": "Failed to delete issue"}), 500
+
+@app.route('/api/project-issue/dashboard')
+def get_project_issue_dashboard():
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT * FROM sp_get_project_issues_dashboard()")
+                result = cur.fetchall()
+        return jsonify(result if result else [])
+    except Exception:
+        logging.exception("Error loading issue dashboard")
         return jsonify({"error": "Failed to fetch dashboard"}), 500
 
 # --------------------------------------
