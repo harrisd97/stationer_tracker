@@ -62,6 +62,14 @@ def posts():
 def issues():
     return render_template("issues.html")
 
+@app.route('/inquiry')
+def inquiry():
+    return render_template("inquiry.html")
+
+@app.route('/time')
+def time_log_page():
+    return render_template("time.html")
+
 # --------------------------------------
 # LOV (List of Values)
 # --------------------------------------
@@ -521,6 +529,121 @@ def get_project_issue_dashboard():
     except Exception:
         logging.exception("Error loading issue dashboard")
         return jsonify({"error": "Failed to fetch dashboard"}), 500
+
+# --------------------------------------
+# Inquiry Tracker APIs
+# --------------------------------------
+@app.route('/api/inquiry-tracker')
+def get_inquiry_tracker():
+    page = int(request.args.get("page", 1))
+    limit = int(request.args.get("limit", 10))
+    search = request.args.get("search", "")
+    year = request.args.get("year", type=int)
+    month = request.args.get("month", type=int)
+
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(
+                    "SELECT * FROM sp_get_sales_inquiry_list(%s, %s, %s, %s, %s);",
+                    (page, limit, search, year, month)
+                )
+                return jsonify(cur.fetchall())
+    except Exception:
+        logging.exception("Error fetching inquiry tracker list")
+        return jsonify({"success": False, "error": "Failed to fetch inquiry tracker list"}), 500
+
+@app.route('/api/inquiry-tracker/dashboard')
+def get_inquiry_dashboard():
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT * FROM sp_get_sales_inquiry_dashboard();")
+                result = cur.fetchone()
+        return jsonify(result if result else {
+            "inquiries_this_month": 0,
+            "converted_projects": 0,
+            "conversion_rate": 0,
+            "avg_time_to_convert": 0
+        })
+    except Exception:
+        logging.exception("Error fetching inquiry dashboard")
+        return jsonify({"error": "Failed to fetch inquiry dashboard"}), 500
+
+# --------------------------------------
+# Time Log APIs
+# --------------------------------------
+@app.route('/api/time-log/dashboard')
+def get_time_log_dashboard():
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT * FROM sp_get_time_log_dashboard();")
+                result = cur.fetchone()
+        return jsonify(result if result else {
+            "total_hours_spent": 0,
+            "total_task_entries": 0,
+            "top_project": "-",
+            "top_project_hours": 0
+        })
+    except Exception:
+        logging.exception("Error fetching time log dashboard")
+        return jsonify({"error": "Failed to fetch dashboard"}), 500
+
+@app.route('/api/time-log-summary')
+def get_time_log_summary():
+    page = int(request.args.get("page", 1))
+    limit = int(request.args.get("limit", 10))
+    search = request.args.get("search", "")
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT * FROM sp_get_time_log_summary(%s, %s, %s);", (page, limit, search))
+                return jsonify(cur.fetchall())
+    except Exception:
+        logging.exception("Error fetching time log summary")
+        return jsonify({"success": False, "error": "Failed to fetch summary"}), 500
+
+@app.route('/api/time-log')
+def get_time_logs_by_project():
+    project_id = request.args.get("project_id", type=int)
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT * FROM sp_get_time_logs_by_project(%s);", (project_id,))
+                return jsonify(cur.fetchall())
+    except Exception:
+        logging.exception("Error fetching time log list")
+        return jsonify({"success": False, "error": "Failed to fetch time logs"}), 500
+
+@app.route('/api/time-log', methods=["POST"])
+def save_time_log():
+    try:
+        payload = request.get_json()
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:  # Add RealDictCursor
+                cur.execute("SELECT sp_save_time_log(%s)", [json.dumps(payload)])
+                result = cur.fetchone()
+                conn.commit()
+                message = result['sp_save_time_log'] if result and 'sp_save_time_log' in result else "No response"
+        return jsonify({"status": "success", "message": message})
+    except Exception as e:
+        logging.exception(f"Error saving time log: {str(e)}")
+        return jsonify({"status": "error", "message": "Failed to save time log"}), 500
+
+@app.route('/api/time-log/<int:time_log_id>', methods=["DELETE"])
+def delete_time_log(time_log_id):
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:  # Add RealDictCursor
+                cur.execute("SELECT sp_delete_time_log(%s)", (time_log_id,))
+                result = cur.fetchone()
+                conn.commit()
+                message = result['sp_delete_time_log'] if result and 'sp_delete_time_log' in result else "No response"
+        return jsonify({"status": "success", "message": "Time log deleted successfully"})
+    except Exception as e:
+        logging.exception(f"Error deleting time log: {str(e)}")
+        return jsonify({"status": "error", "message": "Failed to delete time log"}), 500
 
 # --------------------------------------
 # App Entry Point
