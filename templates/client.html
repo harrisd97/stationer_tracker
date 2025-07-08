@@ -630,6 +630,7 @@
     // Initialization       //
     // ===================== //
     window.onload = () => {
+      document.querySelector('.page-loader').style.display = 'none';
       document.getElementById("feedbackFormSection").style.display = "none";
       loadProjectsDropdown();     // Load project options
       loadLOV("FEEDBACK_THEME", "feedback_theme"); // Load feedback themes
