@@ -773,6 +773,7 @@
 
     // PT-3: Initialization
     window.onload = () => {
+      document.querySelector('.page-loader').style.display = 'none';
       document.getElementById("inquiry_date").value = getTodayDate();
       loadLOV("CONVERSION_STATUS", "conversion_status").then(() => {
         document.getElementById("conversion_status").value = "PENDING";

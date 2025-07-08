@@ -724,6 +724,7 @@
 
     // --- Initialization ---
     window.onload = () => {
+      document.querySelector('.page-loader').style.display = 'none';
       loadLOV("TASK_CATEGORY", "category_code");
       loadTaskDashboard();
       loadCategorySummary();

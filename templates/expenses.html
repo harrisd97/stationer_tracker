@@ -754,6 +754,7 @@
       loadProjectSearchLOV();            // ST-3.3: Setup project search autocomplete
       loadExpenseDashboard();            // ST-3.4: Load summary metrics
       loadExpenses();                    // ST-3.5: Load initial expense list
+      document.querySelector('.page-loader').style.display = 'none'; // Hide page loader after initialization
     };
 
     // ST-4: Event Listeners for UI controls
