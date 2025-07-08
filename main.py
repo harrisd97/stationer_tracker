@@ -580,15 +580,25 @@ def get_time_log_dashboard():
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
                 cur.execute("SELECT * FROM sp_get_time_log_dashboard();")
                 result = cur.fetchone()
+
         return jsonify(result if result else {
             "total_hours_spent": 0,
             "total_task_entries": 0,
             "top_project": "-",
-            "top_project_hours": 0
+            "top_project_hours": 0,
+            "avg_task_json": []
         })
+
     except Exception:
         logging.exception("Error fetching time log dashboard")
-        return jsonify({"error": "Failed to fetch dashboard"}), 500
+        return jsonify({
+            "error": "Failed to fetch dashboard",
+            "total_hours_spent": 0,
+            "total_task_entries": 0,
+            "top_project": "-",
+            "top_project_hours": 0,
+            "avg_task_json": []
+        }), 500
 
 @app.route('/api/time-log-summary')
 def get_time_log_summary():
