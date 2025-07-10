@@ -396,7 +396,91 @@
       to { opacity: 1; }
     }
 
-    /* S-9: Responsive Media Queries */
+    /* S-9: Loading States - Non-overlay approach */
+    .loading-skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading-shimmer 2s infinite;
+      border-radius: 0.375rem;
+      color: transparent !important;
+    }
+
+    @keyframes loading-shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .loading-text {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading-shimmer 2s infinite;
+      border-radius: 0.25rem;
+      height: 1.2em;
+      display: inline-block;
+      width: 60%;
+      min-width: 80px;
+    }
+
+    .loading-text-lg {
+      height: 2rem;
+      width: 80%;
+    }
+
+    .loading-text-sm {
+      height: 1em;
+      width: 40%;
+    }
+
+    .loading-row {
+      background: linear-gradient(90deg, #f8f9fa 25%, #f1f3f4 50%, #f8f9fa 75%);
+      background-size: 200% 100%;
+      animation: loading-shimmer 2s infinite;
+    }
+
+    .loading-row td {
+      background: transparent !important;
+      color: transparent !important;
+      border-color: #e9ecef !important;
+    }
+
+    .loading-spinner {
+      width: 1.2rem;
+      height: 1.2rem;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid var(--accent-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-right: 0.5rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Table loading states */
+    .table-loading tbody tr {
+      background: linear-gradient(90deg, #f8f9fa 25%, #f1f3f4 50%, #f8f9fa 75%);
+      background-size: 200% 100%;
+      animation: loading-shimmer 2s infinite;
+    }
+
+    .table-loading tbody td {
+      color: transparent !important;
+      border-color: #e9ecef !important;
+    }
+
+    /* Dashboard loading states */
+    .dashboard-loading {
+      background: linear-gradient(90deg, #f8f9fa 25%, #f1f3f4 50%, #f8f9fa 75%) !important;
+      background-size: 200% 100% !important;
+      animation: loading-shimmer 2s infinite !important;
+      color: transparent !important;
+      border-color: #e9ecef !important;
+    }
+
+    /* S-10: Responsive Media Queries */
     @media (min-width: 768px) {
       .main-container {
         margin: 2rem auto;
@@ -505,12 +589,14 @@
   </div>
 
   <!-- H-6: Navbar -->
+  <!-- H-6.1: Main navigation bar with branding and links -->
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">
         <i class="fas fa-gem"></i>
         <strong>Stationer Tracker</strong>
       </a>
+      <!-- H-6.2: Navbar toggler for mobile -->
       <button class="navbar-toggler" 
               type="button" 
               data-bs-toggle="collapse" 
@@ -520,20 +606,26 @@
               aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+      <!-- H-6.3: Navbar links -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
+          <!-- H-6.3.1: Navigation links for different sections -->
           <li class="nav-item">
             <a class="nav-link" href="/projects">Design Projects</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/client-experiences">Clients & Feedback</a>
+            <a class="nav-link" href="/inquiry">Sales & Inquiry Tracker</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/time">Time & Hours</a>
           </li>
           <li class="nav-item"><a class="nav-link" href="/costs">Expenses & Profit</a></li>
-          <li class="nav-item"><a class="nav-link" href="/tasks">Tasks & Routine</a></li>
-          <li class="nav-item"><a class="nav-link" href="/posts">Content & Ideas</a></li>
           <li class="nav-item"><a class="nav-link" href="/issues">Workflow & Challenges</a></li>
-          <li class="nav-item"><a class="nav-link" href="/inquiry">Leads & Sales</a></li>
-          <li class="nav-item"><a class="nav-link" href="/time">Time & Hours</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/client-experiences">Clients & Feedback</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="/posts">Content & Ideas</a></li>
+          <li class="nav-item"><a class="nav-link" href="/tasks">Tasks & Routine</a></li>
         </ul>
       </div>
     </div>
@@ -560,19 +652,19 @@
       <div class="summary-cards">
         <div class="summary-card">
           <h6>Total Hours</h6>
-          <p id="totalHours">-</p>
+          <p id="totalHours"><span class="loading-spinner"></span>Loading...</p>
         </div>
         <div class="summary-card">
           <h6>Total Tasks</h6>
-          <p id="totalTasks">-</p>
+          <p id="totalTasks"><span class="loading-spinner"></span>Loading...</p>
         </div>
         <div class="summary-card">
           <h6>Top Project</h6>
-          <p id="topProject">-</p>
+          <p id="topProject"><span class="loading-spinner"></span>Loading...</p>
         </div>
         <div class="summary-card">
           <h6>Top Project Hours</h6>
-          <p id="topProjectHours">-</p>
+          <p id="topProjectHours"><span class="loading-spinner"></span>Loading...</p>
         </div>
       </div>
     </div>
@@ -647,7 +739,7 @@
       <div id="loading" class="loading-overlay" style="display:none;">
         <div class="spinner-border text-danger"></div>
       </div>
-      <table class="table table-bordered table-striped mb-0">
+      <table class="table table-bordered table-striped mb-0 table-loading" id="timeLogTable">
         <thead class="table-light">
           <tr>
             <th>#</th>
@@ -657,7 +749,30 @@
             <th>Expand</th>
           </tr>
         </thead>
-        <tbody id="timeLogGrid"></tbody>
+        <tbody id="timeLogGrid">
+          <!-- Loading rows -->
+          <tr class="loading-row">
+            <td><span class="loading-text-sm">1</span></td>
+            <td><span class="loading-text">Loading project name</span></td>
+            <td><span class="loading-text-sm">0.0</span></td>
+            <td><span class="loading-text-sm">0</span></td>
+            <td><span class="loading-text-sm">⌄</span></td>
+          </tr>
+          <tr class="loading-row">
+            <td><span class="loading-text-sm">2</span></td>
+            <td><span class="loading-text">Loading project name</span></td>
+            <td><span class="loading-text-sm">0.0</span></td>
+            <td><span class="loading-text-sm">0</span></td>
+            <td><span class="loading-text-sm">⌄</span></td>
+          </tr>
+          <tr class="loading-row">
+            <td><span class="loading-text-sm">3</span></td>
+            <td><span class="loading-text">Loading project name</span></td>
+            <td><span class="loading-text-sm">0.0</span></td>
+            <td><span class="loading-text-sm">0</span></td>
+            <td><span class="loading-text-sm">⌄</span></td>
+          </tr>
+        </tbody>
       </table>
     </section>
 
@@ -697,6 +812,9 @@
       try {
         document.querySelector('.page-loader').style.display = 'flex';
         
+        // Show loading states
+        showLoadingStates();
+        
         await Promise.all([
           loadLOV("TIME_TASK", "task_type"),
           loadProjectSearchLOV(),
@@ -704,13 +822,57 @@
         ]);
 
         await loadTimeLogs();
+        
+        // Hide loading states
+        hideLoadingStates();
       } catch (error) {
         showToast("Error initializing page", "danger");
         console.error("Initialization error:", error);
+        hideLoadingStates();
       } finally {
         document.querySelector('.page-loader').style.display = 'none';
       }
     };
+
+    function showLoadingStates() {
+      // Dashboard cards already have loading spinners in HTML
+      // Table already has loading class in HTML
+    }
+
+    function hideLoadingStates() {
+      // Remove loading classes from table
+      const timeLogTable = document.getElementById('timeLogTable');
+      removeLoadingState(timeLogTable);
+      
+      // Remove loading spinners from dashboard cards
+      const dashboardCards = ['totalHours', 'totalTasks', 'topProject', 'topProjectHours'];
+      dashboardCards.forEach(cardId => {
+        const element = document.getElementById(cardId);
+        if (element) {
+          const spinner = element.querySelector('.loading-spinner');
+          if (spinner) spinner.remove();
+        }
+      });
+    }
+
+    // Helper function to remove loading classes
+    function removeLoadingState(element) {
+      if (element) {
+        element.classList.remove('table-loading', 'loading-row', 'dashboard-loading');
+        
+        // Remove loading rows from table bodies
+        const loadingRows = element.querySelectorAll('.loading-row');
+        loadingRows.forEach(row => row.remove());
+        
+        // Remove loading spinners
+        const loadingSpinners = element.querySelectorAll('.loading-spinner');
+        loadingSpinners.forEach(spinner => spinner.remove());
+        
+        // Remove loading text elements
+        const loadingTexts = element.querySelectorAll('.loading-text, .loading-text-lg, .loading-text-sm');
+        loadingTexts.forEach(text => text.remove());
+      }
+    }
 
     // ---------- EVENT LISTENERS ----------
     document.addEventListener('DOMContentLoaded', function() {
@@ -829,6 +991,14 @@
         if (!Array.isArray(data)) throw new Error("Invalid data format");
 
         const tbody = document.getElementById("timeLogGrid");
+        
+        // Remove loading state first
+        const timeLogTable = document.getElementById('timeLogTable');
+        if (timeLogTable) {
+          timeLogTable.classList.remove('table-loading');
+        }
+        
+        // Clear the tbody completely including loading rows
         tbody.innerHTML = "";
 
         if (data.length === 0) {
@@ -886,8 +1056,16 @@
           `;
         });
       } catch (err) {
+        // Remove loading state on error too
+        const timeLogTable = document.getElementById('timeLogTable');
+        if (timeLogTable) {
+          timeLogTable.classList.remove('table-loading');
+        }
+        
         showToast("Failed to load time logs.", "danger");
         console.error("loadTimeLogs error:", err);
+        document.getElementById("timeLogGrid").innerHTML = 
+          `<tr><td colspan="5" class="text-center text-danger">Failed to load time logs</td></tr>`;
       } finally {
         if (loadingOverlay) loadingOverlay.style.display = "none";
       }
@@ -908,6 +1086,10 @@
         metrics.forEach(metric => {
           const element = document.getElementById(metric.id);
           if (element) {
+            // Remove loading spinner first
+            const spinner = element.querySelector('.loading-spinner');
+            if (spinner) spinner.remove();
+            
             if (metric.isText) {
               element.textContent = metric.value;
             } else {
@@ -922,6 +1104,17 @@
       } catch (err) {
         showToast("Dashboard metrics failed to load", "warning");
         console.error("loadTimeLogDashboard error:", err);
+        
+        // Show error states for dashboard cards
+        const dashboardCards = ['totalHours', 'totalTasks', 'topProject', 'topProjectHours'];
+        dashboardCards.forEach(cardId => {
+          const element = document.getElementById(cardId);
+          if (element) {
+            const spinner = element.querySelector('.loading-spinner');
+            if (spinner) spinner.remove();
+            element.innerHTML = '<span class="text-danger">Failed to load</span>';
+          }
+        });
       }
     }
 

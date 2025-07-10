@@ -46,7 +46,7 @@
       font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: url('https://www.transparenttextures.com/patterns/white-diamond.png'), 
                   linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
-      color: var(--text-color);
+      color: var (--text-color);
       position: relative;
     }
 
@@ -473,7 +473,7 @@
         background: white;
         padding: 1rem;
         border-radius: 0 0 1rem 1rem;
-        box-shadow: 0 4px 12px var(--shadow-color);
+        box-shadow: 0 4px 12px var (--shadow-color);
         max-height: calc(100vh - 70px);
         overflow-y: auto;
         transition: all 0.3s ease;
@@ -550,6 +550,277 @@
     .clickable {
       display: none;
     }
+
+    /* New styles for dashboard split layout */
+    #taskMasterDashboard .dashboard-card {
+      min-height: 180px;
+      background: linear-gradient(135deg, #f5f0ff, #fefdff);
+      border-radius: 1rem;
+      border: 1px solid var(--border-color);
+    }
+    #taskMasterDashboard .card .card-body {
+      min-height: 150px;
+    }
+    #taskMasterDashboard .card-header {
+      border-radius: 1rem 1rem 0 0;
+    }
+    @media (max-width: 991px) {
+      #taskMasterDashboard .col-lg-4,
+      #taskMasterDashboard .col-lg-8 {
+        flex: 0 0 100%;
+        max-width: 100%;
+      }
+      #taskMasterDashboard .dashboard-card {
+        min-height: 120px;
+      }
+    }
+#taskMasterDashboard .dashboard-card {
+  min-height: 200px;
+  background: linear-gradient(135deg, #f5f0ff, #fefdff);
+  border-radius: 1rem;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#taskMasterDashboard .dashboard-card-equal {
+  height: 220px;
+  min-height: 220px;
+  max-height: 220px;
+}
+.dashboard-card-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--title-color);
+  min-height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+#dashboardUpcomingTasks.dashboard-card-value {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-color);
+  min-height: 3.5rem;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+#taskMasterGrid {
+  background: linear-gradient(135deg, #f5f0ff, #fefdff);
+}
+#taskMasterGrid thead {
+  background: var(--primary-color) !important;
+  color: var(--title-color);
+}
+#taskMasterGrid tbody tr {
+  background: transparent;
+  transition: background 0.2s;
+}
+#taskMasterGrid tbody tr:nth-child(even) {
+  background: rgba(179, 153, 204, 0.07);
+}
+#taskMasterGrid tbody tr:hover {
+  background: #ede6f7 !important;
+}
+#taskMasterGrid th, #taskMasterGrid td {
+  border-color: var(--border-color) !important;
+  vertical-align: middle;
+}
+@media (max-width: 991px) {
+  #taskMasterDashboard .col-lg-4,
+  #taskMasterDashboard .col-lg-8 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  #taskMasterDashboard .dashboard-card,
+  #taskMasterDashboard .dashboard-card-equal {
+    min-height: 120px;
+    height: 150px;
+    max-height: 150px;
+  }
+  .dashboard-card-value {
+    font-size: 1.5rem;
+    min-height: 2.2rem;
+  }
+}
+#taskMasterGrid {
+  background: linear-gradient(135deg, #f5f0ff, #fefdff);
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color); /* Changed from 2px purple to subtle border */
+}
+#taskMasterGrid thead {
+  background: var(--primary-color) !important;
+  color: var(--title-color);
+  border-bottom: 1px solid var(--border-color); /* Changed from 2px purple to subtle border */
+}
+#taskMasterGrid th, #taskMasterGrid td {
+  border-color: var(--border-color) !important;
+  vertical-align: middle;
+  text-align: center;
+}
+#taskMasterGrid tbody tr {
+  background: transparent;
+  transition: background 0.2s;
+}
+#taskMasterGrid tbody tr:nth-child(even) {
+  background: rgba(179, 153, 204, 0.07);
+}
+#taskMasterGrid tbody tr:hover {
+  background: #ede6f7 !important;
+}
+#taskMasterGrid th {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+#taskMasterDashboard .card {
+  box-shadow: 0 2px 12px 0 rgba(179,153,204,0.04); /* Reduced from 0 4px 24px 0 rgba(179,153,204,0.10) */
+}
+
+/* Task Master Grid Edit Improvements */
+#taskMasterGrid .form-select-sm {
+  font-size: 0.875rem;
+  min-width: 120px;
+  max-width: 200px;
+}
+
+#taskMasterGrid .form-control-sm,
+#taskMasterGrid .form-select-sm {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+}
+
+#taskMasterGrid .form-select-sm option {
+  padding: 0.25rem 0.5rem;
+  background-color: white;
+  color: var(--text-color);
+}
+
+/* Ensure dropdown visibility */
+#taskMasterGrid .form-select-sm:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.2rem rgba(179, 153, 204, 0.25);
+  z-index: 1000;
+}
+
+    /* Update the dashboard card styling to remove purple border */
+    #taskMasterDashboard .card.shadow-lg {
+      border: 1px solid var(--border-color) !important; /* Override the inline purple border */
+      background: linear-gradient(135deg, #f5f0ff, #fefdff) !important;
+    }
+
+    /* Update card header to match */
+    #taskMasterDashboard .card-header {
+      background: var(--primary-color) !important;
+      border-bottom: 1px solid var(--border-color) !important; /* Changed from 2px purple */
+    }
+
+    /* Update card header to match - remove border bottom */
+    #taskMasterDashboard .card-header {
+      background: var(--primary-color) !important;
+      border-bottom: none !important; /* Remove the border line */
+    }
+
+    /* S-19: Loading States - Non-overlay approach */
+    .loading-skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading-shimmer 2s infinite;
+      border-radius: 0.375rem;
+      color: transparent !important;
+    }
+
+    @keyframes loading-shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .loading-text {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading-shimmer 2s infinite;
+      border-radius: 0.25rem;
+      height: 1.2em;
+      display: inline-block;
+      width: 60%;
+      min-width: 80px;
+    }
+
+    .loading-text-lg {
+      height: 2rem;
+      width: 80%;
+    }
+
+    .loading-text-sm {
+      height: 1em;
+      width: 40%;
+    }
+
+    .loading-row {
+      background: linear-gradient(90deg, #f8f9fa 25%, #f1f3f4 50%, #f8f9fa 75%);
+      background-size: 200% 100%;
+      animation: loading-shimmer 2s infinite;
+    }
+
+    .loading-row td {
+      background: transparent !important;
+      color: transparent !important;
+      border-color: #e9ecef !important;
+    }
+
+    /* Responsive loading adjustments */
+    @media (max-width: 768px) {
+      .loading-text {
+        width: 70%;
+        min-width: 60px;
+      }
+      .loading-text-lg {
+        height: 1.5rem;
+        width: 85%;
+      }
+    }
+
+    /* Loading states for dashboard cards */
+    .dashboard-loading {
+      background: linear-gradient(90deg, #f8f9fa 25%, #f1f3f4 50%, #f8f9fa 75%) !important;
+      background-size: 200% 100% !important;
+      animation: loading-shimmer 2s infinite !important;
+      color: transparent !important;
+      border-color: #e9ecef !important;
+    }
+
+    .loading-spinner {
+      width: 1.2rem;
+      height: 1.2rem;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid var(--accent-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-right: 0.5rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Table loading states */
+    .table-loading tbody tr {
+      background: linear-gradient(90deg, #f8f9fa 25%, #f1f3f4 50%, #f8f9fa 75%);
+      background-size: 200% 100%;
+      animation: loading-shimmer 2s infinite;
+    }
+
+    .table-loading tbody td {
+      color: transparent !important;
+      border-color: #e9ecef !important;
+    }
   </style>
 </head>
 
@@ -581,14 +852,18 @@
             <a class="nav-link" href="/projects">Design Projects</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/client-experiences">Clients & Feedback</a>
+            <a class="nav-link" href="/inquiry">Sales & Inquiry Tracker</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/time">Time & Hours</a>
           </li>
           <li class="nav-item"><a class="nav-link" href="/costs">Expenses & Profit</a></li>
-          <li class="nav-item"><a class="nav-link" href="/tasks">Tasks & Routine</a></li>
-          <li class="nav-item"><a class="nav-link" href="/posts">Content & Ideas</a></li>
           <li class="nav-item"><a class="nav-link" href="/issues">Workflow & Challenges</a></li>
-          <li class="nav-item"><a class="nav-link" href="/inquiry">Leads & Sales</a></li>
-          <li class="nav-item"><a class="nav-link" href="/time">Time & Hours</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/client-experiences">Clients & Feedback</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="/posts">Content & Ideas</a></li>
+          <li class="nav-item"><a class="nav-link" href="/tasks">Tasks & Routine</a></li>
         </ul>
       </div>
     </div>
@@ -602,29 +877,82 @@
       </a>
     </div>
 
-    <!-- Summary KPI Cards (DASHBOARD) -->
-    <div class="summary-cards" id="dashboardSummaryCards">
-      <div class="summary-card overall-completion">
-        <h6>Overall Completion</h6>
-        <p id="overallCompletion">-</p>
+    <!-- DASHBOARD SPLIT LAYOUT -->
+    <section class="row g-3 mb-4" id="taskMasterDashboard">
+      <!-- Left Panel: Two stacked cards -->
+      <div class="col-lg-4 d-flex flex-column gap-3">
+        <div class="card shadow-sm flex-fill dashboard-card dashboard-card-equal">
+          <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+            <h6 class="mb-2 text-uppercase" style="color: var(--accent-color); letter-spacing: 1px; text-align:center;">Overall Completion</h6>
+            <div id="overallCompletionCard" class="dashboard-card-value">
+              <span class="loading-spinner"></span>Loading...
+            </div>
+          </div>
+        </div>
+        <div class="card shadow-sm flex-fill dashboard-card dashboard-card-equal">
+          <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+            <h6 class="mb-2 text-uppercase" style="color: var(--accent-color); letter-spacing: 1px; text-align:center;">Upcoming Tasks</h6>
+            <ul id="dashboardUpcomingTasks" class="dashboard-card-value list-unstyled mb-0">
+              <li><span class="loading-spinner"></span>Loading tasks...</li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="summary-card best-category">
-        <h6>Best Category</h6>
-        <p id="bestCategory">-</p>
+      <!-- Right Panel: Task Master Grid -->
+      <div class="col-lg-8">
+        <div class="card shadow-lg h-100 dashboard-card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span class="fw-bold" style="color: var(--title-color); letter-spacing:1px;">Task Master List</span>
+            <button class="btn btn-primary btn-sm" id="addTaskMasterBtn">+ Add</button>
+          </div>
+          <div class="card-body p-0">
+            <div style="max-height:370px; overflow-y:auto;">
+              <table class="table table-bordered mb-0" id="taskMasterGrid" style="background:transparent; border-radius:1rem; overflow:hidden;">
+                <thead style="background: var(--primary-color); color: var(--title-color);">
+                  <tr>
+                    <th style="display:none;">ID</th>
+                    <th>Name</th>
+                    <th>Category Name</th>
+                    <th>Frequency Name</th>
+                    <th>Active</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="taskMasterGridBody">
+                  <!-- Loading rows -->
+                  <tr class="loading-row">
+                    <td style="display:none;">-</td>
+                    <td><span class="loading-text">Loading task name</span></td>
+                    <td><span class="loading-text">Loading category</span></td>
+                    <td><span class="loading-text">Loading frequency</span></td>
+                    <td><span class="loading-text-sm">Yes</span></td>
+                    <td><span class="loading-text-sm">Actions</span></td>
+                  </tr>
+                  <tr class="loading-row">
+                    <td style="display:none;">-</td>
+                    <td><span class="loading-text">Loading task name</span></td>
+                    <td><span class="loading-text">Loading category</span></td>
+                    <td><span class="loading-text">Loading frequency</span></td>
+                    <td><span class="loading-text-sm">No</span></td>
+                    <td><span class="loading-text-sm">Actions</span></td>
+                  </tr>
+                  <tr class="loading-row">
+                    <td style="display:none;">-</td>
+                    <td><span class="loading-text">Loading task name</span></td>
+                    <td><span class="loading-text">Loading category</span></td>
+                    <td><span class="loading-text">Loading frequency</span></td>
+                    <td><span class="loading-text-sm">Yes</span></td>
+                    <td><span class="loading-text-sm">Actions</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="summary-card lowest-category">
-        <h6>Lowest Category</h6>
-        <p id="worstCategory">-</p>
-      </div>
-      <div class="summary-card upcoming-tasks-card">
-        <h6>Upcoming Tasks</h6>
-        <ul class="upcoming-tasks-list" id="upcomingTasksList">
-          <li>Loading...</li>
-        </ul>
-      </div>
-    </div>
+    </section>
 
-    <!-- Controls Row (modify to remove pagination) -->
+    <!-- Controls Row -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3" id="controlsRow">
       <button class="btn btn-primary btn-sm" id="addTaskBtn">+ Add Task</button>
       <div class="input-group input-group-sm flex-grow-1" style="max-width: 300px;">
@@ -636,10 +964,10 @@
       </div>
     </div>
 
-    <!-- CATEGORY SUMMARY GRID (remove the title) -->
+    <!-- CATEGORY SUMMARY GRID -->
     <div class="mb-4" id="categorySummarySection">
       <div class="table-responsive position-relative">
-        <table class="table table-bordered table-striped category-table mb-0">
+        <table class="table table-bordered table-striped category-table mb-0 table-loading" id="categorySummaryTable">
           <thead class="table-light">
             <tr>
               <th>Category</th>
@@ -651,7 +979,34 @@
               <th>Expand</th>
             </tr>
           </thead>
-          <tbody id="categoryTableBody"></tbody>
+          <tbody id="categoryTableBody">
+            <!-- Loading rows -->
+            <tr class="loading-row">
+              <td><span class="loading-text">Loading category</span></td>
+              <td><span class="loading-text-sm">0%</span></td>
+              <td><span class="loading-text-sm">0</span></td>
+              <td><span class="loading-text-sm">0</span></td>
+              <td><span class="loading-text-sm">0</span></td>
+              <td><span class="loading-text">Loading upcoming</span></td>
+              <td><span class="loading-text-sm">⌄</span></td>
+            </tr>
+            <tr class="loading-row">
+              <td><span class="loading-text">Loading category</span></td>
+              <td><span class="loading-text-sm">0%</span></td>
+              <td><span class="loading-text-sm">0</span></td>
+              <td><span class="loading-text-sm">0</span></td>
+              <td><span class="loading-text">Loading upcoming</span></td>
+              <td><span class="loading-text-sm">⌄</span></td>
+            </tr>
+            <tr class="loading-row">
+              <td><span class="loading-text">Loading category</span></td>
+              <td><span class="loading-text-sm">0%</span></td>
+              <td><span class="loading-text-sm">0</span></td>
+              <td><span class="loading-text-sm">0</span></td>
+              <td><span class="loading-text">Loading upcoming</span></td>
+              <td><span class="loading-text-sm">⌄</span></td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -660,18 +1015,27 @@
     <section id="taskFormSection" style="display:none;">
       <form id="taskForm" class="p-3 border rounded bg-white mb-4">
         <input type="hidden" id="task_id" />
+        <input type="hidden" id="task_master_id" />
         <div class="row mb-2">
-          <div class="col-md-4">
+          <div class="col-md-4 position-relative">
+            <label>Task Master</label>
+            <input type="text" id="task_master_search" class="form-control" autocomplete="off" placeholder="Type to search..." required />
+            <input type="hidden" id="task_master_id" />
+            <div id="task_master_dropdown" class="list-group position-absolute w-100" style="z-index:1000; display:none; max-height:200px; overflow-y:auto;"></div>
+          </div>
+          <div class="col-md-2">
             <label>Task Category</label>
-            <select id="category_code" class="form-select" required></select>
+            <input type="text" id="category_name" class="form-control" readonly />
+            <input type="hidden" id="category_code" />
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <label>Task Name</label>
-            <input type="text" id="task_name" class="form-control" required />
+            <input type="text" id="task_name" class="form-control" readonly />
           </div>
-          <div class="col-md-4">
-            <label>Scheduled Date</label>
-            <input type="date" id="scheduled_date" class="form-control" required />
+          <div class="col-md-3">
+            <label>Frequency</label>
+            <input type="text" id="frequency_name" class="form-control" readonly />
+            <input type="hidden" id="frequency_code" />
           </div>
         </div>
         <div class="row mb-2">
@@ -680,10 +1044,14 @@
             <label class="form-check-label" for="is_done">Done?</label>
           </div>
           <div class="col-md-4">
+            <label>Scheduled Date</label>
+            <input type="date" id="scheduled_date" class="form-control" required />
+          </div>
+          <div class="col-md-4">
             <label>Completed Date</label>
             <input type="date" id="completed_date" class="form-control" />
           </div>
-          <div class="col-md-6">
+          <div class="col-md-2">
             <label>Notes</label>
             <textarea id="notes" class="form-control" rows="1"></textarea>
           </div>
@@ -721,19 +1089,60 @@
     let categoryPage = 1;
     let categoryLimit = 5;
     let deleteTaskId = null;
+    
+    // Task Master editing state
+    let editingTaskMasterId = null;
+    let originalTaskMasterRow = null;
+    let taskCategoryLOV = [];
+    let taskFrequencyLOV = [];
+    let isAddingNewTaskMaster = false; // Track if we're in add mode
 
     // --- Initialization ---
-    window.onload = () => {
+    window.onload = async () => {
       document.querySelector('.page-loader').style.display = 'none';
-      loadLOV("TASK_CATEGORY", "category_code");
-      loadTaskDashboard();
-      loadCategorySummary();
+      
+      // Show loading states
+      showLoadingStates();
+      
+      try {
+        await loadTaskMasterLOVs(); // Load LOVs first
+        
+        // Load all data concurrently
+        await Promise.all([
+          loadCategorySummary(),
+          loadDashboardCards(),
+          loadTaskMasterGrid()
+        ]);
+        
+        // Hide loading states
+        hideLoadingStates();
+        
+      } catch (error) {
+        console.error("Error during initialization:", error);
+        hideLoadingStates();
+        showToast("Some data failed to load. Please refresh the page.", "warning");
+      }
       
       // Set up event listeners
       document.getElementById("addTaskBtn").addEventListener("click", resetForm);
       document.getElementById("taskForm").addEventListener("submit", handleTaskSubmit);
       document.getElementById("searchBox").addEventListener("input", handleSearch);
     };
+
+    function showLoadingStates() {
+      // Dashboard cards already have loading spinners in HTML
+      // Table already has loading class in HTML
+    }
+
+    function hideLoadingStates() {
+      // Remove loading classes from category table
+      const categoryTable = document.getElementById('categorySummaryTable');
+      removeLoadingState(categoryTable);
+      
+      // Clear task master grid loading
+      const taskMasterGrid = document.getElementById('taskMasterGrid');
+      removeLoadingState(taskMasterGrid);
+    }
 
     function searchTasks() {
       currentPage = 1;
@@ -792,86 +1201,80 @@
         const res = await fetch(API_ENDPOINTS.DASHBOARD);
         const data = await res.json();
 
-        const completionEl = document.getElementById("overallCompletion");
-        const completionValue = parseFloat(data.overall_completion) || 0;
-        let completionColor;
-        if (completionValue < 30) {
-          completionColor = "#ef4444";
-        } else if (completionValue < 50) {
-          completionColor = "#f97316";
-        } else if (completionValue < 70) {
-          completionColor = "#facc15";
-        } else if (completionValue < 90) {
-          completionColor = "#22c55e";
-        } else {
-          completionColor = "#16a34a";
+        // Fix: Use the correct element ID for overall completion
+        const completionEl = document.getElementById("overallCompletionCard");
+        if (completionEl) {
+          const completionValue = parseFloat(data.overall_completion) || 0;
+          let completionColor;
+          if (completionValue < 30) {
+            completionColor = "#ef4444";
+          } else if (completionValue < 50) {
+            completionColor = "#f97316";
+          } else if (completionValue < 70) {
+            completionColor = "#facc15";
+          } else if (completionValue < 90) {
+            completionColor = "#22c55e";
+          } else {
+            completionColor = "#16a34a";
+          }
+          animateNumber(
+            completionEl,
+            completionValue,
+            1500,
+            '',
+            '%',
+            completionColor
+          );
         }
-        animateNumber(
-          completionEl,
-          completionValue,
-          1500,
-          '',
-          '%',
-          completionColor
-        );
 
-        const bestCategoryEl = document.getElementById("bestCategory");
-        animateNumber(
-          bestCategoryEl,
-          0,
-          800,
-          '',
-          '',
-          '#16a34a',
-          data.best_performing_category || "-"
-        );
-
-        const worstCategoryEl = document.getElementById("worstCategory");
-        animateNumber(
-          worstCategoryEl,
-          0,
-          800,
-          '',
-          '',
-          '#ef4444',
-          data.worst_performing_category || "-"
-        );
-
-        const upcomingList = document.getElementById("upcomingTasksList");
-        if (data.upcoming_tasks && typeof data.upcoming_tasks === "string" && data.upcoming_tasks.trim()) {
-          const tasks = data.upcoming_tasks.split("\n").filter(Boolean);
-          upcomingList.innerHTML = "";
-          tasks.forEach((task, index) => {
-            setTimeout(() => {
-              const li = document.createElement("li");
-              li.textContent = task;
-              li.style.opacity = "0";
-              li.style.transform = "translateY(10px)";
-              li.style.transition = "all 0.4s ease";
-              upcomingList.appendChild(li);
+        // Fix: Use the correct element ID for upcoming tasks
+        const upcomingList = document.getElementById("dashboardUpcomingTasks");
+        if (upcomingList) {
+          if (data.upcoming_tasks && typeof data.upcoming_tasks === "string" && data.upcoming_tasks.trim()) {
+            const tasks = data.upcoming_tasks.split("\n").filter(Boolean);
+            upcomingList.innerHTML = "";
+            tasks.forEach((task, index) => {
               setTimeout(() => {
-                li.style.opacity = "1";
-                li.style.transform = "translateY(0)";
-              }, 50);
-            }, index * 120);
-          });
-        } else {
-          upcomingList.innerHTML = `<li>No upcoming tasks</li>`;
+                const li = document.createElement("li");
+                li.textContent = task;
+                li.style.opacity = "0";
+                li.style.transform = "translateY(10px)";
+                li.style.transition = "all 0.4s ease";
+                upcomingList.appendChild(li);
+                setTimeout(() => {
+                  li.style.opacity = "1";
+                  li.style.transform = "translateY(0)";
+                }, 50);
+              }, index * 120);
+            });
+          } else {
+            upcomingList.innerHTML = `<li>No upcoming tasks</li>`;
+          }
         }
       } catch (err) {
-        showToast("Dashboard metrics failed to load", "warning");
         console.error("Dashboard error:", err);
+        // Don't show toast error since this is handled by loadDashboardCards
       }
     }
 
     async function loadCategorySummary() {
       document.getElementById("categorySummarySection").style.display = "";
       document.getElementById("controlsRow").style.display = "";
+      
       try {
         const res = await fetch(API_ENDPOINTS.TASKS);
         const categories = await res.json();
         const tbody = document.getElementById("categoryTableBody");
+        
+        // Remove loading state first
+        const categoryTable = document.getElementById('categorySummaryTable');
+        if (categoryTable) {
+          categoryTable.classList.remove('table-loading');
+        }
+        
+        // Clear the tbody completely including loading rows
         tbody.innerHTML = "";
+        
         if (!Array.isArray(categories) || categories.length === 0) {
           tbody.innerHTML = `<tr><td colspan="7" class="text-center">No categories found.</td></tr>`;
           return;
@@ -900,7 +1303,15 @@
           `;
         });
       } catch (err) {
+        // Remove loading state on error too
+        const categoryTable = document.getElementById('categorySummaryTable');
+        if (categoryTable) {
+          categoryTable.classList.remove('table-loading');
+        }
+        
         showToast("Failed to load categories", "danger");
+        document.getElementById("categoryTableBody").innerHTML = 
+          `<tr><td colspan="7" class="text-center text-danger">Failed to load categories</td></tr>`;
       }
     }
 
@@ -922,17 +1333,25 @@
 
     async function renderTasksInline(categoryCode) {
       const container = document.getElementById(`tasksContainer-${categoryCode}`);
-      container.innerHTML = `<div class="text-center py-2"><div class="spinner-border text-secondary"></div></div>`;
+      container.innerHTML = `
+        <div class="text-center py-3">
+          <span class="loading-spinner"></span>
+          <span class="ms-2">Loading tasks...</span>
+        </div>`;
+      
       try {
         const categoryState = getCategoryState(categoryCode);
         const page = categoryState.page;
         const limit = categoryState.limit;
         const res = await fetch(`${API_ENDPOINTS.TASKS_BY_CATEGORY}/${encodeURIComponent(categoryCode)}?page=${page}&limit=${limit}`);
         const data = await res.json();
+        
         if (!Array.isArray(data) || data.length === 0) {
           container.innerHTML = `<div class="text-muted py-2">No tasks found for this category.</div>`;
           return;
         }
+        
+        // ...existing code for rendering tasks...
         categoryState.tasksData = data;
         const hasPrevPage = page > 1;
         const hasNextPage = data.length === limit;
@@ -972,6 +1391,7 @@
               <tr>
                 <th>#</th>
                 <th>Task Name</th>
+                <th>Frequency</th>
                 <th>Scheduled Date</th>
                 <th>Done?</th>
                 <th>Completed Date</th>
@@ -999,9 +1419,10 @@
           }
           const overdue = !row.is_done && row.scheduled_date && new Date(row.scheduled_date) < new Date(new Date().setHours(0, 0, 0, 0));
           html += `
-            <tr id="task-row-${row.task_id}" data-task-id="${row.task_id}" data-category-code="${categoryCode}" ${overdue ? ' class="overdue"' : ''}>
+            <tr id="task-row-${row.task_id}" data-task-id="${row.task_id}" data-task-master-id="${row.task_master_id}" data-category-code="${categoryCode}" ${overdue ? ' class="overdue"' : ''}>
               <td>${sno}</td>
               <td class="task-name">${row.task_name || "-"}</td>
+              <td class="frequency">${row.frequency || "-"}</td>
               <td class="scheduled-date" data-raw-date="${row.scheduled_date}">${displayScheduledDate}</td>
               <td class="is-done">${row.is_done ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'}</td>
               <td class="completed-date" data-raw-date="${row.completed_date}">${displayCompletedDate}</td>
@@ -1020,7 +1441,7 @@
         html += `</tbody></table>`;
         container.innerHTML = html;
       } catch (err) {
-        container.innerHTML = `<div class="text-danger">Failed to load tasks.</div>`;
+        container.innerHTML = `<div class="text-danger py-2">Failed to load tasks.</div>`;
       }
     }
 
@@ -1049,12 +1470,16 @@
         return;
       }
       const nameCell = row.querySelector('.task-name');
+      const frequencyCell = row.querySelector('.frequency');
       const scheduledDateCell = row.querySelector('.scheduled-date');
       const isDoneCell = row.querySelector('.is-done');
       const completedDateCell = row.querySelector('.completed-date');
       const notesCell = row.querySelector('.notes');
       const actionsCell = row.querySelector('td:last-child');
+      
       nameCell.innerHTML = `<input type="text" class="form-control form-control-sm" id="edit-task-name-${taskId}" value="${taskData.task_name || ''}">`;
+      frequencyCell.innerHTML = `<input type="text" class="form-control form-control-sm" id="edit-frequency-${taskId}" value="${taskData.frequency || ''}" readonly>`;
+      
       let scheduledDate = '';
       if (taskData.scheduled_date) {
         const dateObj = new Date(taskData.scheduled_date);
@@ -1094,21 +1519,25 @@
       const isDone = document.getElementById(`edit-is-done-${taskId}`).checked;
       const completedDate = document.getElementById(`edit-completed-date-${taskId}`).value;
       const notes = document.getElementById(`edit-notes-${taskId}`).value;
+      
       const categoryState = getCategoryState(categoryCode);
       const originalTask = categoryState.tasksData.find(task => task.task_id === taskId);
       if (!originalTask) {
         showToast("Task data not found", "danger");
         return;
       }
+      
+      // Format the payload according to the required format - task_master_id is critical
       const payload = {
-        ...originalTask,
-        task_name: taskName,
+        task_id: taskId,
+        task_master_id: originalTask.task_master_id,
+        category_code: categoryCode, // Keep the category_code
         scheduled_date: scheduledDate || null,
         is_done: isDone,
         completed_date: completedDate || null,
-        notes: notes,
-        category_code: categoryCode
+        notes: notes
       };
+      
       try {
         const res = await fetch(API_ENDPOINTS.TASK, {
           method: "POST",
@@ -1125,7 +1554,7 @@
           currentlyEditingTaskId = null;
           originalTaskData = {};
           await renderTasksInline(categoryCode);
-          loadTaskDashboard();
+          loadDashboardCards(); // Change from loadTaskDashboard to loadDashboardCards
           loadCategorySummary();
         } else {
           throw new Error(result.message || "Update failed");
@@ -1141,11 +1570,13 @@
       if (!row) return;
       if (originalTaskData) {
         const nameCell = row.querySelector('.task-name');
+        const frequencyCell = row.querySelector('.frequency');
         const scheduledDateCell = row.querySelector('.scheduled-date');
         const isDoneCell = row.querySelector('.is-done');
         const completedDateCell = row.querySelector('.completed-date');
         const notesCell = row.querySelector('.notes');
         const actionsCell = row.querySelector('td:last-child');
+        
         let displayScheduledDate = "-";
         let displayCompletedDate = "-";
         if (originalTaskData.scheduled_date) {
@@ -1165,7 +1596,9 @@
           showToast("Cannot restore row - missing category code", "warning");
           return;
         }
+        
         nameCell.textContent = originalTaskData.task_name || "-";
+        frequencyCell.textContent = originalTaskData.frequency || "-";
         scheduledDateCell.textContent = displayScheduledDate;
         isDoneCell.innerHTML = originalTaskData.is_done ? 
           '<i class="fas fa-check text-success"></i>' : 
@@ -1237,16 +1670,23 @@
         const controlsRow = document.getElementById("controlsRow");
         controlsRow.parentNode.insertBefore(formSection, controlsRow.nextSibling);
         formSection.style.display = "block";
-        for (const key in data) {
-          const el = document.getElementById(key);
-          if (el) {
-            if (typeof data[key] === "boolean") {
-              el.checked = data[key];
-            } else {
-              el.value = data[key] || "";
-            }
-          }
-        }
+        
+        // Set form fields
+        document.getElementById("task_id").value = data.task_id || "";
+        document.getElementById("task_master_id").value = data.task_master_id || "";
+        document.getElementById("task_master_select").value = data.task_master_id || "";
+        // Find and set category/task/frequency fields
+        const selected = taskMasterList.find(t => t.task_master_id == data.task_master_id);
+        document.getElementById("category_code").value = selected ? selected.category_code : (data.category_code || "");
+        document.getElementById("category_name").value = selected ? selected.category_name : "";
+        document.getElementById("task_name").value = selected ? selected.task_name : (data.task_name || "");
+        document.getElementById("frequency_code").value = selected ? selected.frequency_code : "";
+        document.getElementById("frequency_name").value = selected ? selected.frequency_name : "";
+        document.getElementById("scheduled_date").value = data.scheduled_date ? new Date(data.scheduled_date).toISOString().split('T')[0] : "";
+        document.getElementById("is_done").checked = data.is_done || false;
+        document.getElementById("completed_date").value = data.completed_date ? new Date(data.completed_date).toISOString().split('T')[0] : "";
+        document.getElementById("notes").value = data.notes || "";
+        
         formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } catch (err) {
         showToast("Failed to load task details.", "danger");
@@ -1256,15 +1696,16 @@
     async function handleTaskSubmit(e) {
       e.preventDefault();
       
-      // Collect form data
-      const payload = {};
-      [...document.querySelectorAll("#taskForm input, #taskForm select, #taskForm textarea")].forEach(el => {
-        if (el.type === "checkbox") {
-          payload[el.id] = el.checked;
-        } else {
-          payload[el.id] = el.value;
-        }
-      });
+      // Collect form data and format it according to the required format
+      const payload = {
+        task_id: document.getElementById("task_id").value || null,
+        task_master_id: document.getElementById("task_master_id").value, // Ensure this is included
+        category_code: document.getElementById("category_code").value, // Keep the category_code
+        scheduled_date: document.getElementById("scheduled_date").value || null,
+        is_done: document.getElementById("is_done").checked,
+        completed_date: document.getElementById("completed_date").value || null,
+        notes: document.getElementById("notes").value || ""
+      };
       
       try {
         const res = await fetch(API_ENDPOINTS.TASK, {
@@ -1284,7 +1725,7 @@
           closeForm();
           // Refresh data
           await Promise.all([
-            loadTaskDashboard(),
+            loadDashboardCards(), // Change from loadTaskDashboard to loadDashboardCards
             loadCategorySummary()
           ]);
         } else {
@@ -1298,6 +1739,13 @@
     function resetForm() {
       document.getElementById("taskForm").reset();
       document.getElementById("task_id").value = "";
+      document.getElementById("task_master_id").value = "";
+      document.getElementById("task_master_search").value = "";
+      document.getElementById("category_code").value = "";
+      document.getElementById("category_name").value = "";
+      document.getElementById("task_name").value = "";
+      document.getElementById("frequency_code").value = "";
+      document.getElementById("frequency_name").value = "";
       const formSection = document.getElementById("taskFormSection");
       const controlsRow = document.getElementById("controlsRow");
       controlsRow.parentNode.insertBefore(formSection, controlsRow.nextSibling);
@@ -1357,7 +1805,7 @@
               } else {
                 loadCategorySummary();
               }
-              loadTaskDashboard();
+              loadDashboardCards(); // Change from loadTaskDashboard to loadDashboardCards
               loadCategorySummary();
             } else {
               throw new Error(result.message || "Delete failed");
@@ -1380,17 +1828,40 @@
       }
     }
 
-    async function loadLOV(refName, selectId) {
+    async function loadTaskMasterList() {
       try {
-        const res = await fetch(`${API_ENDPOINTS.LOV}${refName}`);
+        const res = await fetch('/api/task-master-list');
         const data = await res.json();
-        const select = document.getElementById(selectId);
+        taskMasterList = Array.isArray(data) ? data : [];
+        const select = document.getElementById("task_master_select");
         select.innerHTML = `<option value="">-- Select --</option>`;
-        data.forEach(item => {
-          select.innerHTML += `<option value="${item.code_value}">${item.code_description}</option>`;
+        taskMasterList.forEach(item => {
+          select.innerHTML += `<option value="${item.task_master_id}">${item.task_name} (${item.category_name}, ${item.frequency_name})</option>`;
         });
       } catch (err) {
-        showToast(`Failed to load ${refName}`, "warning");
+        showToast("Failed to load Task Master list", "warning");
+      }
+    }
+
+    function onTaskMasterChange() {
+      const select = document.getElementById("task_master_select");
+      const selectedId = select.value;
+      const selected = taskMasterList.find(t => t.task_master_id == selectedId);
+      if (selected) {
+        document.getElementById("task_master_id").value = selected.task_master_id;
+        document.getElementById("task_master_search").value = `${selected.task_name} (${selected.category_name}, ${selected.frequency_name})`;
+        document.getElementById("category_code").value = selected.category_code || "";
+        document.getElementById("category_name").value = selected.category_name || "";
+        document.getElementById("task_name").value = selected.task_name || "";
+        document.getElementById("frequency_code").value = selected.frequency_code || "";
+        document.getElementById("frequency_name").value = selected.frequency_name || "";
+      } else {
+        document.getElementById("task_master_id").value = "";
+        document.getElementById("category_code").value = "";
+        document.getElementById("category_name").value = "";
+        document.getElementById("task_name").value = "";
+        document.getElementById("frequency_code").value = "";
+        document.getElementById("frequency_name").value = "";
       }
     }
 
@@ -1408,6 +1879,555 @@
         showToast(`Searching for: ${lastSearchQuery}`, "info");
       }
     }
+
+    let taskMasterList = [];
+
+    // Replace loadTaskMasterList and onTaskMasterChange with autocomplete logic
+    document.getElementById("task_master_search").addEventListener("input", async function() {
+      const query = this.value.trim();
+      const dropdown = document.getElementById("task_master_dropdown");
+      if (!query) {
+        dropdown.style.display = "none";
+        return;
+      }
+      try {
+        const res = await fetch(`/api/task-master-list?search=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        taskMasterList = Array.isArray(data) ? data : [];
+        if (taskMasterList.length === 0) {
+          dropdown.innerHTML = '<div class="list-group-item text-muted">No results</div>';
+        } else {
+          dropdown.innerHTML = taskMasterList.map(item =>
+            `<button type="button" class="list-group-item list-group-item-action" data-id="${item.task_master_id}">${item.task_name} (${item.category_name}, ${item.frequency_name})</button>`
+          ).join('');
+        }
+        dropdown.style.display = "block";
+      } catch {
+        dropdown.innerHTML = '<div class="list-group-item text-danger">Error loading</div>';
+        dropdown.style.display = "block";
+      }
+    });
+
+    document.getElementById("task_master_dropdown").addEventListener("click", function(e) {
+      if (e.target && e.target.matches("button[data-id]")) {
+        const id = e.target.getAttribute("data-id");
+        const selected = taskMasterList.find(t => t.task_master_id == id);
+        if (selected) {
+          document.getElementById("task_master_id").value = selected.task_master_id;
+          document.getElementById("task_master_search").value = `${selected.task_name} (${selected.category_name}, ${selected.frequency_name})`;
+          document.getElementById("category_code").value = selected.category_code || "";
+          document.getElementById("category_name").value = selected.category_name || "";
+          document.getElementById("task_name").value = selected.task_name || "";
+          document.getElementById("frequency_code").value = selected.frequency_code || "";
+          document.getElementById("frequency_name").value = selected.frequency_name || "";
+        }
+        this.style.display = "none";
+      }
+    });
+
+    // Hide dropdown on blur (with slight delay for click)
+    document.getElementById("task_master_search").addEventListener("blur", function() {
+      setTimeout(() => { document.getElementById("task_master_dropdown").style.display = "none"; }, 200);
+    });
+
+    // Update resetForm and editTask to use the new search field
+    function resetForm() {
+      document.getElementById("taskForm").reset();
+      document.getElementById("task_id").value = "";
+      document.getElementById("task_master_id").value = "";
+      document.getElementById("task_master_search").value = "";
+      document.getElementById("category_code").value = "";
+      document.getElementById("category_name").value = "";
+      document.getElementById("task_name").value = "";
+      document.getElementById("frequency_code").value = "";
+      document.getElementById("frequency_name").value = "";
+      const formSection = document.getElementById("taskFormSection");
+      const controlsRow = document.getElementById("controlsRow");
+      controlsRow.parentNode.insertBefore(formSection, controlsRow.nextSibling);
+      formSection.style.display = "block";
+      formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    async function editTask(taskId) {
+      for (const categoryCode in categoryStates) {
+        const categoryState = categoryStates[categoryCode];
+        if (categoryState.tasksData && Array.isArray(categoryState.tasksData)) {
+          const taskData = categoryState.tasksData.find(task => task.task_id === taskId);
+          if (taskData) {
+            editTaskFromCategory(categoryCode, taskId);
+            return;
+          }
+        }
+      }
+      try {
+        const res = await fetch(`${API_ENDPOINTS.TASK}/${taskId}`);
+        const data = await res.json();
+        if (!data || Object.keys(data).length === 0) {
+          showToast("Task not found.", "warning");
+          return;
+        }
+        const formSection = document.getElementById("taskFormSection");
+        const controlsRow = document.getElementById("controlsRow");
+        controlsRow.parentNode.insertBefore(formSection, controlsRow.nextSibling);
+        formSection.style.display = "block";
+        
+        // Set form fields
+        document.getElementById("task_id").value = data.task_id || "";
+        document.getElementById("task_master_id").value = data.task_master_id || "";
+        // Find and set category/task/frequency fields
+        const selected = taskMasterList.find(t => t.task_master_id == data.task_master_id);
+        document.getElementById("task_master_search").value = selected
+          ? `${selected.task_name} (${selected.category_name}, ${selected.frequency_name})`
+          : "";
+        document.getElementById("category_code").value = selected ? selected.category_code : (data.category_code || "");
+        document.getElementById("category_name").value = selected ? selected.category_name : "";
+        document.getElementById("task_name").value = selected ? selected.task_name : (data.task_name || "");
+        document.getElementById("frequency_code").value = selected ? selected.frequency_code : "";
+        document.getElementById("frequency_name").value = selected ? selected.frequency_name : "";
+        document.getElementById("scheduled_date").value = data.scheduled_date ? new Date(data.scheduled_date).toISOString().split('T')[0] : "";
+        document.getElementById("is_done").checked = data.is_done || false;
+        document.getElementById("completed_date").value = data.completed_date ? new Date(data.completed_date).toISOString().split('T')[0] : "";
+        document.getElementById("notes").value = data.notes || "";
+        
+        formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (err) {
+        showToast("Failed to load task details.", "danger");
+      }
+    }
+
+    // --- DASHBOARD TASK MASTER LOGIC ---
+    async function loadTaskMasterGrid() {
+      try {
+        const res = await fetch('/api/task-master');
+        const data = await res.json();
+        const tbody = document.getElementById('taskMasterGridBody');
+        
+        // Clear loading rows completely
+        tbody.innerHTML = '';
+        
+        if (!Array.isArray(data) || data.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">No records found.</td></tr>`;
+          return;
+        }
+        
+        data.forEach(row => {
+          tbody.innerHTML += `
+            <tr id="task-master-row-${row.task_master_id}"
+                data-category-code="${row.category_code || ''}"
+                data-frequency-code="${row.frequency_code || ''}"
+                data-task-name="${row.task_name || ''}"
+                data-is-active="${row.is_active}">
+              <td style="display:none;">${row.task_master_id}</td>
+              <td class="task-name-cell">${row.task_name || ''}</td>
+              <td class="category-name-cell">${row.category_name || ''}</td>
+              <td class="frequency-name-cell">${row.frequency_name || ''}</td>
+              <td class="is-active-cell">${row.is_active ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-secondary">No</span>'}</td>
+              <td class="actions-cell">
+                <button class="btn btn-sm btn-outline-primary" onclick="editTaskMaster(${row.task_master_id})" title="Edit Task Master">
+                  <i class="fas fa-edit"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+      } catch (err) {
+        console.error("Error loading task master grid:", err);
+        document.getElementById('taskMasterGridBody').innerHTML = 
+          `<tr><td colspan="6" class="text-danger text-center">Failed to load task masters</td></tr>`;
+      }
+    }
+
+    // Load Task Master LOVs for editing
+    async function loadTaskMasterLOVs() {
+      try {
+        const [catRes, freqRes] = await Promise.all([
+          fetch('/api/lov/TASK_CATEGORY'),
+          fetch('/api/lov/TASK_FREQUENCY')
+        ]);
+        
+        const catData = await catRes.json();
+        const freqData = await freqRes.json();
+        
+        taskCategoryLOV = Array.isArray(catData) ? catData : [];
+        taskFrequencyLOV = Array.isArray(freqData) ? freqData : [];
+        
+        console.log('Task Category LOV loaded:', taskCategoryLOV);
+        console.log('Task Frequency LOV loaded:', taskFrequencyLOV);
+      } catch (err) {
+        console.error("Error loading Task Master LOVs:", err);
+        taskCategoryLOV = [];
+        taskFrequencyLOV = [];
+      }
+    }
+
+    // Add new Task Master row at the top
+    function addNewTaskMaster() {
+      // Cancel any existing edit or add operation
+      if (editingTaskMasterId !== null) {
+        cancelTaskMasterEdit();
+      }
+      if (isAddingNewTaskMaster) {
+        cancelAddTaskMaster();
+      }
+
+      // Check if LOVs are loaded
+      if (taskCategoryLOV.length === 0 || taskFrequencyLOV.length === 0) {
+        showToast("Loading categories and frequencies...", "info");
+        loadTaskMasterLOVs().then(() => {
+          setTimeout(() => addNewTaskMaster(), 100);
+        });
+        return;
+      }
+
+      isAddingNewTaskMaster = true;
+      const tbody = document.getElementById('taskMasterGridBody');
+
+      // Create category options
+      const categoryOptions = taskCategoryLOV.map(cat => {
+        return `<option value="${cat.code_value}">${cat.code_description}</option>`;
+      }).join('');
+
+      // Create frequency options
+      const frequencyOptions = taskFrequencyLOV.map(freq => {
+        return `<option value="${freq.code_value}">${freq.code_description}</option>`;
+      }).join('');
+
+      // Insert new row at the top
+      const newRow = document.createElement('tr');
+      newRow.id = 'new-task-master-row';
+      newRow.className = 'table-warning'; // Highlight new row
+      newRow.innerHTML = `
+        <td style="display:none;">NEW</td>
+        <td class="task-name-cell">
+          <input type="text" class="form-control form-control-sm" id="new-task-name" placeholder="Enter task name..." style="min-width: 120px;">
+        </td>
+        <td class="category-name-cell">
+          <select class="form-select form-select-sm" id="new-category" style="min-width: 150px;">
+            <option value="">-- Select Category --</option>
+            ${categoryOptions}
+          </select>
+        </td>
+        <td class="frequency-name-cell">
+          <select class="form-select form-select-sm" id="new-frequency" style="min-width: 120px;">
+            <option value="">-- Select Frequency --</option>
+            ${frequencyOptions}
+          </select>
+        </td>
+        <td class="is-active-cell">
+          <select class="form-select form-select-sm" id="new-is-active" style="min-width: 80px;">
+            <option value="true" selected>Yes</option>
+            <option value="false">No</option>
+          </select>
+        </td>
+        <td class="actions-cell">
+          <button class="btn btn-sm btn-success me-1" onclick="saveNewTaskMaster()" title="Save New Task Master">
+            <i class="fas fa-save"></i>
+          </button>
+          <button class="btn btn-sm btn-secondary" onclick="cancelAddTaskMaster()" title="Cancel Add">
+            <i class="fas fa-times"></i>
+          </button>
+        </td>
+      `;
+
+      // Insert at the beginning of tbody
+      tbody.insertBefore(newRow, tbody.firstChild);
+
+      // Focus on the task name input
+      document.getElementById('new-task-name').focus();
+    }
+
+    // Save new Task Master
+    async function saveNewTaskMaster() {
+      const taskName = document.getElementById('new-task-name').value.trim();
+      const categoryCode = document.getElementById('new-category').value;
+      const frequencyCode = document.getElementById('new-frequency').value;
+      const isActive = document.getElementById('new-is-active').value === 'true';
+
+      // Validation
+      if (!taskName) {
+        showToast("Task name is required", "warning");
+        document.getElementById('new-task-name').focus();
+        return;
+      }
+      if (!categoryCode) {
+        showToast("Category is required", "warning");
+        document.getElementById('new-category').focus();
+        return;
+      }
+      if (!frequencyCode) {
+        showToast("Frequency is required", "warning");
+        document.getElementById('new-frequency').focus();
+        return;
+      }
+
+      const payload = {
+        task_name: taskName,
+        category_code: categoryCode,
+        frequency_code: frequencyCode,
+        is_active: isActive
+      };
+
+      try {
+        const res = await fetch('/api/task-master', {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`Server error (${res.status}): ${errorText}`);
+        }
+
+        const result = await res.json();
+        if (result.status === "success") {
+          showToast("Task Master created successfully!", "success");
+          isAddingNewTaskMaster = false;
+          // Reload the grid to show updated data
+          await loadTaskMasterGrid();
+        } else {
+          throw new Error(result.message || "Save failed");
+        }
+      } catch (err) {
+        showToast(err.message || "Failed to save Task Master", "danger");
+        console.error("Save new Task Master error:", err);
+      }
+    }
+
+    // Cancel add new Task Master
+    function cancelAddTaskMaster() {
+      const newRow = document.getElementById('new-task-master-row');
+      if (newRow) {
+        newRow.remove();
+      }
+      isAddingNewTaskMaster = false;
+    }
+
+    // Edit Task Master inline (updated to handle add mode)
+    function editTaskMaster(taskMasterId) {
+      // Cancel any existing add operation
+      if (isAddingNewTaskMaster) {
+        cancelAddTaskMaster();
+      }
+
+      // Cancel any existing edit
+      if (editingTaskMasterId !== null) {
+        cancelTaskMasterEdit();
+      }
+
+      // Check if LOVs are loaded
+      if (taskCategoryLOV.length === 0 || taskFrequencyLOV.length === 0) {
+        showToast("Loading categories and frequencies...", "info");
+        loadTaskMasterLOVs().then(() => {
+          setTimeout(() => editTaskMaster(taskMasterId), 100);
+        });
+        return;
+      }
+
+      editingTaskMasterId = taskMasterId;
+      const row = document.getElementById(`task-master-row-${taskMasterId}`);
+      if (!row) return;
+
+      // Store original row content
+      originalTaskMasterRow = row.innerHTML;
+
+      // Get current data from data attributes
+      const taskName = row.dataset.taskName || '';
+      const categoryCode = row.dataset.categoryCode || '';
+      const frequencyCode = row.dataset.frequencyCode || '';
+      const isActive = row.dataset.isActive === 'true';
+
+      // Create category options with better formatting
+      const categoryOptions = taskCategoryLOV.map(cat => {
+        const catCode = String(cat.code_value).trim();
+        const currentCode = String(categoryCode).trim();
+        const selected = catCode === currentCode ? 'selected' : '';
+        return `<option value="${cat.code_value}" ${selected}>${cat.code_description}</option>`;
+      }).join('');
+
+      // Create frequency options with better formatting
+      const frequencyOptions = taskFrequencyLOV.map(freq => {
+        const freqCode = String(freq.code_value).trim();
+        const currentCode = String(frequencyCode).trim();
+        const selected = freqCode === currentCode ? 'selected' : '';
+        return `<option value="${freq.code_value}" ${selected}>${freq.code_description}</option>`;
+      }).join('');
+
+      // Replace row content with edit form
+      row.innerHTML = `
+        <td style="display:none;">${taskMasterId}</td>
+        <td class="task-name-cell">
+          <input type="text" class="form-control form-control-sm" id="edit-task-name-${taskMasterId}" value="${taskName}" style="min-width: 120px;">
+        </td>
+        <td class="category-name-cell">
+          <select class="form-select form-select-sm" id="edit-category-${taskMasterId}" style="min-width: 150px;">
+            <option value="">-- Select Category --</option>
+            ${categoryOptions}
+          </select>
+        </td>
+        <td class="frequency-name-cell">
+          <select class="form-select form-select-sm" id="edit-frequency-${taskMasterId}" style="min-width: 120px;">
+            <option value="">-- Select Frequency --</option>
+            ${frequencyOptions}
+          </select>
+        </td>
+        <td class="is-active-cell">
+          <select class="form-select form-select-sm" id="edit-is-active-${taskMasterId}" style="min-width: 80px;">
+            <option value="true" ${isActive ? 'selected' : ''}>Yes</option>
+            <option value="false" ${!isActive ? 'selected' : ''}>No</option>
+          </select>
+        </td>
+        <td class="actions-cell">
+          <button class="btn btn-sm btn-success me-1" onclick="saveTaskMasterEdit(${taskMasterId})" title="Save Changes">
+            <i class="fas fa-save"></i>
+          </button>
+          <button class="btn btn-sm btn-secondary" onclick="cancelTaskMasterEdit()" title="Cancel Edit">
+            <i class="fas fa-times"></i>
+          </button>
+        </td>
+      `;
+    }
+
+    // Save Task Master edit
+    async function saveTaskMasterEdit(taskMasterId) {
+      const taskName = document.getElementById(`edit-task-name-${taskMasterId}`).value.trim();
+      const categoryCode = document.getElementById(`edit-category-${taskMasterId}`).value;
+      const frequencyCode = document.getElementById(`edit-frequency-${taskMasterId}`).value;
+      const isActive = document.getElementById(`edit-is-active-${taskMasterId}`).value === 'true';
+
+      // Validation
+      if (!taskName) {
+        showToast("Task name is required", "warning");
+        return;
+      }
+      if (!categoryCode) {
+        showToast("Category is required", "warning");
+        return;
+      }
+      if (!frequencyCode) {
+        showToast("Frequency is required", "warning");
+        return;
+      }
+
+      const payload = {
+        task_master_id: taskMasterId,
+        task_name: taskName,
+        category_code: categoryCode, // Send code, not description
+        frequency_code: frequencyCode, // Send code, not description
+        is_active: isActive
+      };
+
+      try {
+        const res = await fetch('/api/task-master', {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`Server error (${res.status}): ${errorText}`);
+        }
+
+        const result = await res.json();
+        if (result.status === "success") {
+          showToast("Task Master updated successfully!", "success");
+          editingTaskMasterId = null;
+          originalTaskMasterRow = null;
+          // Reload the grid to show updated data
+          await loadTaskMasterGrid();
+        } else {
+          throw new Error(result.message || "Update failed");
+        }
+      } catch (err) {
+        showToast(err.message || "Failed to save Task Master", "danger");
+        console.error("Save Task Master error:", err);
+      }
+    }
+
+    // Cancel Task Master edit
+    function cancelTaskMasterEdit() {
+      if (editingTaskMasterId !== null && originalTaskMasterRow) {
+        const row = document.getElementById(`task-master-row-${editingTaskMasterId}`);
+        if (row) {
+          row.innerHTML = originalTaskMasterRow;
+        }
+        editingTaskMasterId = null;
+        originalTaskMasterRow = null;
+      }
+    }
+
+    // Add task master button handler
+    document.getElementById('addTaskMasterBtn').onclick = function() {
+      addNewTaskMaster();
+    };
+
+    // --- DASHBOARD CARDS LOGIC ---
+    async function loadDashboardCards() {
+      try {
+        const res = await fetch('/api/monthly-task/dashboard');
+        const data = await res.json();
+        
+        // Overall Completion
+        const completionEl = document.getElementById('overallCompletionCard');
+        if (completionEl) {
+          // Remove loading spinner
+          const spinner = completionEl.querySelector('.loading-spinner');
+          if (spinner) spinner.remove();
+          
+          completionEl.innerHTML = (data.overall_completion != null ? data.overall_completion + '%' : '-');
+        }
+        
+        // Upcoming Tasks
+        const ul = document.getElementById('dashboardUpcomingTasks');
+        if (ul) {
+          // Remove loading spinner
+          const spinner = ul.querySelector('.loading-spinner');
+          if (spinner) spinner.remove();
+          
+          ul.innerHTML = '';
+          if (data.upcoming_tasks && typeof data.upcoming_tasks === "string" && data.upcoming_tasks.trim()) {
+            data.upcoming_tasks.split('\n').forEach(task => {
+              if (task.trim()) ul.innerHTML += `<li>${task}</li>`;
+            });
+          } else {
+            ul.innerHTML = '<li class="text-muted">No upcoming tasks</li>';
+          }
+        }
+      } catch (err) {
+        console.error("Error loading dashboard cards:", err);
+        showToast("Dashboard metrics failed to load", "warning");
+        const completionEl = document.getElementById('overallCompletionCard');
+        const upcomingEl = document.getElementById('dashboardUpcomingTasks');
+        if (completionEl) completionEl.innerHTML = '<span class="text-danger">Failed to load</span>';
+        if (upcomingEl) upcomingEl.innerHTML = '<li class="text-danger">Failed to load</li>';
+      }
+    }
+
+    // Helper function to create loading content
+    function createLoadingContent(text = "Loading...") {
+      return `<span class="loading-spinner"></span>${text}`;
+    }
+
+    // Helper function to remove loading classes
+    function removeLoadingState(element) {
+      if (element) {
+        element.classList.remove('table-loading', 'loading-row', 'dashboard-loading');
+        
+        // Remove loading rows from table bodies
+        const loadingRows = element.querySelectorAll('.loading-row');
+        loadingRows.forEach(row => row.remove());
+        
+        // Remove loading spinners
+        const loadingSpinners = element.querySelectorAll('.loading-spinner');
+        loadingSpinners.forEach(spinner => spinner.remove());
+        
+        // Remove loading text elements
+        const loadingTexts = element.querySelectorAll('.loading-text, .loading-text-lg, .loading-text-sm');
+        loadingTexts.forEach(text => text.remove());
+      }
+    }
+
   </script>
 
   <!-- Toast container for user messages -->
