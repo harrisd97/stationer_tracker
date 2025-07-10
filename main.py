@@ -321,31 +321,27 @@ def get_monthly_task_by_id(task_id):
 def save_monthly_task():
     try:
         payload = request.get_json()
-        if not payload.get('category_code'):
-            return jsonify({"status": "error", "message": "Missing required field: category_code"}), 400
-            
         with get_connection() as conn:
-            with conn.cursor() as cur:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:  # Use RealDictCursor
                 cur.execute("SELECT sp_save_monthly_task(%s)", [json.dumps(payload)])
                 result = cur.fetchone()
                 conn.commit()
-                message = result[0] if result else "No response"
+                message = result['sp_save_monthly_task'] if result and 'sp_save_monthly_task' in result else "No response"
         return jsonify({"status": "success", "message": message})
     except Exception as e:
         logging.exception(f"Error saving task: {str(e)}")
-        return jsonify({"status": "error", "message": f"Failed to save task: {str(e)}"}), 500
+        return jsonify({"status": "error", "message": "Failed to save task"}), 500
 
 @app.route('/api/monthly-task/<int:task_id>', methods=["DELETE"])
 def delete_monthly_task(task_id):
     try:
         with get_connection() as conn:
-            with conn.cursor() as cur:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:  # Use RealDictCursor
                 cur.execute("SELECT sp_delete_monthly_task(%s)", (task_id,))
                 result = cur.fetchone()
                 conn.commit()
-                message = result[0] if result else "No response"
-                
-        return jsonify({"status": "success", "message": "Task deleted successfully"})
+                message = result['sp_delete_monthly_task'] if result and 'sp_delete_monthly_task' in result else "No response"
+        return jsonify({"status": "success", "message": message})
     except Exception:
         logging.exception("Error deleting task")
         return jsonify({"status": "error", "message": "Failed to delete task"}), 500
@@ -358,17 +354,77 @@ def get_monthly_task_dashboard():
                 cur.execute("SELECT * FROM sp_get_monthly_task_dashboard()")
                 result = cur.fetchone()
         if result:
-            return jsonify(result)
+            # Clean up the percentage values by removing '%' if present
+            overall_completion = result.get("overall_completion", "0")
+            if isinstance(overall_completion, str) and overall_completion.endswith('%'):
+                overall_completion = overall_completion[:-1]  # Remove the '%' symbol
+            
+            return jsonify({
+                "overall_completion": overall_completion,
+                "best_performing_category": result.get("best_performing_category", "-"),
+                "worst_performing_category": result.get("worst_performing_category", "-"),
+                "upcoming_tasks": result.get("upcoming_tasks", "")
+            })
         return jsonify({
-            "overall_completion": "0%",
+            "overall_completion": "0",
             "best_performing_category": "-",
             "worst_performing_category": "-",
             "upcoming_tasks": ""
         })
-    except Exception:
-        logging.exception("Error loading task dashboard")
-        return jsonify({"error": "Failed to fetch dashboard"}), 500
+    except Exception as e:
+        logging.exception(f"Error loading task dashboard: {str(e)}")
+        return jsonify({
+            "error": "Failed to fetch dashboard",
+            "overall_completion": "0",
+            "best_performing_category": "-", 
+            "worst_performing_category": "-",
+            "upcoming_tasks": ""
+        }), 500
 
+@app.route('/api/task-master-list')
+def get_task_master_list():
+    search = request.args.get('search', '').strip()
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                if search:
+                    cur.execute("""
+                        SELECT * FROM sp_get_task_master_list()
+                        WHERE task_name ILIKE %s OR category_name ILIKE %s OR frequency_name ILIKE %s
+                    """, (f'%{search}%', f'%{search}%', f'%{search}%'))
+                else:
+                    cur.execute("SELECT * FROM sp_get_task_master_list();")
+                return jsonify(cur.fetchall())
+    except Exception:
+        logging.exception("Error fetching task master list")
+        return jsonify({"success": False, "error": "Failed to fetch task master list"}), 500
+
+@app.route('/api/task-master')
+def get_task_master():
+    try:
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT * FROM sp_get_task_master_list();")
+                return jsonify(cur.fetchall())
+    except Exception:
+        logging.exception("Error fetching task master list")
+        return jsonify({"success": False, "error": "Failed to fetch task master list"}), 500
+    
+@app.route('/api/task-master', methods=["POST"])
+def save_task_master():
+    try:
+        payload = request.get_json()
+        with get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT sp_save_task_master(%s)", [json.dumps(payload)])
+                result = cur.fetchone()
+                conn.commit()
+                message = result['sp_save_task_master'] if result and 'sp_save_task_master' in result else "No response"
+        return jsonify({"status": "success", "message": message})
+    except Exception:
+        logging.exception("Error saving task master")
+        return jsonify({"status": "error", "message": "Failed to save task master"}), 500
+    
 # --------------------------------------
 # Content & Ideas APIs
 # --------------------------------------

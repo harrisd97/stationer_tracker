@@ -234,7 +234,7 @@
     /* S-9: Form Controls */
     .form-control, .form-select {
       /* S-9.1: Form controls styling: border, focus effects */
-      border-color: var(--border-color);
+      border-color: var (--border-color);
       border-radius: 0.5rem;
     }
     .form-control:focus, .form-select:focus {
@@ -254,8 +254,8 @@
     }
     .btn-outline-secondary {
       /* S-10.3: Outline secondary button styling */
-      border-color: var(--accent-color);
-      color: var(--accent-color);
+      border-color: var (--accent-color);
+      color: var (--accent-color);
     }
 
     /* S-11: Footer */
@@ -541,6 +541,102 @@
       display: inline-block;
       width: auto;
     }
+
+    /* S-19: Loading States - Non-overlay approach */
+    .loading-skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading-shimmer 2s infinite;
+      border-radius: 0.375rem;
+      color: transparent !important;
+    }
+
+    @keyframes loading-shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .loading-text {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading-shimmer 2s infinite;
+      border-radius: 0.25rem;
+      height: 1.2em;
+      display: inline-block;
+      width: 60%;
+      min-width: 80px;
+    }
+
+    .loading-text-lg {
+      height: 2rem;
+      width: 80%;
+    }
+
+    .loading-text-sm {
+      height: 1em;
+      width: 40%;
+    }
+
+    .loading-row {
+      background: linear-gradient(90deg, #f8f9fa 25%, #f1f3f4 50%, #f8f9fa 75%);
+      background-size: 200% 100%;
+      animation: loading-shimmer 2s infinite;
+    }
+
+    .loading-row td {
+      background: transparent !important;
+      color: transparent !important;
+      border-color: #e9ecef !important;
+    }
+
+    /* Responsive loading adjustments */
+    @media (max-width: 768px) {
+      .loading-text {
+        width: 70%;
+        min-width: 60px;
+      }
+      .loading-text-lg {
+        height: 1.5rem;
+        width: 85%;
+      }
+    }
+
+    /* Loading states for dashboard cards */
+    .dashboard-loading {
+      background: linear-gradient(90deg, #f8f9fa 25%, #f1f3f4 50%, #f8f9fa 75%) !important;
+      background-size: 200% 100% !important;
+      animation: loading-shimmer 2s infinite !important;
+      color: transparent !important;
+      border-color: #e9ecef !important;
+    }
+
+    .loading-spinner {
+      width: 1.2rem;
+      height: 1.2rem;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid var(--accent-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-right: 0.5rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Table loading states */
+    .table-loading tbody tr {
+      background: linear-gradient(90deg, #f8f9fa 25%, #f1f3f4 50%, #f8f9fa 75%);
+      background-size: 200% 100%;
+      animation: loading-shimmer 2s infinite;
+    }
+
+    .table-loading tbody td {
+      color: transparent !important;
+      border-color: #e9ecef !important;
+    }
   </style>
 </head>
 
@@ -580,14 +676,18 @@
             <a class="nav-link" href="/projects">Design Projects</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/client-experiences">Clients & Feedback</a>
+            <a class="nav-link" href="/inquiry">Sales & Inquiry Tracker</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/time">Time & Hours</a>
           </li>
           <li class="nav-item"><a class="nav-link" href="/costs">Expenses & Profit</a></li>
-          <li class="nav-item"><a class="nav-link" href="/tasks">Tasks & Routine</a></li>
-          <li class="nav-item"><a class="nav-link" href="/posts">Content & Ideas</a></li>
           <li class="nav-item"><a class="nav-link" href="/issues">Workflow & Challenges</a></li>
-          <li class="nav-item"><a class="nav-link" href="/inquiry">Leads & Sales</a></li>
-          <li class="nav-item"><a class="nav-link" href="/time">Time & Hours</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/client-experiences">Clients & Feedback</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="/posts">Content & Ideas</a></li>
+          <li class="nav-item"><a class="nav-link" href="/tasks">Tasks & Routine</a></li>
         </ul>
       </div>
     </div>
@@ -604,25 +704,25 @@
 
     <!-- H-7.2: Summary KPI Cards -->
     <div class="summary-cards">
-      <!-- H-7.2.1: Total Revenue Card -->
+      <!-- H-7.2.1: Total Agreed Cost Card -->
       <div class="summary-card">
-        <h6>Total Revenue</h6>
-        <p id="totalRevenue">-</p>
+        <h6>Total Agreed Cost</h6>
+        <p id="totalAgreedCost"><span class="loading-spinner"></span>Loading...</p>
       </div>
       <!-- H-7.2.2: Total Cost Card -->
       <div class="summary-card">
         <h6>Total Cost</h6>
-        <p id="totalCost">-</p>
+        <p id="totalCost"><span class="loading-spinner"></span>Loading...</p>
       </div>
       <!-- H-7.2.3: Total Profit Card -->
       <div class="summary-card">
         <h6>Total Profit</h6>
-        <p id="totalProfit">-</p>
+        <p id="totalProfit"><span class="loading-spinner"></span>Loading...</p>
       </div>
       <!-- H-7.2.4: Average Profit % Card -->
       <div class="summary-card">
         <h6>Avg. Profit %</h6>
-        <p id="avgProfitPct">-</p>
+        <p id="avgProfitPct"><span class="loading-spinner"></span>Loading...</p>
       </div>
     </div>
 
@@ -692,24 +792,49 @@
 
     <!-- H-7.5: Expense List Table -->
     <section class="table-responsive position-relative mb-4">
-      <!-- H-7.5.1: Loading overlay during data fetch -->
-      <div id="loading" class="loading-overlay" style="display:none;">
-        <div class="spinner-border text-danger"></div>
-      </div>
       <!-- H-7.5.2: Data table -->
-      <table class="table table-bordered table-striped mb-0">
+      <table class="table table-bordered table-striped mb-0 table-loading" id="expenseTable">
         <thead class="table-light">
           <tr>
             <th>#</th>
             <th>Project</th>
-            <th>Revenue</th>
+            <th>Total Agreed Cost</th>
             <th>Total Cost</th>
             <th>Profit</th>
             <th>Profit %</th>
             <th>Expand</th>
           </tr>
         </thead>
-        <tbody id="expenseGrid"></tbody>
+        <tbody id="expenseGrid">
+          <!-- Loading rows -->
+          <tr class="loading-row">
+            <td><span class="loading-text-sm">1</span></td>
+            <td><span class="loading-text">Loading project name</span></td>
+            <td><span class="loading-text-sm">$0.00</span></td>
+            <td><span class="loading-text-sm">$0.00</span></td>
+            <td><span class="loading-text-sm">$0.00</span></td>
+            <td><span class="loading-text-sm">0%</span></td>
+            <td><span class="loading-text-sm">⌄</span></td>
+          </tr>
+          <tr class="loading-row">
+            <td><span class="loading-text-sm">2</span></td>
+            <td><span class="loading-text">Loading project name</span></td>
+            <td><span class="loading-text-sm">$0.00</span></td>
+            <td><span class="loading-text-sm">$0.00</span></td>
+            <td><span class="loading-text-sm">$0.00</span></td>
+            <td><span class="loading-text-sm">0%</span></td>
+            <td><span class="loading-text-sm">⌄</span></td>
+          </tr>
+          <tr class="loading-row">
+            <td><span class="loading-text-sm">3</span></td>
+            <td><span class="loading-text">Loading project name</span></td>
+            <td><span class="loading-text-sm">$0.00</span></td>
+            <td><span class="loading-text-sm">$0.00</span></td>
+            <td><span class="loading-text-sm">$0.00</span></td>
+            <td><span class="loading-text-sm">0%</span></td>
+            <td><span class="loading-text-sm">⌄</span></td>
+          </tr>
+        </tbody>
       </table>
     </section>
 
@@ -750,12 +875,49 @@
     // ST-3: Initialization
     // ST-3.1: Load dropdowns, dashboard, first expense page
     window.onload = () => {
+      // Show loading states initially
+      showLoadingStates();
+      
+      loadLOV("COST_TYPE", "cost_type"); // ST-3.2: Load cost types dropdown
+      // Show loading states initially
+      showLoadingStates();
+      
       loadLOV("COST_TYPE", "cost_type"); // ST-3.2: Load cost types dropdown
       loadProjectSearchLOV();            // ST-3.3: Setup project search autocomplete
       loadExpenseDashboard();            // ST-3.4: Load summary metrics
       loadExpenses();                    // ST-3.5: Load initial expense list
       document.querySelector('.page-loader').style.display = 'none'; // Hide page loader after initialization
     };
+
+    function showLoadingStates() {
+      // Dashboard cards already have loading spinners in HTML
+      // Table already has loading class in HTML
+    }
+
+    function hideLoadingStates() {
+      // Remove loading classes from expense table
+      const expenseTable = document.getElementById('expenseTable');
+      removeLoadingState(expenseTable);
+    }
+
+    // Helper function to remove loading classes
+    function removeLoadingState(element) {
+      if (element) {
+        element.classList.remove('table-loading', 'loading-row', 'dashboard-loading');
+        
+        // Remove loading rows from table bodies
+        const loadingRows = element.querySelectorAll('.loading-row');
+        loadingRows.forEach(row => row.remove());
+        
+        // Remove loading spinners
+        const loadingSpinners = element.querySelectorAll('.loading-spinner');
+        loadingSpinners.forEach(spinner => spinner.remove());
+        
+        // Remove loading text elements
+        const loadingTexts = element.querySelectorAll('.loading-text, .loading-text-lg, .loading-text-sm');
+        loadingTexts.forEach(text => text.remove());
+      }
+    }
 
     // ST-4: Event Listeners for UI controls
     document.getElementById("limitSelect").addEventListener("change", () => {
@@ -793,15 +955,21 @@
         // Validate data
         if (!Array.isArray(data)) throw new Error("Invalid data format");
 
-        // Clear existing rows
+        // Clear existing rows and remove loading state
         const tbody = document.getElementById("expenseGrid");
+        const expenseTable = document.getElementById('expenseTable');
+        removeLoadingState(expenseTable);
         tbody.innerHTML = "";
+
+        // Hide loading states
+        hideLoadingStates();
 
         // Handle no data case
         if (data.length === 0) {
           document.getElementById("pageIndicator").innerText = "No records";
           document.getElementById("prevBtn").style.display = "none";
           document.getElementById("nextBtn").style.display = "none";
+          tbody.innerHTML = `<tr><td colspan="7" class="text-center">No records found.</td></tr>`;
           return;
         }
 
@@ -820,7 +988,7 @@
             <tr>
               <td>${sno}</td>
               <td>${row.project_reference || "-"}</td>
-              <td>${isNaN(parseFloat(row.revenue)) ? "-" : `$${parseFloat(row.revenue).toFixed(2)}`}</td>
+              <td>${isNaN(parseFloat(row.final_amount)) ? "-" : `$${parseFloat(row.final_amount).toFixed(2)}`}</td>
               <td>${isNaN(parseFloat(row.total_cost)) ? "-" : `$${parseFloat(row.total_cost).toFixed(2)}`}</td>
               <td>${isNaN(parseFloat(row.profit)) ? "-" : `$${parseFloat(row.profit).toFixed(2)}`}</td>
               <td>${isNaN(parseFloat(row.profit_pct)) ? "-" : `${parseFloat(row.profit_pct).toFixed(1)}%`}</td>
@@ -853,6 +1021,11 @@
           `;
         });
       } catch (err) {
+        // Remove loading state on error too
+        const expenseTable = document.getElementById('expenseTable');
+        removeLoadingState(expenseTable);
+        hideLoadingStates();
+        
         showToast("Failed to load expenses.", "danger");
         console.error("loadExpenses error:", err);
       } finally {
@@ -867,9 +1040,9 @@
         const res = await fetch(API_ENDPOINTS.DASHBOARD);
         const data = await res.json();
 
-        // Animate each metric
+        // Animate each metric and remove loading spinners
         const metrics = [
-          { id: "totalRevenue", value: parseFloat(data.totalRevenue) || 0, prefix: '$' },
+          { id: "totalAgreedCost", value: parseFloat(data.totalRevenue) || 0, prefix: '$' },
           { id: "totalCost", value: parseFloat(data.totalCost) || 0, prefix: '$' },
           { id: "totalProfit", value: parseFloat(data.totalProfit) || 0, prefix: '$' },
           { id: "avgProfitPct", value: parseFloat(data.avgProfitPct) || 0, suffix: '%' }
@@ -878,6 +1051,10 @@
         metrics.forEach(metric => {
           const element = document.getElementById(metric.id);
           if (element) {
+            // Remove loading spinner first
+            const spinner = element.querySelector('.loading-spinner');
+            if (spinner) spinner.remove();
+            
             animateNumber(element, metric.value, 1500, metric.prefix, metric.suffix);
           }
         });
@@ -885,6 +1062,17 @@
       } catch (err) {
         showToast("Dashboard metrics failed to load", "warning");
         console.error("loadExpenseDashboard error:", err);
+        
+        // Remove loading spinners and show error state
+        const metrics = ["totalAgreedCost", "totalCost", "totalProfit", "avgProfitPct"];
+        metrics.forEach(id => {
+          const element = document.getElementById(id);
+          if (element) {
+            const spinner = element.querySelector('.loading-spinner');
+            if (spinner) spinner.remove();
+            element.innerHTML = '<span class="text-danger">Failed to load</span>';
+          }
+        });
       }
     }
 
@@ -1221,13 +1409,8 @@
         const currentValue = startValue + (finalValue - startValue) * easeOutQuart;
         
         if (typeof finalValue === 'number') {
+          // No color or arrow for any metrics
           element.innerHTML = `${prefix}${Math.abs(currentValue).toFixed(2)}${suffix}`;
-          
-          // Add color and arrow based on value
-          const color = finalValue < 0 ? '#dc3545' : '#198754';
-          const arrow = finalValue < 0 ? '↓' : (finalValue > 0 ? '↑' : '');
-          
-          element.innerHTML = `<span style="color: ${color}">${prefix}${Math.abs(currentValue).toFixed(2)}${suffix} ${arrow}</span>`;
         }
         
         if (progress < 1) {
