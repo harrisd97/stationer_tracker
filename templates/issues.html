@@ -12,6 +12,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Add Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- H-3: Custom CSS Styles -->
   <!-- H-3.1: All style numbering uses S- prefix, see below -->
@@ -171,62 +173,47 @@
     }
 
     /* S-7: KPI Summary Cards */
-    .summary-cards {
-      display: flex;
-      flex-wrap: nowrap;
-      gap: 1rem;
-      margin: 0 auto 2rem;
-      padding: 0 1rem 0.5rem;
-      overflow-x: auto;
-      justify-content: center;  /* Center the cards */
-      max-width: 100%;         /* Ensure container doesn't overflow */
-    }
-
-    .summary-card {
-      min-width: 200px;        /* Minimum width */
-      max-width: 250px;        /* Maximum width */
-      flex: 0 0 auto;         /* Don't grow or shrink */
-      background: linear-gradient(135deg, #f5f0ff, #e9d4f5);
+    .chart-container {
+      /* S-7.1: Chart container styling */
+      background: rgba(255, 255, 255, 0.98);
       border: 1px solid var(--border-color);
       border-radius: 1rem;
-      padding: 1.2rem;
-      text-align: center;
+      padding: 1.5rem;
       box-shadow: 0 4px 15px var(--shadow-color);
-      transition: transform 0.2s ease;
-      margin-right: 0.5rem;   /* Space between cards */
+      position: relative;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
 
-    /* Ensure last card doesn't have extra margin */
-    .summary-card:last-child {
-      margin-right: 0;
+    .chart-wrapper {
+      /* S-7.3: Chart wrapper for side-by-side layout */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 1;
     }
 
-    /* Hide scrollbar but keep functionality */
-    .summary-cards::-webkit-scrollbar {
-      height: 0;
-      width: 0;
+    .chart-canvas-container {
+      /* S-7.4: Canvas container */
+      flex: 0 0 60%;
+      height: 100%;
+      position: relative;
     }
 
-    .summary-card:hover {
-      /* S-7.3: Hover effect for KPI cards */
-      transform: translateY(-2px);
-    }
-
-    .summary-card h6 {
-      /* S-7.4: Card titles style */
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--accent-color);
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    .summary-card p {
-      /* S-7.5: KPI values style */
-      font-size: 1.4rem;
-      font-weight: bold;
-      color: var(--text-color);
-      margin: 0;
+    .chart-legend-container {
+      /* S-7.5: Legend container */
+      flex: 0 0 35%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-left: 1rem;
     }
 
     /* S-8: Table Styling */
@@ -620,16 +607,25 @@
       </a>
     </div>
 
-    <!-- H-7.2: Summary KPI Cards -->
-    <div class="summary-cards" id="issueTypeSummary">
-      <!-- Dynamic cards will be added here based on issue types -->
+    <!-- H-7.2: Issue Type Chart -->
+    <div class="chart-container mb-4" style="max-width: 700px; margin: 0 auto;">
+      <div class="chart-wrapper">
+        <div class="chart-canvas-container">
+          <canvas id="issueTypeChart"></canvas>
+        </div>
+        <div class="chart-legend-container">
+          <div id="chartLegend"></div>
+        </div>
+      </div>
     </div>
 
     <!-- H-7.3: Controls Row -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
       <!-- H-7.3.1: Add Issue Button -->
       <button class="btn btn-primary btn-sm" id="addIssueBtn">+ Add Issue</button>
-      <!-- H-7.3.2: Search Box -->
+      <!-- H-7.3.2: Download Data Button -->
+      <button class="btn btn-outline-secondary btn-sm" id="downloadDataBtn" onclick="downloadIssues()">Download Data</button>
+      <!-- H-7.3.3: Search Box -->
       <div class="input-group input-group-sm flex-grow-1" style="max-width: 300px;">
         <input type="text" id="searchBox" class="form-control" placeholder="Search project or client..." 
                onkeyup="if(event.key === 'Enter') searchIssues()">
@@ -880,53 +876,240 @@
     }
 
     // ST-6: Load Dashboard Metrics
-    // ST-6.1: Display issue counts by type
+    // ST-6.1: Display issue counts by type as chart
+    let issueChart = null;
+
     async function loadIssueDashboard() {
-    const summaryContainer = document.getElementById("issueTypeSummary");
-    summaryContainer.style.opacity = '0'; // Hide initially
-    
-    try {
-        const res = await fetch(API_ENDPOINTS.DASHBOARD);
-        const data = await res.json();
+      try {
+          const res = await fetch(API_ENDPOINTS.DASHBOARD);
+          const data = await res.json();
 
-        // Clear existing cards
-        summaryContainer.innerHTML = "";
+          // Get chart canvas
+          const ctx = document.getElementById('issueTypeChart').getContext('2d');
+          
+          // Destroy existing chart if it exists
+          if (issueChart) {
+              issueChart.destroy();
+          }
 
-        // Handle no data case
-        if (!Array.isArray(data) || data.length === 0) {
-            summaryContainer.innerHTML = `
-                <div class="summary-card">
-                    <h6>Total Issues</h6>
-                    <p>0</p>
-                </div>`;
-        } else {
-            // Create cards for each issue type
-            data.forEach(item => {
-                summaryContainer.innerHTML += `
-                    <div class="summary-card">
-                        <h6>${item.issue_type_desc || "Unknown"}</h6>
-                        <p id="issue-count-${item.issue_type}">${item.issue_count || 0}</p>
-                    </div>`;
-            });
-            
-            // Animate counts after cards are created
-            data.forEach(item => {
-                const element = document.getElementById(`issue-count-${item.issue_type}`);
-                if (element) {
-                    animateNumber(element, parseInt(item.issue_count) || 0, 1500);
-                }
-            });
-        }
+          // Handle no data case
+          if (!Array.isArray(data) || data.length === 0) {
+              // Create empty chart
+              issueChart = new Chart(ctx, {
+                  type: 'doughnut',
+                  data: {
+                      labels: ['No Issues'],
+                      datasets: [{
+                          data: [1],
+                          backgroundColor: ['#e2daea'],
+                          borderColor: ['#ffffff'],
+                          borderWidth: 2
+                      }]
+                  },
+                  options: {
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                          title: {
+                              display: true,
+                              text: 'The Trouble Pie',
+                              font: {
+                                  size: 14,
+                                  weight: 'bold'
+                              },
+                              color: '#7a4e82'
+                          },
+                          legend: {
+                              display: false
+                          }
+                      }
+                  }
+              });
+              
+              // Update custom legend
+              document.getElementById('chartLegend').innerHTML = '<p style="color: #7a4e82; font-size: 12px;">No issues recorded yet</p>';
+              return;
+          }
 
-        // Fade in the summary cards
-        summaryContainer.style.transition = 'opacity 0.3s ease';
-        summaryContainer.style.opacity = '1';
+          // Prepare chart data with more distinct colors
+          const labels = data.map(item => item.issue_type_desc || 'Unknown');
+          const counts = data.map(item => item.issue_count || 0);
+          const total = counts.reduce((a, b) => a + b, 0);
+          
+          // More distinct colors within purple theme - alternating light and dark
+          const colors = [
+              '#7a4e82',  // Dark purple
+              '#c8a8d8',  // Light purple
+              '#9f6ba8',  // Medium purple
+              '#e4d0f0',  // Very light purple
+              '#6b3d73',  // Darker purple
+              '#b89cc9',  // Medium light purple
+              '#8b5495',  // Medium dark purple
+              '#d4c5e8',  // Light lavender
+              '#5d3366',  // Very dark purple
+              '#a084b5'   // Muted purple
+          ];
 
-    } catch (err) {
-        showToast("Dashboard metrics failed to load", "warning");
-        console.error("loadIssueDashboard error:", err);
+          // Create doughnut chart
+          issueChart = new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                  labels: labels,
+                  datasets: [{
+                      data: counts,
+                      backgroundColor: colors.slice(0, data.length),
+                      borderColor: '#ffffff',
+                      borderWidth: 3,
+                      hoverBorderWidth: 4,
+                      hoverBorderColor: '#7a4e82'
+                  }]
+              },
+              options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  cutout: '50%',
+                  plugins: {
+                      title: {
+                          display: true,
+                          text: 'The Trouble Pie',
+                          font: {
+                              size: 14,
+                              weight: 'bold'
+                          },
+                          color: '#7a4e82',
+                          padding: {
+                              bottom: 15
+                          }
+                      },
+                      legend: {
+                          display: false
+                      },
+                      tooltip: {
+                          callbacks: {
+                              label: function(context) {
+                                  const label = context.label || '';
+                                  const value = context.parsed || 0;
+                                  const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                  const percentage = ((value / total) * 100).toFixed(1);
+                                  return `${label}: ${value} (${percentage}%)`;
+                              }
+                          },
+                          backgroundColor: 'rgba(122, 78, 130, 0.9)',
+                          titleColor: '#ffffff',
+                          bodyColor: '#ffffff',
+                          borderColor: '#b399cc',
+                          borderWidth: 1
+                      },
+                      datalabels: {
+                          display: true,
+                          color: function(context) {
+                              // Use white text for dark colors, dark text for light colors
+                              const bgColor = context.dataset.backgroundColor[context.dataIndex];
+                              const darkColors = ['#7a4e82', '#9f6ba8', '#6b3d73', '#8b5495', '#5d3366'];
+                              return darkColors.includes(bgColor) ? '#ffffff' : '#4a4158';
+                          },
+                          font: {
+                              weight: 'bold',
+                              size: 11
+                          },
+                          formatter: function(value, context) {
+                              const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                              const percentage = ((value / total) * 100).toFixed(1);
+                              // Only show percentage if it's greater than 5% to avoid clutter
+                              return percentage > 5 ? percentage + '%' : '';
+                          },
+                          anchor: 'center',
+                          align: 'center'
+                      }
+                  },
+                  animation: {
+                      animateScale: true,
+                      animateRotate: true,
+                      duration: 1000
+                  }
+              },
+              plugins: [{
+                  // Custom plugin to draw percentages inside segments
+                  id: 'percentageLabels',
+                  afterDatasetsDraw: function(chart) {
+                      const ctx = chart.ctx;
+                      const dataset = chart.data.datasets[0];
+                      const total = dataset.data.reduce((a, b) => a + b, 0);
+                      
+                      chart.data.datasets.forEach((dataset, datasetIndex) => {
+                          const meta = chart.getDatasetMeta(datasetIndex);
+                          
+                          meta.data.forEach((element, index) => {
+                              if (element.hidden) return;
+                              
+                              const value = dataset.data[index];
+                              const percentage = ((value / total) * 100).toFixed(1);
+                              
+                              // Only show percentage if segment is large enough
+                              if (percentage > 5) {
+                                  const centerPoint = element.getCenterPoint();
+                                  
+                                  ctx.save();
+                                  ctx.font = 'bold 11px Poppins, sans-serif';
+                                  
+                                  // Choose text color based on background color
+                                  const bgColor = dataset.backgroundColor[index];
+                                  const darkColors = ['#7a4e82', '#9f6ba8', '#6b3d73', '#8b5495', '#5d3366'];
+                                  ctx.fillStyle = darkColors.includes(bgColor) ? '#ffffff' : '#4a4158';
+                                  
+                                  ctx.textAlign = 'center';
+                                  ctx.textBaseline = 'middle';
+                                  
+                                  const text = percentage + '%';
+                                  ctx.fillText(text, centerPoint.x, centerPoint.y);
+                                  
+                                  ctx.restore();
+                              }
+                          });
+                      });
+                  }
+              }]
+          });
+
+          // Create custom legend
+          const legendContainer = document.getElementById('chartLegend');
+          
+          let legendHTML = '<div style="font-size: 12px; color: #4a4158;">';
+          
+          labels.forEach((label, index) => {
+              const count = counts[index];
+              const percentage = ((count / total) * 100).toFixed(1);
+              const color = colors[index];
+              
+              legendHTML += `
+                  <div style="display: flex; align-items: center; margin-bottom: 8px; cursor: pointer;" 
+                       onclick="toggleChartSegment(${index})">
+                      <div style="width: 12px; height: 12px; border-radius: 50%; background-color: ${color}; margin-right: 8px; border: 1px solid #ffffff;"></div>
+                      <span style="flex: 1; font-weight: 500;">${label}</span>
+                      <span style="color: #7a4e82; font-weight: 600;">${count} (${percentage}%)</span>
+                  </div>
+              `;
+          });
+          
+          legendHTML += '</div>';
+          legendContainer.innerHTML = legendHTML;
+
+      } catch (err) {
+          showToast("Dashboard metrics failed to load", "warning");
+          console.error("loadIssueDashboard error:", err);
+      }
     }
-}
+
+    // Add function to toggle chart segments
+    function toggleChartSegment(index) {
+        if (issueChart) {
+            const meta = issueChart.getDatasetMeta(0);
+            if (meta.data[index]) {
+                meta.data[index].hidden = !meta.data[index].hidden;
+                issueChart.update();
+            }
+        }
+    }
 
     // ST-7: Load List of Values (LOV) for dropdowns
     // ST-7.1: Populate options like "Issue Type"
@@ -1361,6 +1544,39 @@ function cancelInlineEdit(issueId, projectId) {
     if (issueRow && issueRow.dataset.originalContent) {
         issueRow.innerHTML = issueRow.dataset.originalContent;
     }
+}
+
+// Function to download issue data as CSV
+async function downloadIssues() {
+  try {
+    const res = await fetch(`${API_ENDPOINTS.PROJECT_ISSUES}?page=1&limit=1000`);
+    const data = await res.json();
+
+    if (!data.length) {
+      showToast("No data available to download.", "warning");
+      return;
+    }
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Project Reference,Total Issues,Last Issue Date\n";
+
+    data.forEach(row => {
+      csvContent += `${row.project_reference || ''},${row.total_issues || '0'},${formatDate(row.last_issue_date) || ''}\n`;
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "issues_data.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showToast("Data downloaded successfully.", "success");
+  } catch (error) {
+    showToast("Failed to download data.", "danger");
+    console.error("Error downloading data:", error);
+  }
 }
   </script>
 

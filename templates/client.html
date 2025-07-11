@@ -503,7 +503,9 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
       <!-- H-7.3.1: Add Feedback Button -->
       <button class="btn btn-primary btn-sm" id="addFeedbackBtn">+ Add Feedback</button>
-      <!-- H-7.3.2: Search Box -->
+      <!-- H-7.3.2: Download Data Button -->
+      <button class="btn btn-outline-secondary btn-sm" id="downloadDataBtn" onclick="downloadClientExperiences()">Download Data</button>
+      <!-- H-7.3.3: Search Box -->
       <div class="input-group input-group-sm flex-grow-1" style="max-width: 300px;">
         <input type="text" id="searchBox" class="form-control" placeholder="Search client or project..." 
                onkeyup="if(event.key === 'Enter') searchExperiences()">
@@ -1104,6 +1106,39 @@
       } catch (err) {
         showToast(err.message || "Failed to save changes", "danger");
         console.error("Save error:", err);
+      }
+    }
+
+    // Function to download client experiences data as CSV
+    async function downloadClientExperiences() {
+      try {
+        const res = await fetch(`/api/client-experiences?page=1&limit=1000`);
+        const data = await res.json();
+
+        if (!data.length) {
+          showToast("No data available to download.", "warning");
+          return;
+        }
+
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Client Name,Project Reference,Score,Feedback Theme,Testimonial Collected,Referral Given\n";
+
+        data.forEach(row => {
+          csvContent += `${row.client_name || ''},${row.project_reference || ''},${row.score || ''},${row.feedback_theme_desc || ''},${row.testimonial_collected ? 'Yes' : 'No'},${row.referral_collected ? 'Yes' : 'No'}\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "client_experiences_data.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        showToast("Data downloaded successfully.", "success");
+      } catch (error) {
+        showToast("Failed to download data.", "danger");
+        console.error("Error downloading data:", error);
       }
     }
   </script>
