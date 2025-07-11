@@ -730,7 +730,9 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
       <!-- H-7.3.1: Add Expense Button -->
       <button class="btn btn-primary btn-sm" id="addExpenseBtn">+ Add Expense</button>
-      <!-- H-7.3.2: Search Box -->
+      <!-- H-7.3.2: Download Data Button -->
+      <button class="btn btn-outline-secondary btn-sm" id="downloadDataBtn" onclick="downloadExpenses()">Download Data</button>
+      <!-- H-7.3.3: Search Box -->
       <div class="input-group input-group-sm flex-grow-1" style="max-width: 300px;">
         <input type="text" id="searchBox" class="form-control" placeholder="Search project or client..." 
                onkeyup="if(event.key === 'Enter') searchExpenses()">
@@ -1481,6 +1483,39 @@
         });
       }
     });
+
+    // Function to download expense data as CSV
+    async function downloadExpenses() {
+      try {
+        const res = await fetch(`${API_ENDPOINTS.PROJECT_COSTS}?page=1&limit=1000`);
+        const data = await res.json();
+
+        if (!data.length) {
+          showToast("No data available to download.", "warning");
+          return;
+        }
+
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Project Reference,Total Agreed Cost,Total Cost,Profit,Profit %\n";
+
+        data.forEach(row => {
+          csvContent += `${row.project_reference || ''},${row.final_amount || ''},${row.total_cost || ''},${row.profit || ''},${row.profit_pct || ''}\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "expenses_data.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        showToast("Data downloaded successfully.", "success");
+      } catch (error) {
+        showToast("Failed to download data.", "danger");
+        console.error("Error downloading data:", error);
+      }
+    }
   </script>
 
   <!-- H-10: Toast container for user messages -->

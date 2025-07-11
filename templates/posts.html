@@ -634,7 +634,9 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
       <!-- H-7.3.1: Add Post Button -->
       <button class="btn btn-primary btn-sm" id="addPostBtn">+ Add Content Post</button>
-      <!-- H-7.3.2: Search Box -->
+      <!-- H-7.3.2: Download Data Button -->
+      <button class="btn btn-outline-secondary btn-sm" id="downloadDataBtn" onclick="downloadPosts()">Download Data</button>
+      <!-- H-7.3.3: Search Box -->
       <div class="input-group input-group-sm flex-grow-1" style="max-width: 300px;">
         <input type="text" id="searchBox" class="form-control" placeholder="Search topics..." 
                onkeyup="if(event.key === 'Enter') searchPosts()">
@@ -1248,6 +1250,39 @@
       }
       
       requestAnimationFrame(updateNumber);
+    }
+
+    // ST-19: Function to download post data as CSV
+    async function downloadPosts() {
+      try {
+        const res = await fetch(`${API_ENDPOINTS.CONTENT_POSTS}?page=1&limit=1000`);
+        const data = await res.json();
+
+        if (!data.length) {
+          showToast("No data available to download.", "warning");
+          return;
+        }
+
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Date,Topic,Platform,Post Type,Engagement Score\n";
+
+        data.forEach(post => {
+          csvContent += `${post.post_date || ''},${post.topic || ''},${post.platform_name || post.platform_code || ''},${post.post_type_name || post.post_type_code || ''},${post.engagement_score || 0}\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "posts_data.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        showToast("Data downloaded successfully.", "success");
+      } catch (error) {
+        showToast("Failed to download data.", "danger");
+        console.error("Error downloading data:", error);
+      }
     }
   </script>
 

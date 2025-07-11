@@ -955,6 +955,8 @@
     <!-- Controls Row -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3" id="controlsRow">
       <button class="btn btn-primary btn-sm" id="addTaskBtn">+ Add Task</button>
+      <!-- Add Download Data button -->
+      <button class="btn btn-outline-secondary btn-sm" id="downloadDataBtn" onclick="downloadTasks()">Download Data</button>
       <div class="input-group input-group-sm flex-grow-1" style="max-width: 300px;">
         <input type="text" id="searchBox" class="form-control" placeholder="Search task or category..." 
                onkeyup="if(event.key === 'Enter') searchTasks()">
@@ -2425,6 +2427,38 @@
         // Remove loading text elements
         const loadingTexts = element.querySelectorAll('.loading-text, .loading-text-lg, .loading-text-sm');
         loadingTexts.forEach(text => text.remove());
+      }
+    }
+
+    async function downloadTasks() {
+      try {
+        const res = await fetch('/api/monthly-tasks?page=1&limit=1000');
+        const data = await res.json();
+
+        if (!data.length) {
+          showToast("No data available to download.", "warning");
+          return;
+        }
+
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Task Name,Category Name,Frequency Name,Scheduled Date,Completed Date,Is Done,Notes\n";
+
+        data.forEach(row => {
+          csvContent += `${row.task_name || ''},${row.category_name || ''},${row.frequency_name || ''},${row.scheduled_date || ''},${row.completed_date || ''},${row.is_done ? 'Yes' : 'No'},${row.notes || ''}\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "tasks_data.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        showToast("Data downloaded successfully.", "success");
+      } catch (error) {
+        showToast("Failed to download data.", "danger");
+        console.error("Error downloading data:", error);
       }
     }
 
