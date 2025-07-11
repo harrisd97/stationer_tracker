@@ -19,7 +19,7 @@ It provides a unified dashboard and set of tools to help you manage your workflo
 
 ## About This Project
 
-This app was inspired by a real-world challenge for wedding stationers (see the attached screenshot for the original challenge prompt).  
+This app was inspired by a real-world challenge for wedding stationers.  
 While the inspiration came from that challenge, **the code and features here are unique to this project** and may differ from the original requirements.
 
 ---
