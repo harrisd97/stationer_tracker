@@ -191,12 +191,37 @@
     .chart-wrapper {
       /* S-7.3: Chart wrapper for side-by-side layout */
       display: flex;
+      flex-wrap: wrap; /* Allow wrapping */
       align-items: center;
       justify-content: space-between;
       width: 100%;
       height: 100%;
       position: relative;
       z-index: 1;
+    }
+
+    @media (max-width: 576px) {
+      .chart-wrapper {
+        flex-direction: column !important; /* Stack vertically */
+        align-items: center;
+        gap: 1rem; /* Add spacing */
+      }
+
+      .chart-canvas-container, .chart-legend-container {
+        flex: 1 1 100%; /* Full width */
+        max-width: 100%;
+        padding: 0; /* Remove extra padding */
+      }
+
+      .chart-container {
+        height: auto !important; /* Allow height adjustment */
+        min-height: 400px; /* Optional: maintain space */
+      }
+
+      #chartLegend {
+        text-align: center; /* Center legend */
+        width: 100%;
+      }
     }
 
     .chart-canvas-container {

@@ -49,6 +49,10 @@
       background-color: rgba(255, 255, 255, 0.95);
       border-bottom: 1px solid var(--border-color);
       box-shadow: 0 2px 10px var(--shadow-color);
+      position: fixed; /* Make the header fixed */
+      top: 0;
+      width: 100%;
+      z-index: 1050; /* Ensure it stays above other elements */
     }
 
     .navbar-brand {
@@ -87,15 +91,11 @@
     }
 
     .main-container {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      flex: 1 0 auto;
       width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem;
-      min-height: calc(100vh - 140px);
+      padding: 100px 1rem 4rem 1rem; /* top padding fixed */
     }
 
     .cards-wrapper {
@@ -296,8 +296,7 @@
         font-size: 2rem;
       }
       .main-container {
-        padding: 0.75rem;
-        min-height: calc(100vh - 80px);
+        padding: 100px 0.75rem 3rem;
       }
       .cards-wrapper {
         padding: 1rem;
