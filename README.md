@@ -1,41 +1,83 @@
-# Stationer Tracker
+# Stationer Success Tracker
 
-**Stationer Tracker** is a business management web application designed specifically for independent wedding and invitation stationers. The app helps you organize, track, and analyze all aspects of your business—from projects and tasks to client experiences, expenses, content, and time logs.
+![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)
+![Flask](https://img.shields.io/badge/Flask-3.1-black.svg)
+![Database](https://img.shields.io/badge/Database-PostgreSQL-blue.svg)
+![Frontend](https://img.shields.io/badge/Frontend-Vanilla%20JS-yellow.svg)
+
+A full-stack business management web application built for creative entrepreneurs. This tool provides a centralized dashboard to manage projects, track client feedback, and analyze financial performance, enabling smarter, data-driven business decisions.
 
 > **Live Demo:** [https://stationer-tracker.onrender.com](https://stationer-tracker.onrender.com)
 
 ---
 
-## Who is this for?
+### Key Features
 
-This application is built for:
-- **Wedding Stationers**
-- **Invitation Designers**
-- **Small business owners** in the custom stationery and event paper goods industry
-
-It provides a unified dashboard and set of tools to help you manage your workflow, track business habits, monitor expenses, log time, and analyze client feedback—all in one place.
+* **Project Management:** A central hub to track projects from inquiry to completion, including key dates, amounts, and statuses.
+* **Client Experience Tracking:** Log client feedback, scores, and testimonials to measure satisfaction and gather marketing assets.
+* **Financial Dashboards:** Monitor revenue, costs, and profitability with dynamically updated summary cards and detailed expense breakdowns.
+* **Dynamic & Responsive UI:** A clean, fast, and mobile-friendly interface built with vanilla JavaScript and Bootstrap for a seamless user experience on any device.
 
 ---
 
-## About This Project
+## Technical Architecture
 
-This app was inspired by a real-world challenge for wedding stationers (see the attached screenshot for the original challenge prompt).  
+This application is built with a clean, decoupled architecture, featuring a robust Python/Flask backend that serves a RESTful API and a dynamic, framework-free JavaScript front-end.
+
+#### Backend (Python & Flask)
+
+The backend is engineered for reliability and maintainability.
+
+* **RESTful API:** A comprehensive API provides endpoints for all CRUD (Create, Read, Update, Delete) operations for projects, client experiences, and expenses.
+* [cite_start]**Database Integration:** Connects to a PostgreSQL database using the `psycopg2` library[cite: 1]. Business logic for data manipulation is encapsulated within **PostgreSQL stored procedures** (e.g., `sp_save_project`, `sp_get_project_cost_list`), centralizing data logic for enhanced security and performance.
+* **Robust Logging:** Features built-in logging for every API request and response, writing to `stationer_tracker.log` for easy debugging and monitoring in a production environment.
+* [cite_start]**Separation of Concerns:** Database connection details are cleanly separated in `db_config.py`, making the application easy to configure and deploy[cite: 1].
+
+#### Frontend (Vanilla JavaScript & Bootstrap 5)
+
+The user interface is designed to be intuitive and interactive without the overhead of a large front-end framework.
+
+* **Dynamic UI:** The front-end is built with vanilla JavaScript, making asynchronous API calls using the `fetch()` API to load and submit data without page reloads.
+* **Interactive Features:**
+    * **Asynchronous Data Tables:** Project and expense lists are loaded on demand with client-side pagination.
+    * **Live Search:** Project search fields offer real-time, "search-as-you-type" functionality by querying the backend API.
+    * **User Feedback:** Toast notifications provide non-intrusive feedback for actions like "Save Successful" or "Error".
 
 ---
 
-## Key Features
+### Local Setup
 
-- **Project Management:** Track all your client projects and their statuses.
-- **Task Master & Monthly Tasks:** Define reusable task templates and manage recurring routines.
-- **Client Experience:** Log feedback, testimonials, and survey results.
-- **Expense Tracking:** Categorize and analyze your business expenses.
-- **Content & Ideas:** Manage your content posts and engagement analytics.
-- **Inquiry Tracker:** Track sales pipeline and conversion rates.
-- **Time Logging:** Log time spent on each project or task.
-- **Dashboards:** Visual summaries for smarter business decisions.
-- **Robust Logging:** All actions are logged for transparency and auditing.
+To run this project locally, you will need Python 3.9+ and a running PostgreSQL instance.
 
----
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/your-username/stationer_tracker.git](https://github.com/your-username/stationer_tracker.git)
+    cd stationer_tracker
+    ```
 
-*For more details on setup, features, and API endpoints, see below in this README.*
+2.  **Create and activate a virtual environment:**
+    ```bash
+    # For macOS/Linux
+    python3 -m venv venv
+    source venv/bin/activate
 
+    # For Windows
+    python -m venv venv
+    .\venv\Scripts\activate
+    ```
+
+3.  **Install dependencies from `requirements.txt`**:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4.  **Configure the Database:**
+    * Set up a PostgreSQL database.
+    * [cite_start]Update the connection DSN string in `db_config.py` to point to your database instance[cite: 1].
+    * Run the necessary SQL scripts to create tables and stored procedures.
+
+5.  **Run the application using `main.py`**:
+    ```bash
+    python main.py
+    ```
+    The application will be available at `http://127.0.0.1:5050`.
